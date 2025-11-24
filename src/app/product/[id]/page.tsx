@@ -26,80 +26,82 @@ export default async function ProductPage({ params }: { params: { id: string } }
         <div className="container py-5">
             <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item"><Link href="/">Головна</Link></li>
-                    <li className="breadcrumb-item active" aria-current="page">{product.title}</li>
+                    <li className="breadcrumb-item"><Link href="/" style={{ color: 'var(--accent-color)' }}>Головна</Link></li>
+                    <li className="breadcrumb-item active" aria-current="page" style={{ color: 'var(--text-secondary)' }}>{product.title}</li>
                 </ol>
             </nav>
 
-            <div className="row g-5">
+            <div className="row g-4">
                 {/* Left Column: Gallery */}
-                <div className="col-md-6">
-                    <div className="sticky-top" style={{ top: '120px' }}>
+                <div className="col-lg-5 col-md-6">
+                    <div className="sticky-top" style={{ top: '100px' }}>
                         <ProductGallery images={product.images || [product.image_url]} />
                         
                         {/* Sticky button under gallery - shown when main button scrolls out */}
-                        <div id="sticky-cart-button" className="mt-4 d-none">
+                        <div id="sticky-cart-button" className="mt-3 d-none">
                             <AddToCartButton product={product} />
                         </div>
-                    </div>
-                    
-                    {/* Description - shown below gallery on mobile/tablet */}
-                    <div className="mt-5 d-md-none">
-                        <h5 className="fw-bold mb-3">Опис</h5>
-                        <p className="text-muted" style={{ lineHeight: '1.7' }}>
-                            {product.description}
-                        </p>
                     </div>
                 </div>
 
                 {/* Right Column: Product Info */}
-                <div className="col-md-6">
-                    {product.availability === 'pre_order' && (
-                        <div className="mb-3">
-                            <span className="badge bg-warning text-dark px-4 py-2" style={{ fontSize: '1rem', fontWeight: '600' }}>
-                                Предзаказ
-                            </span>
+                <div className="col-lg-7 col-md-6">
+                    {/* Author */}
+                    {product.author && (
+                        <div className="mb-2">
+                            <small style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-heading)' }}>
+                                Автор: <Link href="#" style={{ color: 'var(--accent-color)', textDecoration: 'none' }}>{product.author}</Link>
+                            </small>
                         </div>
                     )}
-                    <h1 className="mb-4" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: '600' }}>
+
+                    {/* Title */}
+                    <h1 className="mb-3" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: '700', color: '#e6f1ff' }}>
                         {product.title}
                     </h1>
 
+                    {/* Badges */}
+                    <div className="d-flex gap-2 mb-3">
+                        {product.availability === 'pre_order' && (
+                            <span className="badge bg-warning text-dark px-3 py-1" style={{ fontSize: '0.85rem' }}>
+                                Предзаказ
+                            </span>
+                        )}
+                        {product.discount_percent > 0 && (
+                            <span className="badge bg-danger px-3 py-1" style={{ fontSize: '0.85rem' }}>
+                                Акція -{product.discount_percent}%
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Price */}
                     <div className="mb-4">
                         {product.discount_percent > 0 ? (
-                            <div className="d-flex align-items-center gap-3">
-                                <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
+                            <div className="d-flex align-items-baseline gap-3">
+                                <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#28a745', fontFamily: 'var(--font-heading)' }}>
                                     {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                 </h2>
-                                <div className="d-flex flex-column">
-                                    <span className="text-decoration-line-through text-muted" style={{ fontSize: '1.2rem' }}>
-                                        {Math.round(product.price)} грн
-                                    </span>
-                                    <span className="badge bg-danger" style={{ fontSize: '0.9rem', width: 'fit-content' }}>
-                                        -{product.discount_percent}%
-                                    </span>
-                                </div>
+                                <span className="text-decoration-line-through" style={{ fontSize: '1.3rem', color: 'var(--text-secondary)' }}>
+                                    {Math.round(product.price)} грн
+                                </span>
                             </div>
                         ) : (
-                            <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                            <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#e6f1ff', fontFamily: 'var(--font-heading)' }}>
                                 {Math.round(product.price)} грн
                             </h2>
                         )}
                     </div>
 
-                    <div className="alert alert-info d-flex align-items-center mb-4" role="alert" style={{ backgroundColor: 'rgba(56, 74, 158, 0.2)', borderColor: 'var(--primary-color)', color: '#e6f1ff' }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-patch-check-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-                            <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896-.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.638.896.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.638-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
-                        </svg>
-                        <div>
-                            Товар розроблений професійним психологом.
-                        </div>
-                    </div>
-
+                    {/* Stock Status */}
                     {product.stock_quantity !== undefined && (
-                        <div className="mb-3">
-                            <small style={{ color: product.stock_quantity > 10 ? '#28a745' : product.stock_quantity > 0 ? '#ffc107' : '#dc3545', fontFamily: 'var(--font-heading)', fontWeight: '600' }}>
-                                {product.stock_quantity > 10 ? `✓ В наявності (${product.stock_quantity} од.)` :
+                        <div className="mb-3 p-2 rounded" style={{ backgroundColor: 'rgba(109, 119, 250, 0.1)' }}>
+                            <small style={{ 
+                                color: product.stock_quantity > 10 ? '#28a745' : product.stock_quantity > 0 ? '#ffc107' : '#dc3545', 
+                                fontFamily: 'var(--font-heading)', 
+                                fontWeight: '600',
+                                fontSize: '0.95rem'
+                            }}>
+                                {product.stock_quantity > 10 ? `✓ В наявності` :
                                  product.stock_quantity > 0 ? `⚠ Залишилось ${product.stock_quantity} од.` :
                                  '✗ Немає в наявності'}
                             </small>
@@ -111,15 +113,100 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         <AddToCartButton product={product} />
                     </div>
 
-                    <hr className="my-4" />
+                    {/* Info Badge */}
+                    <div className="alert alert-info d-flex align-items-center mb-4 py-2" role="alert" style={{ backgroundColor: 'rgba(56, 74, 158, 0.15)', border: '1px solid rgba(56, 74, 158, 0.3)', fontSize: '0.9rem' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="flex-shrink-0 me-2" viewBox="0 0 16 16" style={{ color: 'var(--accent-color)' }}>
+                            <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896-.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.638.896.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.638-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                        </svg>
+                        <small style={{ color: 'var(--text-secondary)' }}>
+                            Товар розроблений професійним психологом
+                        </small>
+                    </div>
 
-                    {/* Description - shown in right column on desktop */}
-                    <div className="mt-4 d-none d-md-block">
-                        <h5 className="fw-bold mb-3">Опис</h5>
-                        <p className="text-muted" style={{ lineHeight: '1.7' }}>
+                    {/* Description */}
+                    <div className="mt-4">
+                        <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#e6f1ff', fontSize: '1.2rem' }}>Опис</h5>
+                        <p style={{ lineHeight: '1.8', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
                             {product.description}
                         </p>
                     </div>
+
+                    {/* Book Characteristics */}
+                    {(product.author || product.publisher || product.year || product.pages) && (
+                        <div className="mt-4">
+                            <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#e6f1ff', fontSize: '1.2rem' }}>Характеристики</h5>
+                            <div className="card border-0" style={{ backgroundColor: 'rgba(109, 119, 250, 0.05)' }}>
+                                <div className="card-body p-3">
+                                    <table className="table table-sm mb-0" style={{ fontSize: '0.9rem' }}>
+                                        <tbody>
+                                        {product.author && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ width: '40%', color: 'var(--text-secondary)', border: 'none' }}>Автор</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.author}</td>
+                                            </tr>
+                                        )}
+                                        {product.publisher && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Видавництво</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.publisher}</td>
+                                            </tr>
+                                        )}
+                                        {product.translator && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Перекладач</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.translator}</td>
+                                            </tr>
+                                        )}
+                                        {product.year && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Рік видання</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.year}</td>
+                                            </tr>
+                                        )}
+                                        {product.language && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Мова</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.language}</td>
+                                            </tr>
+                                        )}
+                                        {product.pages > 0 && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Кількість сторінок</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.pages}</td>
+                                            </tr>
+                                        )}
+                                        {product.cover_type && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Обкладинка</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.cover_type}</td>
+                                            </tr>
+                                        )}
+                                        {product.isbn && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>ISBN</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.isbn}</td>
+                                            </tr>
+                                        )}
+                                        {product.format && (
+                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Формат</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.format}</td>
+                                            </tr>
+                                        )}
+                                        {product.book_type && (
+                                            <tr>
+                                                <td className="py-2 px-0" style={{ color: 'var(--text-secondary)', border: 'none' }}>Тип</td>
+                                                <td className="py-2 px-0" style={{ color: '#e6f1ff', border: 'none' }}>{product.book_type}</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
                 </div>
             </div>
 

@@ -73,6 +73,23 @@ export default function CheckoutPage() {
         setLoading(true);
 
         try {
+            // Check stock availability before creating order
+            for (const item of cart) {
+                const { data: product, error: fetchError } = await supabase
+                    .from('products')
+                    .select('stock_quantity')
+                    .eq('id', item.id)
+                    .single();
+
+                if (fetchError) {
+                    throw new Error(`Помилка перевірки товару: ${item.title}`);
+                }
+
+                if (product.stock_quantity !== undefined && item.quantity > product.stock_quantity) {
+                    throw new Error(`Товар "${item.title}" недоступний у потрібній кількості. Доступно: ${product.stock_quantity} од., у кошику: ${item.quantity} од.`);
+                }
+            }
+
             // Generate unique order ID
             const orderId = await generateOrderId();
 

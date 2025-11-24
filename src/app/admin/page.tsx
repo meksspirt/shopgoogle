@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import ImageUpload from '@/components/ImageUpload';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function AdminPage() {
     const router = useRouter();
     const [orders, setOrders] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
+    const [promoCodes, setPromoCodes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [newProduct, setNewProduct] = useState({
         title: '',
@@ -19,12 +21,31 @@ export default function AdminPage() {
         mainImageIndex: 0,
         availability: 'in_stock' as 'in_stock' | 'pre_order',
         discount_percent: 0,
-        stock_quantity: 0
+        stock_quantity: 0,
+        author: '',
+        publisher: '',
+        translator: '',
+        year: new Date().getFullYear(),
+        language: 'Українська',
+        pages: 0,
+        cover_type: '',
+        isbn: '',
+        format: '',
+        book_type: 'Паперова книга'
     });
     const [editingProduct, setEditingProduct] = useState<any>(null);
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [trackingNumbers, setTrackingNumbers] = useState<{ [key: string]: string }>({});
+    const [newPromoCode, setNewPromoCode] = useState({
+        code: '',
+        discount_type: 'percent' as 'percent' | 'fixed',
+        discount_percent: 0,
+        discount_amount: 0,
+        min_order_amount: 0,
+        max_uses: null as number | null,
+        valid_until: ''
+    });
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -48,9 +69,20 @@ export default function AdminPage() {
         else setProducts(data || []);
     };
 
+    const fetchPromoCodes = async () => {
+        const { data, error } = await supabase
+            .from('promo_codes')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) console.error('Error fetching promo codes:', error);
+        else setPromoCodes(data || []);
+    };
+
     useEffect(() => {
         fetchOrders();
         fetchProducts();
+        fetchPromoCodes();
     }, []);
 
     const handleLogout = async () => {
@@ -154,7 +186,17 @@ export default function AdminPage() {
                     images: newProduct.images,
                     availability: newProduct.availability,
                     discount_percent: parseInt(newProduct.discount_percent.toString()) || 0,
-                    stock_quantity: parseInt(newProduct.stock_quantity.toString()) || 0
+                    stock_quantity: parseInt(newProduct.stock_quantity.toString()) || 0,
+                    author: newProduct.author,
+                    publisher: newProduct.publisher,
+                    translator: newProduct.translator,
+                    year: parseInt(newProduct.year.toString()) || new Date().getFullYear(),
+                    language: newProduct.language,
+                    pages: parseInt(newProduct.pages.toString()) || 0,
+                    cover_type: newProduct.cover_type,
+                    isbn: newProduct.isbn,
+                    format: newProduct.format,
+                    book_type: newProduct.book_type
                 }]);
 
             if (error) throw error;
@@ -186,7 +228,17 @@ export default function AdminPage() {
                     images: editingProduct.images,
                     availability: editingProduct.availability,
                     discount_percent: parseInt(editingProduct.discount_percent?.toString() || '0') || 0,
-                    stock_quantity: parseInt(editingProduct.stock_quantity?.toString() || '0') || 0
+                    stock_quantity: parseInt(editingProduct.stock_quantity?.toString() || '0') || 0,
+                    author: editingProduct.author,
+                    publisher: editingProduct.publisher,
+                    translator: editingProduct.translator,
+                    year: parseInt(editingProduct.year?.toString() || new Date().getFullYear().toString()),
+                    language: editingProduct.language,
+                    pages: parseInt(editingProduct.pages?.toString() || '0') || 0,
+                    cover_type: editingProduct.cover_type,
+                    isbn: editingProduct.isbn,
+                    format: editingProduct.format,
+                    book_type: editingProduct.book_type
                 })
                 .eq('id', editingProduct.id);
 
@@ -217,6 +269,65 @@ export default function AdminPage() {
         } else {
             alert('Товар успішно видалено');
             fetchProducts();
+        }
+    };
+
+    const handleCreatePromoCode = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const { error } = await supabase
+                .from('promo_codes')
+                .insert([{
+                    code: newPromoCode.code.toUpperCase(),
+                    discount_percent: newPromoCode.discount_type === 'percent' ? newPromoCode.discount_percent : null,
+                    discount_amount: newPromoCode.discount_type === 'fixed' ? newPromoCode.discount_amount : null,
+                    min_order_amount: newPromoCode.min_order_amount,
+                    max_uses: newPromoCode.max_uses,
+                    valid_until: newPromoCode.valid_until ? new Date(newPromoCode.valid_until).toISOString() : null
+                }]);
+
+            if (error) throw error;
+
+            alert('Промокод успішно створено!');
+            setNewPromoCode({ code: '', discount_type: 'percent', discount_percent: 0, discount_amount: 0, min_order_amount: 0, max_uses: null, valid_until: '' });
+            fetchPromoCodes();
+        } catch (error: any) {
+            console.error('Error creating promo code:', error);
+            alert('Помилка створення промокоду: ' + error.message);
+        }
+    };
+
+    const deletePromoCode = async (id: number, code: string) => {
+        if (!confirm(`Ви впевнені, що хочете видалити промокод "${code}"?`)) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from('promo_codes')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            alert('Помилка видалення промокоду');
+            console.error(error);
+        } else {
+            alert('Промокод успішно видалено');
+            fetchPromoCodes();
+        }
+    };
+
+    const togglePromoCodeStatus = async (id: number, currentStatus: boolean) => {
+        const { error } = await supabase
+            .from('promo_codes')
+            .update({ is_active: !currentStatus })
+            .eq('id', id);
+
+        if (error) {
+            alert('Помилка оновлення статусу');
+            console.error(error);
+        } else {
+            fetchPromoCodes();
         }
     };
 
@@ -426,6 +537,58 @@ export default function AdminPage() {
                                     onChange={e => setNewProduct({ ...newProduct, stock_quantity: parseInt(e.target.value) || 0 })}
                                 />
                             </div>
+                            
+                            {/* Book Characteristics */}
+                            <div className="col-12"><hr className="border-secondary my-3" /><h6 className="text-white">Характеристики книги</h6></div>
+                            
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Автор</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" value={newProduct.author} onChange={e => setNewProduct({ ...newProduct, author: e.target.value })} />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Видавництво</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" value={newProduct.publisher} onChange={e => setNewProduct({ ...newProduct, publisher: e.target.value })} />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Перекладач</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" value={newProduct.translator} onChange={e => setNewProduct({ ...newProduct, translator: e.target.value })} />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Рік видання</label>
+                                <input type="number" className="form-control bg-dark text-white border-secondary" value={newProduct.year} onChange={e => setNewProduct({ ...newProduct, year: parseInt(e.target.value) || new Date().getFullYear() })} />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Мова</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" value={newProduct.language} onChange={e => setNewProduct({ ...newProduct, language: e.target.value })} />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Кількість сторінок</label>
+                                <input type="number" className="form-control bg-dark text-white border-secondary" value={newProduct.pages} onChange={e => setNewProduct({ ...newProduct, pages: parseInt(e.target.value) || 0 })} />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Обкладинка</label>
+                                <select className="form-select bg-dark text-white border-secondary" value={newProduct.cover_type} onChange={e => setNewProduct({ ...newProduct, cover_type: e.target.value })}>
+                                    <option value="">Оберіть</option>
+                                    <option value="Тверда">Тверда</option>
+                                    <option value="М'яка">М'яка</option>
+                                </select>
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">ISBN</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" value={newProduct.isbn} onChange={e => setNewProduct({ ...newProduct, isbn: e.target.value })} />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Формат</label>
+                                <input type="text" className="form-control bg-dark text-white border-secondary" placeholder="140x210мм" value={newProduct.format} onChange={e => setNewProduct({ ...newProduct, format: e.target.value })} />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Тип книги</label>
+                                <select className="form-select bg-dark text-white border-secondary" value={newProduct.book_type} onChange={e => setNewProduct({ ...newProduct, book_type: e.target.value })}>
+                                    <option value="Паперова книга">Паперова книга</option>
+                                    <option value="Електронна книга">Електронна книга</option>
+                                </select>
+                            </div>
+
                             <div className="col-12">
                                 <ImageUpload
                                     onUploadComplete={(urls, mainIndex) => setNewProduct({ ...newProduct, images: urls, mainImageIndex: mainIndex })}
@@ -447,17 +610,21 @@ export default function AdminPage() {
             <div className="row g-4 mb-5">
                 {products.map((product) => (
                     <div key={product.id} className="col-md-6 col-lg-4">
-                        <div className="card shadow-sm h-100" style={{ backgroundColor: 'var(--card-bg)' }}>
-                            <div className="position-relative" style={{ height: '200px' }}>
-                                <Image
-                                    src={product.image_url}
-                                    alt={product.title}
-                                    fill
-                                    className="object-fit-cover"
-                                />
-                            </div>
+                        <div className="card shadow-sm h-100" style={{ backgroundColor: 'var(--card-bg)', cursor: 'pointer' }}>
+                            <Link href={`/product/${product.id}`} target="_blank" className="text-decoration-none">
+                                <div className="position-relative" style={{ height: '200px' }}>
+                                    <Image
+                                        src={product.image_url}
+                                        alt={product.title}
+                                        fill
+                                        className="object-fit-cover"
+                                    />
+                                </div>
+                            </Link>
                             <div className="card-body">
-                                <h5 className="card-title text-white">{product.title}</h5>
+                                <Link href={`/product/${product.id}`} target="_blank" className="text-decoration-none">
+                                    <h5 className="card-title text-white">{product.title}</h5>
+                                </Link>
                                 <p className="card-text text-muted small">
                                     {product.description.length > 50
                                         ? product.description.substring(0, 50) + '...'
@@ -482,6 +649,173 @@ export default function AdminPage() {
                         </div>
                     </div>
                 ))}
+            </div>
+
+            {/* Promo Codes Section */}
+            <h3 className="mb-4 fw-bold mt-5">Промокоди</h3>
+            
+            {/* Create Promo Code Form */}
+            <div className="card shadow-lg border-0 mb-4" style={{ backgroundColor: 'var(--card-bg)' }}>
+                <div className="card-header bg-transparent border-bottom border-secondary py-3">
+                    <h5 className="mb-0 fw-bold text-success">Створити промокод</h5>
+                </div>
+                <div className="card-body p-4">
+                    <form onSubmit={handleCreatePromoCode}>
+                        <div className="row g-3">
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Код промокоду</label>
+                                <input
+                                    type="text"
+                                    className="form-control bg-dark text-white border-secondary"
+                                    required
+                                    placeholder="SUMMER2024"
+                                    value={newPromoCode.code}
+                                    onChange={e => setNewPromoCode({ ...newPromoCode, code: e.target.value.toUpperCase() })}
+                                />
+                            </div>
+                            <div className="col-md-3">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Тип знижки</label>
+                                <select
+                                    className="form-select bg-dark text-white border-secondary"
+                                    value={newPromoCode.discount_type}
+                                    onChange={e => setNewPromoCode({ ...newPromoCode, discount_type: e.target.value as 'percent' | 'fixed' })}
+                                >
+                                    <option value="percent">Відсоток (%)</option>
+                                    <option value="fixed">Фіксована сума (грн)</option>
+                                </select>
+                            </div>
+                            {newPromoCode.discount_type === 'percent' ? (
+                                <div className="col-md-2">
+                                    <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        max="100"
+                                        className="form-control bg-dark text-white border-secondary"
+                                        required
+                                        value={newPromoCode.discount_percent}
+                                        onChange={e => setNewPromoCode({ ...newPromoCode, discount_percent: parseInt(e.target.value) || 0 })}
+                                    />
+                                </div>
+                            ) : (
+                                <div className="col-md-2">
+                                    <label className="form-label small text-muted text-uppercase fw-bold">Знижка (грн)</label>
+                                    <input
+                                        type="number"
+                                        min="1"
+                                        className="form-control bg-dark text-white border-secondary"
+                                        required
+                                        value={newPromoCode.discount_amount}
+                                        onChange={e => setNewPromoCode({ ...newPromoCode, discount_amount: parseFloat(e.target.value) || 0 })}
+                                    />
+                                </div>
+                            )}
+                            <div className="col-md-2">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Мін. сума</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    className="form-control bg-dark text-white border-secondary"
+                                    value={newPromoCode.min_order_amount}
+                                    onChange={e => setNewPromoCode({ ...newPromoCode, min_order_amount: parseFloat(e.target.value) || 0 })}
+                                />
+                            </div>
+                            <div className="col-md-2">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Макс. використань</label>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    className="form-control bg-dark text-white border-secondary"
+                                    placeholder="Необмежено"
+                                    value={newPromoCode.max_uses || ''}
+                                    onChange={e => setNewPromoCode({ ...newPromoCode, max_uses: e.target.value ? parseInt(e.target.value) : null })}
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Діє до</label>
+                                <input
+                                    type="datetime-local"
+                                    className="form-control bg-dark text-white border-secondary"
+                                    value={newPromoCode.valid_until}
+                                    onChange={e => setNewPromoCode({ ...newPromoCode, valid_until: e.target.value })}
+                                />
+                            </div>
+                            <div className="col-12">
+                                <button type="submit" className="btn btn-success px-5">Створити промокод</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            {/* Promo Codes List */}
+            <div className="card shadow-lg border-0 mb-5" style={{ backgroundColor: 'var(--card-bg)' }}>
+                <div className="card-body p-0">
+                    <div className="table-responsive">
+                        <table className="table table-dark table-hover mb-0">
+                            <thead style={{ backgroundColor: 'var(--secondary-color)' }}>
+                                <tr>
+                                    <th className="py-3">Код</th>
+                                    <th className="py-3">Знижка</th>
+                                    <th className="py-3">Мін. сума</th>
+                                    <th className="py-3">Використання</th>
+                                    <th className="py-3">Діє до</th>
+                                    <th className="py-3">Статус</th>
+                                    <th className="py-3">Дії</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {promoCodes.map((promo) => (
+                                    <tr key={promo.id}>
+                                        <td className="py-3">
+                                            <span className="fw-bold text-warning">{promo.code}</span>
+                                        </td>
+                                        <td className="py-3">
+                                            {promo.discount_percent ? 
+                                                <span className="text-success">{promo.discount_percent}%</span> :
+                                                <span className="text-success">{promo.discount_amount} грн</span>
+                                            }
+                                        </td>
+                                        <td className="py-3">
+                                            <span className="text-muted">{promo.min_order_amount} грн</span>
+                                        </td>
+                                        <td className="py-3">
+                                            <span className="text-white">
+                                                {promo.current_uses || 0} / {promo.max_uses || '∞'}
+                                            </span>
+                                        </td>
+                                        <td className="py-3">
+                                            <span className="text-muted small">
+                                                {promo.valid_until ? new Date(promo.valid_until).toLocaleDateString('uk-UA') : 'Безстроково'}
+                                            </span>
+                                        </td>
+                                        <td className="py-3">
+                                            <span className={`badge ${promo.is_active ? 'bg-success' : 'bg-secondary'}`}>
+                                                {promo.is_active ? 'Активний' : 'Неактивний'}
+                                            </span>
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="d-flex gap-2">
+                                                <button
+                                                    className={`btn btn-sm ${promo.is_active ? 'btn-warning' : 'btn-success'}`}
+                                                    onClick={() => togglePromoCodeStatus(promo.id, promo.is_active)}
+                                                >
+                                                    {promo.is_active ? 'Деактивувати' : 'Активувати'}
+                                                </button>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => deletePromoCode(promo.id, promo.code)}
+                                                >
+                                                    Видалити
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             {/* Edit Product Modal */}

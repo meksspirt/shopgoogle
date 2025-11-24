@@ -10,6 +10,9 @@ export default function CartPage() {
     const [mounted, setMounted] = useState(false);
     const [selectedItems, setSelectedItems] = useState<number[]>([]);
     const [recommended, setRecommended] = useState<any[]>([]);
+    const [promoCode, setPromoCode] = useState('');
+    const [appliedPromo, setAppliedPromo] = useState<any>(null);
+    const [promoError, setPromoError] = useState('');
 
     useEffect(() => {
         setMounted(true);
@@ -92,8 +95,94 @@ export default function CartPage() {
         const discount = item.discount_percent || 0;
         return acc + (item.price * item.quantity * discount / 100);
     }, 0);
-    const total = totalWithoutDiscount - totalDiscount;
+    const subtotal = totalWithoutDiscount - totalDiscount;
+    
+    // Calculate promo code discount
+    let promoDiscount = 0;
+    if (appliedPromo) {
+        if (appliedPromo.discount_percent) {
+            promoDiscount = subtotal * (appliedPromo.discount_percent / 100);
+        } else if (appliedPromo.discount_amount) {
+            promoDiscount = Math.min(appliedPromo.discount_amount, subtotal);
+        }
+    }
+    
+    const total = subtotal - promoDiscount;
     const totalItems = selectedCartItems.reduce((acc, item) => acc + item.quantity, 0);
+
+    // Check if any item exceeds stock quantity
+    const hasStockIssues = selectedCartItems.some(item => 
+        item.stock_quantity !== undefined && item.quantity > item.stock_quantity
+    );
+
+    const handleCheckout = (e: React.MouseEvent) => {
+        if (hasStockIssues) {
+            e.preventDefault();
+            alert('Деякі товари в кошику перевищують доступну кількість на складі. Будь ласка, зменшіть кількість перед оформленням замовлення.');
+        } else if (appliedPromo) {
+            // Save promo code to localStorage for checkout page
+            localStorage.setItem('appliedPromo', JSON.stringify(appliedPromo));
+        }
+    };
+
+    const applyPromoCode = async () => {
+        setPromoError('');
+        
+        if (!promoCode.trim()) {
+            setPromoError('Введіть промокод');
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('promo_codes')
+                .select('*')
+                .eq('code', promoCode.toUpperCase())
+                .single();
+
+            if (error || !data) {
+                setPromoError('Промокод не знайдено');
+                return;
+            }
+
+            // Check if promo code is active
+            if (!data.is_active) {
+                setPromoError('Промокод неактивний');
+                return;
+            }
+
+            // Check if promo code has expired
+            if (data.valid_until && new Date(data.valid_until) < new Date()) {
+                setPromoError('Промокод прострочений');
+                return;
+            }
+
+            // Check if promo code has reached max uses
+            if (data.max_uses && data.current_uses >= data.max_uses) {
+                setPromoError('Промокод вичерпано');
+                return;
+            }
+
+            // Check minimum order amount
+            if (data.min_order_amount && totalWithoutDiscount < data.min_order_amount) {
+                setPromoError(`Мінімальна сума замовлення: ${data.min_order_amount} грн`);
+                return;
+            }
+
+            setAppliedPromo(data);
+            setPromoError('');
+        } catch (error) {
+            console.error('Error applying promo code:', error);
+            setPromoError('Помилка застосування промокоду');
+        }
+    };
+
+    const removePromoCode = () => {
+        setAppliedPromo(null);
+        setPromoCode('');
+        setPromoError('');
+        localStorage.removeItem('appliedPromo');
+    };
 
     // Filter recommended products: exclude items already in cart
     const filteredRecommended = recommended
@@ -172,10 +261,26 @@ export default function CartPage() {
                                                     {item.title}
                                                 </h5>
                                             </Link>
-                                            <div className="text-muted small mb-3">
+                                            <div className="text-muted small mb-2">
                                                 <span className="me-3">Колір: стандартний</span>
                                                 <span>Вага: 1 кг</span>
                                             </div>
+                                            {item.stock_quantity !== undefined && (
+                                                <div className="mb-2">
+                                                    <small style={{ 
+                                                        color: item.quantity > item.stock_quantity ? '#dc3545' : 
+                                                               item.stock_quantity > 10 ? '#28a745' : '#ffc107',
+                                                        fontWeight: '600'
+                                                    }}>
+                                                        {item.quantity > item.stock_quantity ? 
+                                                            `⚠ Перевищено ліміт! Доступно: ${item.stock_quantity} од.` :
+                                                         item.stock_quantity > 10 ? 
+                                                            `✓ В наявності` :
+                                                            `⚠ Залишилось ${item.stock_quantity} од.`
+                                                        }
+                                                    </small>
+                                                </div>
+                                            )}
                                             <div className="d-flex gap-3">
                                                 <button className="btn btn-link p-0 text-decoration-none text-danger small" onClick={() => removeItem(item.id)}>Видалити</button>
                                             </div>
@@ -214,8 +319,18 @@ export default function CartPage() {
                 <div className="col-lg-4">
                     <div className="card border-0 shadow-sm sticky-top" style={{ top: '20px', backgroundColor: 'var(--card-bg)' }}>
                         <div className="card-body p-4">
-                            <Link href="/checkout" className="btn btn-success w-100 btn-lg mb-4 fw-bold py-3" style={{ backgroundColor: 'var(--secondary-color)', borderColor: 'var(--secondary-color)' }}>
-                                Перейти до оформлення
+                            <Link 
+                                href="/checkout" 
+                                className={`btn w-100 btn-lg mb-4 fw-bold py-3 ${hasStockIssues ? 'btn-secondary' : 'btn-success'}`}
+                                style={{ 
+                                    backgroundColor: hasStockIssues ? '#6c757d' : 'var(--secondary-color)', 
+                                    borderColor: hasStockIssues ? '#6c757d' : 'var(--secondary-color)',
+                                    opacity: hasStockIssues ? 0.6 : 1,
+                                    cursor: hasStockIssues ? 'not-allowed' : 'pointer'
+                                }}
+                                onClick={handleCheckout}
+                            >
+                                {hasStockIssues ? '⚠ Перевірте кількість товарів' : 'Перейти до оформлення'}
                             </Link>
 
                             <p className="text-muted small mb-4">
@@ -224,14 +339,48 @@ export default function CartPage() {
 
                             <h5 className="card-title text-white mb-4">Ваша корзина</h5>
 
+                            {/* Promo Code Input */}
+                            {!appliedPromo ? (
+                                <div className="mb-4">
+                                    <label className="form-label text-white small">Промокод</label>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            className="form-control bg-dark text-white border-secondary"
+                                            placeholder="Введіть промокод"
+                                            value={promoCode}
+                                            onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                                        />
+                                        <button
+                                            className="btn btn-outline-success"
+                                            onClick={applyPromoCode}
+                                        >
+                                            Застосувати
+                                        </button>
+                                    </div>
+                                    {promoError && <small className="text-danger">{promoError}</small>}
+                                </div>
+                            ) : (
+                                <div className="alert alert-success mb-4 d-flex justify-content-between align-items-center">
+                                    <span>✓ Промокод: <strong>{appliedPromo.code}</strong></span>
+                                    <button className="btn btn-sm btn-outline-danger" onClick={removePromoCode}>✕</button>
+                                </div>
+                            )}
+
                             <div className="d-flex justify-content-between mb-2 text-white">
                                 <span>Товари ({totalItems})</span>
                                 <span>{Math.round(totalWithoutDiscount)} ₴</span>
                             </div>
                             {totalDiscount > 0 && (
-                                <div className="d-flex justify-content-between mb-4 text-success">
-                                    <span>Знижка</span>
+                                <div className="d-flex justify-content-between mb-2 text-success">
+                                    <span>Знижка на товари</span>
                                     <span>- {Math.round(totalDiscount)} ₴</span>
+                                </div>
+                            )}
+                            {promoDiscount > 0 && (
+                                <div className="d-flex justify-content-between mb-2 text-warning">
+                                    <span>Промокод ({appliedPromo.code})</span>
+                                    <span>- {Math.round(promoDiscount)} ₴</span>
                                 </div>
                             )}
 
