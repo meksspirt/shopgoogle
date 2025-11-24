@@ -24,7 +24,7 @@ export default function Navbar() {
     return (
         <nav className="navbar navbar-expand-lg sticky-top">
             <div className="container">
-                <Link href="/" className="navbar-brand fw-bold text-white" style={{ fontFamily: 'var(--font-logo)', fontSize: '1.8rem', letterSpacing: '2px' }}>
+                <Link href="/" className="navbar-brand fw-bold text-white" style={{ fontFamily: 'var(--font-carelia, serif)', fontSize: '1.8rem', letterSpacing: '2px' }}>
                     CalmCraft
                 </Link>
                 <button
