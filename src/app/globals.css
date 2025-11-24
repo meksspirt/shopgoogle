@@ -19,9 +19,9 @@
   /* Fonts */
   --font-logo: 'Cinzel', serif;
   /* Carelia Font alternative - elegant serif for logo */
-  --font-body: 'Quincy CF', serif;
-  /* Main site font */
-  --font-heading: 'Quincy CF', serif;
+  --font-body: var(--font-quincy), serif;
+  /* Main site font - using local Quincy CF */
+  --font-heading: var(--font-quincy), serif;
 }
 
 body {
