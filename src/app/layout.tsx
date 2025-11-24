@@ -19,6 +19,7 @@ const quincy = localFont({
   ],
   variable: '--font-quincy',
   display: 'swap',
+  fallback: ['serif'],
 });
 
 export const metadata = {
@@ -39,7 +40,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" async></script>
       </head>
-      <body className={quincy.variable}>
+      <body className={`${quincy.variable} ${quincy.className}`} style={{ fontFamily: 'var(--font-quincy), serif' }}>
         <Navbar />
         <main className="min-vh-100">
           {children}
