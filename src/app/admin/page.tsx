@@ -202,7 +202,26 @@ export default function AdminPage() {
             if (error) throw error;
 
             alert('Товар успішно створено!');
-            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock', discount_percent: 0, stock_quantity: 0 });
+            setNewProduct({ 
+                title: '', 
+                description: '', 
+                price: '', 
+                images: [], 
+                mainImageIndex: 0, 
+                availability: 'in_stock', 
+                discount_percent: 0, 
+                stock_quantity: 0,
+                author: '',
+                publisher: '',
+                translator: '',
+                year: new Date().getFullYear(),
+                language: 'Українська',
+                pages: 0,
+                cover_type: '',
+                isbn: '',
+                format: '',
+                book_type: 'Паперова книга'
+            });
             fetchProducts();
         } catch (error: any) {
             console.error('Error creating product:', error);
