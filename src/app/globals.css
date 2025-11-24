@@ -17,12 +17,15 @@
   /* Light gray for secondary text */
 
   /* Fonts */
-  --font-heading: 'Tektur', sans-serif;
-  --font-body: 'Cormorant SC', serif;
+  --font-logo: 'Cinzel', serif;
+  /* Carelia Font alternative - elegant serif for logo */
+  --font-body: 'Quincy CF', serif;
+  /* Main site font */
+  --font-heading: 'Quincy CF', serif;
 }
 
 body {
-  font-family: 'Tektur', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
@@ -57,9 +60,9 @@ a:hover {
 }
 
 .navbar-brand {
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  letter-spacing: 1px;
+  font-family: var(--font-logo);
+  font-size: 1.8rem;
+  letter-spacing: 2px;
 }
 
 .nav-link {
