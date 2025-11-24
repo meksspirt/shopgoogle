@@ -1,16 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { useSearchParams } from 'next/navigation';
 
 export default function TrackOrderPage() {
-    const [orderId, setOrderId] = useState('');
+    const searchParams = useSearchParams();
+    const orderIdFromUrl = searchParams.get('orderId');
+    
+    const [orderId, setOrderId] = useState(orderIdFromUrl || '');
     const [status, setStatus] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const handleTrack = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleTrack = async (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
+        
+        if (!orderId) return;
+        
         setLoading(true);
         setError('');
         setStatus(null);
@@ -31,6 +38,13 @@ export default function TrackOrderPage() {
             setLoading(false);
         }
     };
+
+    // Auto-track if orderId is in URL
+    useEffect(() => {
+        if (orderIdFromUrl) {
+            handleTrack();
+        }
+    }, [orderIdFromUrl]);
 
     return (
         <div className="container py-5">

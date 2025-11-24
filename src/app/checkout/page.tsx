@@ -73,6 +73,10 @@ export default function CheckoutPage() {
         setLoading(true);
 
         try {
+            // Get applied promo code from localStorage
+            const appliedPromoStr = localStorage.getItem('appliedPromo');
+            const appliedPromo = appliedPromoStr ? JSON.parse(appliedPromoStr) : null;
+
             // Check stock availability before creating order
             for (const item of cart) {
                 const { data: product, error: fetchError } = await supabase
@@ -114,6 +118,20 @@ export default function CheckoutPage() {
 
             if (orderError) throw orderError;
 
+            // Increment promo code usage counter if promo was applied
+            if (appliedPromo && appliedPromo.id) {
+                const { error: promoError } = await supabase
+                    .from('promo_codes')
+                    .update({ 
+                        current_uses: (appliedPromo.current_uses || 0) + 1 
+                    })
+                    .eq('id', appliedPromo.id);
+
+                if (promoError) {
+                    console.error('Error updating promo code usage:', promoError);
+                }
+            }
+
             // Create Order Items
             const orderItems = cart.map(item => ({
                 order_id: order.id,
@@ -153,8 +171,9 @@ export default function CheckoutPage() {
                 }
             }
 
-            // Clear Cart
+            // Clear Cart and promo code
             localStorage.removeItem('cart');
+            localStorage.removeItem('appliedPromo');
             window.dispatchEvent(new Event('cartUpdated'));
 
             // Redirect

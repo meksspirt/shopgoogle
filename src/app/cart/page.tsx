@@ -102,7 +102,8 @@ export default function CartPage() {
         }
     };
 
-    const selectedCartItems = cart.filter(item => selectedItems.includes(item.id));
+    // All items are always selected now
+    const selectedCartItems = cart;
     
     // Calculate totals with discount
     const totalWithoutDiscount = selectedCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -222,25 +223,7 @@ export default function CartPage() {
             <div className="row g-4 mb-5">
                 {/* Left Column: Cart Items */}
                 <div className="col-lg-8">
-                    {/* Header Actions */}
-                    <div className="d-flex align-items-center mb-3 pb-3 border-bottom border-secondary">
-                        <div className="form-check me-4">
-                            <input
-                                className="form-check-input"
-                                type="checkbox"
-                                id="selectAll"
-                                checked={selectedItems.length === cart.length && cart.length > 0}
-                                onChange={toggleSelectAll}
-                                style={{ cursor: 'pointer' }}
-                            />
-                            <label className="form-check-label text-white ms-2" htmlFor="selectAll" style={{ cursor: 'pointer' }}>
-                                Вибрати все
-                            </label>
-                        </div>
-                        <button className="btn btn-link text-danger text-decoration-none p-0" onClick={() => setSelectedItems([])}>
-                            Видалити вибрані
-                        </button>
-                    </div>
+
 
                     {/* Items List */}
                     <div className="d-flex flex-column gap-3">
@@ -248,15 +231,8 @@ export default function CartPage() {
                             <div key={item.id} className="card border-0 shadow-sm" style={{ backgroundColor: 'var(--card-bg)' }}>
                                 <div className="card-body">
                                     <div className="row align-items-start">
-                                        {/* Checkbox & Image */}
-                                        <div className="col-auto d-flex align-items-center">
-                                            <input
-                                                className="form-check-input me-3"
-                                                type="checkbox"
-                                                checked={selectedItems.includes(item.id)}
-                                                onChange={() => toggleSelect(item.id)}
-                                                style={{ cursor: 'pointer' }}
-                                            />
+                                        {/* Image */}
+                                        <div className="col-auto">
                                             <Link href={`/product/${item.id}`} className="text-decoration-none">
                                                 <div className="position-relative rounded overflow-hidden bg-white" style={{ height: '120px', width: '120px', cursor: 'pointer' }}>
                                                     <Image

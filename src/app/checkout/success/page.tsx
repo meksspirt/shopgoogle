@@ -52,7 +52,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
 
                     <div className="d-grid gap-2 d-sm-flex justify-content-center">
                         <Link 
-                            href="/track" 
+                            href={`/track?orderId=${orderId}`}
                             className="btn btn-outline-primary d-flex align-items-center justify-content-center"
                             style={{ fontFamily: 'var(--font-heading)', minHeight: '48px' }}
                         >

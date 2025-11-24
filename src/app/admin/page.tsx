@@ -400,7 +400,17 @@ export default function AdminPage() {
                                         <td className="py-3">
                                             {order.instagram_nick && (
                                                 <div className="small text-secondary">
-                                                    Inst: <span className="text-primary">@{order.instagram_nick}</span>
+                                                    Inst: <a 
+                                                        href={`https://www.instagram.com/${order.instagram_nick.replace('@', '')}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-primary text-decoration-none"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+                                                    >
+                                                        @{order.instagram_nick}
+                                                    </a>
                                                 </div>
                                             )}
                                             {order.visited_psychologist && (
