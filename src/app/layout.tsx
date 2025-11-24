@@ -45,7 +45,7 @@ export default function RootLayout({
       <head>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" async></script>
       </head>
-      <body className={`${quincy.variable} ${carelia.variable} ${quincy.className}`} style={{ fontFamily: 'var(--font-quincy), serif' }}>
+      <body className={`${quincy.variable} ${carelia.variable}`}>
         <Navbar />
         <main className="min-vh-100">
           {children}

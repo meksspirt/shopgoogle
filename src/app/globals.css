@@ -24,11 +24,19 @@
   --font-heading: var(--font-quincy), serif;
 }
 
+* {
+  font-family: var(--font-quincy, serif) !important;
+}
+
 body {
   font-family: var(--font-quincy, serif) !important;
   background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
+}
+
+p, span, div, a, button, input, textarea, select, label {
+  font-family: var(--font-quincy, serif) !important;
 }
 
 h1,
