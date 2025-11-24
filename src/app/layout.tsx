@@ -24,7 +24,7 @@ const quincy = localFont({
 
 // Настройка шрифта Carelia для логотипа
 const carelia = localFont({
-  src: './fonts/Carelia-Upright.woff',
+  src: './fonts/Carelia-Upright.ttf',
   variable: '--font-carelia',
   display: 'swap',
   fallback: ['serif'],
