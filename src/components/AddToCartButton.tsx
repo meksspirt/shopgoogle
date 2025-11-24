@@ -64,6 +64,9 @@ export default function AddToCartButton({ product }: { product: any }) {
         }
     };
 
+    // Check if product is out of stock
+    const isOutOfStock = product.stock_quantity !== undefined && product.stock_quantity <= 0;
+
     return (
         <>
             <style jsx>{`
@@ -131,38 +134,65 @@ export default function AddToCartButton({ product }: { product: any }) {
 
             <div>
                 {/* Quantity Selector */}
-                <div className="d-flex align-items-center gap-3 mb-3">
-                    <button
-                        className="btn quantity-btn"
-                        onClick={decreaseQuantity}
-                        style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
-                    >
-                        −
-                    </button>
-                    <input
-                        type="number"
-                        className="form-control text-center quantity-input"
-                        value={quantity}
-                        onChange={(e) => {
-                            const maxQuantity = product.stock_quantity || 999;
-                            const value = parseInt(e.target.value) || 1;
-                            setQuantity(Math.max(1, Math.min(value, maxQuantity)));
-                        }}
-                        style={{ width: '80px', height: '50px', fontSize: '1.2rem' }}
-                        min="1"
-                        max={product.stock_quantity || 999}
-                    />
-                    <button
-                        className="btn quantity-btn"
-                        onClick={increaseQuantity}
-                        style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
-                    >
-                        +
-                    </button>
-                </div>
+                {!isOutOfStock && (
+                    <div className="d-flex align-items-center gap-3 mb-3">
+                        <button
+                            className="btn quantity-btn"
+                            onClick={decreaseQuantity}
+                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                            −
+                        </button>
+                        <input
+                            type="number"
+                            className="form-control text-center quantity-input"
+                            value={quantity}
+                            onChange={(e) => {
+                                const maxQuantity = product.stock_quantity || 999;
+                                const value = parseInt(e.target.value) || 1;
+                                setQuantity(Math.max(1, Math.min(value, maxQuantity)));
+                            }}
+                            style={{ width: '80px', height: '50px', fontSize: '1.2rem' }}
+                            min="1"
+                            max={product.stock_quantity || 999}
+                        />
+                        <button
+                            className="btn quantity-btn"
+                            onClick={increaseQuantity}
+                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
+                        >
+                            +
+                        </button>
+                    </div>
+                )}
 
                 {/* Add to Cart / Go to Cart Button */}
-                {!isAdded ? (
+                {isOutOfStock ? (
+                    <button
+                        className="btn w-100"
+                        disabled
+                        style={{
+                            height: '60px',
+                            borderRadius: '12px',
+                            fontFamily: 'var(--font-heading)',
+                            fontWeight: '700',
+                            fontSize: '1.2rem',
+                            background: '#6c757d',
+                            border: 'none',
+                            color: 'white',
+                            textTransform: 'uppercase',
+                            letterSpacing: '1px',
+                            cursor: 'not-allowed',
+                            opacity: 0.6
+                        }}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-x-circle me-2" viewBox="0 0 16 16" style={{ verticalAlign: 'middle' }}>
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                        Немає в наявності
+                    </button>
+                ) : !isAdded ? (
                     <button
                         className={`btn w-100 add-to-cart-btn ${isAnimating ? 'animating' : ''}`}
                         onClick={addToCart}
