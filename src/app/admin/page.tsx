@@ -386,7 +386,6 @@ export default function AdminPage() {
             )}
 
             {/* Products List */}
-            <h3 className="mb-4 fw-bold">Товари</h3>
             <div className="row g-4 mb-5">
                 {products.map((product) => (
                     <div key={product.id} className="col-md-6 col-lg-4">

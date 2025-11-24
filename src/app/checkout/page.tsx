@@ -156,14 +156,14 @@ export default function CheckoutPage() {
                                     {item.discount_percent > 0 ? (
                                         <>
                                             <div className="fw-bold text-success">
-                                                {(item.price * (1 - item.discount_percent / 100) * item.quantity).toFixed(2)} грн
+                                                {Math.round(item.price * (1 - item.discount_percent / 100) * item.quantity)} грн
                                             </div>
                                             <div className="text-muted text-decoration-line-through small">
-                                                {(item.price * item.quantity).toFixed(2)} грн
+                                                {Math.round(item.price * item.quantity)} грн
                                             </div>
                                         </>
                                     ) : (
-                                        <div className="fw-bold text-primary">{(item.price * item.quantity).toFixed(2)} грн</div>
+                                        <div className="fw-bold text-primary">{Math.round(item.price * item.quantity)} грн</div>
                                     )}
                                 </div>
                             </div>
@@ -173,12 +173,12 @@ export default function CheckoutPage() {
                     <div className="mt-4 p-4 rounded" style={{ backgroundColor: 'var(--card-bg)' }}>
                         <div className="d-flex justify-content-between mb-2">
                             <span className="text-muted">Сума товарів</span>
-                            <span>{totalWithoutDiscount.toFixed(2)} грн</span>
+                            <span>{Math.round(totalWithoutDiscount)} грн</span>
                         </div>
                         {totalDiscount > 0 && (
                             <div className="d-flex justify-content-between mb-2">
                                 <span className="text-success">Знижка</span>
-                                <span className="text-success">-{totalDiscount.toFixed(2)} грн</span>
+                                <span className="text-success">-{Math.round(totalDiscount)} грн</span>
                             </div>
                         )}
                         <div className="d-flex justify-content-between mb-2">
@@ -188,7 +188,7 @@ export default function CheckoutPage() {
                         <hr className="border-secondary my-3" />
                         <div className="d-flex justify-content-between align-items-center">
                             <span className="h5 mb-0">Всього до сплати</span>
-                            <span className="h3 mb-0 text-primary fw-bold">{total.toFixed(2)} грн</span>
+                            <span className="h3 mb-0 text-primary fw-bold">{Math.round(total)} грн</span>
                         </div>
                     </div>
                 </div>
@@ -293,7 +293,7 @@ export default function CheckoutPage() {
                                     className="btn btn-primary w-100 btn-lg py-3 fw-bold text-uppercase ls-1 shadow-lg"
                                     disabled={loading}
                                 >
-                                    {loading ? 'Обробка...' : `Сплатити ${total.toFixed(2)} грн`}
+                                    {loading ? 'Обробка...' : `Сплатити ${Math.round(total)} грн`}
                                 </button>
                             </div>
                         </div>

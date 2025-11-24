@@ -45,7 +45,7 @@ export default function TrackOrderPage() {
                                     <input
                                         type="text"
                                         className="form-control form-control-lg bg-dark text-white border-secondary"
-                                        placeholder="напр. 123e4567-e89b-..."
+                                        placeholder="напр. 530819"
                                         value={orderId}
                                         onChange={(e) => setOrderId(e.target.value)}
                                         required

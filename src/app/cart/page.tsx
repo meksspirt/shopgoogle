@@ -177,13 +177,13 @@ export default function CartPage() {
                                                 {item.discount_percent > 0 ? (
                                                     <>
                                                         <h4 className="mb-0 text-success fw-bold">
-                                                            {(item.price * (1 - item.discount_percent / 100)).toFixed(0)} ₴
+                                                            {Math.round(item.price * (1 - item.discount_percent / 100))} ₴
                                                         </h4>
-                                                        <div className="text-muted text-decoration-line-through small">{item.price} ₴</div>
+                                                        <div className="text-muted text-decoration-line-through small">{Math.round(item.price)} ₴</div>
                                                         <div className="badge bg-danger small">-{item.discount_percent}%</div>
                                                     </>
                                                 ) : (
-                                                    <h4 className="mb-0 text-white fw-bold">{item.price} ₴</h4>
+                                                    <h4 className="mb-0 text-white fw-bold">{Math.round(item.price)} ₴</h4>
                                                 )}
                                             </div>
 
@@ -216,12 +216,12 @@ export default function CartPage() {
 
                             <div className="d-flex justify-content-between mb-2 text-white">
                                 <span>Товари ({totalItems})</span>
-                                <span>{totalWithoutDiscount.toFixed(0)} ₴</span>
+                                <span>{Math.round(totalWithoutDiscount)} ₴</span>
                             </div>
                             {totalDiscount > 0 && (
                                 <div className="d-flex justify-content-between mb-4 text-success">
                                     <span>Знижка</span>
-                                    <span>- {totalDiscount.toFixed(0)} ₴</span>
+                                    <span>- {Math.round(totalDiscount)} ₴</span>
                                 </div>
                             )}
 
@@ -229,7 +229,7 @@ export default function CartPage() {
 
                             <div className="d-flex justify-content-between align-items-center mb-2">
                                 <span className="h5 mb-0 text-white">Загальна вартість</span>
-                                <span className="h4 mb-0 text-white fw-bold">{total.toFixed(0)} ₴</span>
+                                <span className="h4 mb-0 text-white fw-bold">{Math.round(total)} ₴</span>
                             </div>
                         </div>
                     </div>
