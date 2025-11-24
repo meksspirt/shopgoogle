@@ -113,11 +113,16 @@ export default function AdminPage() {
                 throw new Error('Замовлення не знайдено або вже видалено');
             }
 
+            // Обновляем список заказов
+            await fetchOrders();
+            
             alert('Замовлення успішно видалено');
-            fetchOrders();
         } catch (error: any) {
             alert('Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'));
             console.error('Delete order error:', error);
+            
+            // Обновляем список в любом случае
+            await fetchOrders();
         }
     };
 
