@@ -7,17 +7,25 @@ import localFont from "next/font/local";
 const quincy = localFont({
   src: [
     {
-      path: './fonts/Fontspring-DEMO-quincycf-regular.otf',
+      path: './fonts/fonnts.com-Quincy_CF_Regular.ttf',
       weight: '400',
       style: 'normal',
     },
     {
-      path: './fonts/Fontspring-DEMO-quincycf-bold.otf',
+      path: './fonts/fonnts.com-Quincy_CF_Bold.ttf',
       weight: '700',
       style: 'normal',
     },
   ],
   variable: '--font-quincy',
+  display: 'swap',
+  fallback: ['serif'],
+});
+
+// Настройка шрифта Carelia для логотипа
+const carelia = localFont({
+  src: './fonts/Carelia-Upright.woff',
+  variable: '--font-carelia',
   display: 'swap',
   fallback: ['serif'],
 });
@@ -35,12 +43,9 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" async></script>
       </head>
-      <body className={`${quincy.variable} ${quincy.className}`} style={{ fontFamily: 'var(--font-quincy), serif' }}>
+      <body className={`${quincy.variable} ${carelia.variable} ${quincy.className}`} style={{ fontFamily: 'var(--font-quincy), serif' }}>
         <Navbar />
         <main className="min-vh-100">
           {children}

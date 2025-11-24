@@ -17,8 +17,8 @@
   /* Light gray for secondary text */
 
   /* Fonts */
-  --font-logo: 'Cinzel', serif;
-  /* Carelia Font alternative - elegant serif for logo */
+  --font-logo: var(--font-carelia), serif;
+  /* Carelia Font for logo */
   --font-body: var(--font-quincy), serif;
   /* Main site font - using local Quincy CF */
   --font-heading: var(--font-quincy), serif;
@@ -60,7 +60,7 @@ a:hover {
 }
 
 .navbar-brand {
-  font-family: var(--font-logo);
+  font-family: var(--font-carelia, serif) !important;
   font-size: 1.8rem;
   letter-spacing: 2px;
 }
