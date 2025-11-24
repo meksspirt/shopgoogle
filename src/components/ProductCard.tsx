@@ -12,6 +12,7 @@ interface Product {
     price: number;
     image_url: string;
     availability?: string;
+    discount_percent?: number;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -52,6 +53,13 @@ export default function ProductCard({ product }: { product: Product }) {
                                 </span>
                             </div>
                         )}
+                        {product.discount_percent && product.discount_percent > 0 && (
+                            <div className="position-absolute top-0 start-0 m-2">
+                                <span className="badge bg-danger px-3 py-2" style={{ fontSize: '0.9rem', fontWeight: '700' }}>
+                                    -{product.discount_percent}%
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <div className="card-body d-flex flex-column p-3" style={{ backgroundColor: '#fff' }}>
                         <h5 className="card-title mb-2 text-dark" style={{
@@ -71,9 +79,22 @@ export default function ProductCard({ product }: { product: Product }) {
                             {product.description}
                         </p>
                         <div className="d-flex justify-content-between align-items-center mt-auto">
-                            <span className="fw-bold" style={{ fontSize: '1.25rem', color: '#000' }}>
-                                {product.price} грн
-                            </span>
+                            <div>
+                                {product.discount_percent && product.discount_percent > 0 ? (
+                                    <>
+                                        <div className="text-muted text-decoration-line-through small">
+                                            {product.price} грн
+                                        </div>
+                                        <span className="fw-bold text-danger" style={{ fontSize: '1.35rem' }}>
+                                            {Math.round(product.price * (1 - product.discount_percent / 100))} грн
+                                        </span>
+                                    </>
+                                ) : (
+                                    <span className="fw-bold" style={{ fontSize: '1.25rem', color: '#000' }}>
+                                        {product.price} грн
+                                    </span>
+                                )}
+                            </div>
                             <button
                                 className="btn btn-dark btn-sm px-3"
                                 onClick={addToCart}

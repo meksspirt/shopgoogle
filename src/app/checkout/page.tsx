@@ -55,6 +55,7 @@ export default function CheckoutPage() {
                     customer_name: formData.name,
                     customer_email: formData.email,
                     customer_phone: formData.phone,
+                    customer_address: `${formData.city}, Нова Пошта №${formData.novaPoshta}`,
                     customer_city: formData.city,
                     nova_poshta_branch: formData.novaPoshta,
                     instagram_nick: formData.instagram,

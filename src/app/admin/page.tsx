@@ -17,7 +17,8 @@ export default function AdminPage() {
         price: '',
         images: [] as string[],
         mainImageIndex: 0,
-        availability: 'in_stock' as 'in_stock' | 'pre_order'
+        availability: 'in_stock' as 'in_stock' | 'pre_order',
+        discount_percent: 0
     });
     const [editingProduct, setEditingProduct] = useState<any>(null);
     const [creatingProduct, setCreatingProduct] = useState(false);
@@ -110,13 +111,14 @@ export default function AdminPage() {
                     price: parseFloat(newProduct.price),
                     image_url: newProduct.images[newProduct.mainImageIndex],
                     images: newProduct.images,
-                    availability: newProduct.availability
+                    availability: newProduct.availability,
+                    discount_percent: parseInt(newProduct.discount_percent.toString()) || 0
                 }]);
 
             if (error) throw error;
 
             alert('Товар успішно створено!');
-            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock' });
+            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock', discount_percent: 0 });
             fetchProducts();
         } catch (error: any) {
             console.error('Error creating product:', error);
@@ -140,7 +142,8 @@ export default function AdminPage() {
                     price: parseFloat(editingProduct.price),
                     image_url: editingProduct.images[editingProduct.mainImageIndex || 0],
                     images: editingProduct.images,
-                    availability: editingProduct.availability
+                    availability: editingProduct.availability,
+                    discount_percent: parseInt(editingProduct.discount_percent?.toString() || '0') || 0
                 })
                 .eq('id', editingProduct.id);
 
@@ -238,6 +241,18 @@ export default function AdminPage() {
                                     <option value="in_stock">В наявності</option>
                                     <option value="pre_order">Предзаказ</option>
                                 </select>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    className="form-select-lg bg-dark text-white border-secondary"
+                                    value={newProduct.discount_percent}
+                                    onChange={e => setNewProduct({ ...newProduct, discount_percent: parseInt(e.target.value) || 0 })}
+                                    style={{ width: '100%', padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid' }}
+                                />
                             </div>
                             <div className="col-12">
                                 <ImageUpload
@@ -350,6 +365,17 @@ export default function AdminPage() {
                                                 <option value="in_stock">В наявності</option>
                                                 <option value="pre_order">Предзаказ</option>
                                             </select>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                max="100"
+                                                className="form-control bg-dark text-white border-secondary"
+                                                value={editingProduct.discount_percent || 0}
+                                                onChange={e => setEditingProduct({ ...editingProduct, discount_percent: parseInt(e.target.value) || 0 })}
+                                            />
                                         </div>
                                         <div className="col-12">
                                             <ImageUpload
