@@ -1,20 +1,20 @@
 :root {
-  /* User Palette Mapping */
-  --bg-color: #140f07;
-  /* Color 1: Darkest Background */
-  --card-bg: #13234c;
-  /* Color 2: Deep Blue (Cards/Sections) */
-  --primary-color: #384a9e;
-  /* Color 3: Main Site Color */
-  --secondary-color: #6d77fa;
-  /* Color 4: Lighter Blue */
-  --accent-color: #b8aafa;
-  /* Color 5: Lightest (Accents/Text) */
+  /* New Color Scheme - #00075e as primary */
+  --bg-color: #00075e;
+  /* Main dark blue background */
+  --card-bg: #001a8a;
+  /* Lighter blue for cards */
+  --primary-color: #00075e;
+  /* Primary brand color */
+  --secondary-color: #0033cc;
+  /* Secondary blue */
+  --accent-color: #ffffff;
+  /* White for accents */
 
   /* Text Colors */
   --text-primary: #ffffff;
-  --text-secondary: #b8aafa;
-  /* Using Color 5 for secondary text */
+  --text-secondary: #e0e0e0;
+  /* Light gray for secondary text */
 
   /* Fonts */
   --font-heading: 'Tektur', sans-serif;
@@ -96,19 +96,19 @@ a:hover {
 
 /* Button Overrides */
 .btn-primary {
-  background-color: transparent;
+  background-color: var(--accent-color);
   border: 1px solid var(--accent-color);
-  color: var(--accent-color);
+  color: var(--primary-color);
   border-radius: 4px;
   padding: 0.75rem 1.5rem;
   font-family: var(--font-body);
-  /* Keep buttons sans-serif */
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background-color: rgba(100, 255, 218, 0.1);
-  border-color: var(--accent-color);
-  color: var(--accent-color);
+  background-color: #f0f0f0;
+  border-color: #f0f0f0;
+  color: var(--primary-color);
 }
 
 .btn-outline-primary {
