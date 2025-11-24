@@ -1,5 +1,5 @@
 :root {
-  /* Color Scheme - Оптимизировано для читаемости */
+  /* Color Scheme */
   --bg-color: #ffffff;
   /* Основной фон сайта - белый */
   
@@ -9,30 +9,24 @@
   --accent-button: #343434;
   /* Темный графит - кнопки и footer */
   
-  --link-color: #00075e;
-  /* Ссылки - темно-синий для лучшей читаемости */
-  --link-hover: #6366f1;
-  /* Hover - яркий индиго */
+  --link-color: #b9b8c5;
+  /* Светлый серо-лиловый - ссылки и hover */
+  --link-hover: #b9b8c5;
+  /* Hover состояние */
   
   --card-bg: #ffffff;
   /* Фон карточек - белый */
   
-  --discount-price: #22c55e;
-  /* Цена - зеленый (позитивный) */
-  --old-price: #9ca3af;
-  /* Старая цена - серый */
-  --accent-badge: #fbbf24;
-  /* Акцентные бейджи - желтый */
-  --sale-badge: #ff0066;
-  /* Скидка - розовый */
+  --discount-price: #ff0066;
+  /* Цена со скидкой */
+  --accent-badge: #ff0066;
+  /* Акцентные бейджи */
 
   /* Text Colors */
-  --text-primary: #1f2937;
-  /* Основной текст - темно-серый (лучше чем чистый синий) */
-  --text-secondary: #6b7280;
-  /* Второстепенный текст - средний серый */
-  --text-muted: #9ca3af;
-  /* Приглушенный текст */
+  --text-primary: #00075e;
+  /* Основной текст - темно-синий */
+  --text-secondary: #b9b8c5;
+  /* Второстепенный текст */
   --text-light: #ffffff;
   /* Светлый текст для темных фонов */
 
@@ -57,11 +51,6 @@ p, span, div, a, button, input, textarea, select, label {
   font-family: var(--font-quincy, serif) !important;
 }
 
-p {
-  line-height: 1.7;
-  color: var(--text-primary);
-}
-
 h1,
 h2,
 h3,
@@ -81,7 +70,6 @@ a {
 
 a:hover {
   color: var(--link-hover);
-  text-decoration: underline;
 }
 
 /* Navbar Overrides */
@@ -108,8 +96,7 @@ a:hover {
 }
 
 .nav-link:hover {
-  color: rgba(255, 255, 255, 0.8) !important;
-  text-decoration: none;
+  color: var(--link-hover) !important;
 }
 
 /* Card Overrides */
@@ -165,10 +152,6 @@ a:hover {
 
 /* Utilities */
 .text-muted {
-  color: var(--text-muted) !important;
-}
-
-.lead {
   color: var(--text-secondary) !important;
 }
 
@@ -180,56 +163,38 @@ a:hover {
   background-color: var(--bg-color) !important;
 }
 
-/* Price Styling */
-.discount-price, .text-success {
+/* Discount Price */
+.text-danger, .discount-price {
   color: var(--discount-price) !important;
-  font-weight: 700;
-}
-
-.old-price {
-  color: var(--old-price) !important;
-  text-decoration: line-through;
-}
-
-.text-danger {
-  color: var(--sale-badge) !important;
 }
 
 /* Badge */
 .badge.bg-danger {
-  background-color: var(--sale-badge) !important;
-}
-
-.badge.bg-warning {
   background-color: var(--accent-badge) !important;
-  color: var(--text-primary) !important;
 }
 
 /* Form Controls */
 .form-control {
   background-color: var(--bg-color);
-  border: 2px solid #e5e7eb;
+  border: 1px solid var(--link-color);
   color: var(--text-primary);
-  padding: 0.75rem 1rem;
 }
 
 .form-control::placeholder {
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .form-label {
   color: var(--text-primary);
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  margin-bottom: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 .form-control:focus {
   background-color: var(--bg-color);
   border-color: var(--primary-color);
   color: var(--text-primary);
-  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
-  outline: none;
+  box-shadow: 0 0 0 0.25rem rgba(0, 7, 94, 0.1);
 }
 
 /* Table */
@@ -249,10 +214,6 @@ a:hover {
 
 /* Footer */
 footer, .bg-dark {
-  background-color: var(--primary-color) !important;
+  background-color: var(--accent-button) !important;
   color: var(--text-light) !important;
-}
-
-footer small {
-  opacity: 0.9;
 }

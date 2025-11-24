@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     )}
 
                     {/* Title */}
-                    <h1 className="mb-3" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: '700', color: '#e6f1ff' }}>
+                    <h1 className="mb-3" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', fontWeight: '700', color: '#00075e' }}>
                         {product.title}
                     </h1>
 
@@ -78,15 +78,15 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     <div className="mb-4">
                         {product.discount_percent > 0 ? (
                             <div className="d-flex align-items-baseline gap-3">
-                                <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#28a745', fontFamily: 'var(--font-heading)' }}>
+                                <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#ff0066', fontFamily: 'var(--font-heading)' }}>
                                     {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                 </h2>
-                                <span className="text-decoration-line-through" style={{ fontSize: '1.3rem', color: 'var(--text-secondary)' }}>
+                                <span className="text-decoration-line-through" style={{ fontSize: '1.3rem', color: '#9ca3af' }}>
                                     {Math.round(product.price)} грн
                                 </span>
                             </div>
                         ) : (
-                            <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#e6f1ff', fontFamily: 'var(--font-heading)' }}>
+                            <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#111827', fontFamily: 'var(--font-heading)' }}>
                                 {Math.round(product.price)} грн
                             </h2>
                         )}
@@ -125,8 +125,8 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
                     {/* Description */}
                     <div className="mt-4">
-                        <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#e6f1ff', fontSize: '1.2rem' }}>Опис</h5>
-                        <p style={{ lineHeight: '1.8', color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
+                        <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#00075e', fontSize: '1.2rem' }}>Опис</h5>
+                        <p style={{ lineHeight: '1.8', color: '#374151', fontSize: '0.95rem' }}>
                             {product.description}
                         </p>
                     </div>
@@ -134,69 +134,69 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     {/* Book Characteristics */}
                     {(product.author || product.publisher || product.year || product.pages) && (
                         <div className="mt-4">
-                            <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.3rem' }}>Характеристики</h5>
-                            <div className="card border-0" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
+                            <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#00075e', fontSize: '1.3rem' }}>Характеристики</h5>
+                            <div className="card" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}>
                                 <div className="card-body p-4">
                                     <table className="table table-sm mb-0" style={{ fontSize: '1rem', backgroundColor: 'transparent' }}>
                                         <tbody style={{ backgroundColor: 'transparent' }}>
                                         {product.author && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ width: '40%', color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Автор</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.author}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ width: '40%', color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Автор</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.author}</td>
                                             </tr>
                                         )}
                                         {product.publisher && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Видавництво</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.publisher}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Видавництво</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.publisher}</td>
                                             </tr>
                                         )}
                                         {product.translator && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Перекладач</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.translator}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Перекладач</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.translator}</td>
                                             </tr>
                                         )}
                                         {product.year && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Рік видання</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.year}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Рік видання</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.year}</td>
                                             </tr>
                                         )}
                                         {product.language && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Мова</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.language}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Мова</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.language}</td>
                                             </tr>
                                         )}
                                         {product.pages > 0 && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Кількість сторінок</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.pages}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Кількість сторінок</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.pages}</td>
                                             </tr>
                                         )}
                                         {product.cover_type && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Обкладинка</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.cover_type}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Обкладинка</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.cover_type}</td>
                                             </tr>
                                         )}
                                         {product.isbn && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>ISBN</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.isbn}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>ISBN</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.isbn}</td>
                                             </tr>
                                         )}
                                         {product.format && (
-                                            <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.15)', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Формат</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.format}</td>
+                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Формат</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.format}</td>
                                             </tr>
                                         )}
                                         {product.book_type && (
                                             <tr style={{ backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#cccccc', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Тип</td>
-                                                <td className="py-3 px-0" style={{ color: '#ffffff', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.book_type}</td>
+                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Тип</td>
+                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.book_type}</td>
                                             </tr>
                                         )}
                                     </tbody>

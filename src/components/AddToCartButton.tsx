@@ -90,7 +90,8 @@ export default function AddToCartButton({ product }: { product: any }) {
                 
                 .add-to-cart-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(109, 119, 250, 0.4);
+                    box-shadow: 0 8px 20px rgba(52, 52, 52, 0.4);
+                    background: #00075e !important;
                 }
                 
                 .add-to-cart-btn:active {
@@ -107,28 +108,28 @@ export default function AddToCartButton({ product }: { product: any }) {
                 
                 .quantity-btn {
                     transition: all 0.2s ease;
-                    border: 2px solid #6d77fa;
-                    color: #6d77fa;
+                    border: 2px solid #00075e;
+                    color: #00075e;
                     background: transparent;
                 }
                 
                 .quantity-btn:hover {
-                    background: #6d77fa;
+                    background: #00075e;
                     color: white;
                     transform: scale(1.1);
                 }
                 
                 .quantity-input {
-                    border: 2px solid #6d77fa;
-                    background: rgba(109, 119, 250, 0.1);
-                    color: #e6f1ff;
+                    border: 2px solid #00075e;
+                    background: #ffffff;
+                    color: #111827;
                     font-weight: 600;
                 }
                 
                 .quantity-input:focus {
-                    border-color: #b8aafa;
-                    box-shadow: 0 0 0 0.2rem rgba(109, 119, 250, 0.25);
-                    background: rgba(109, 119, 250, 0.15);
+                    border-color: #00075e;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 7, 94, 0.15);
+                    background: #ffffff;
                 }
             `}</style>
 
@@ -202,9 +203,9 @@ export default function AddToCartButton({ product }: { product: any }) {
                             fontFamily: 'var(--font-heading)',
                             fontWeight: '700',
                             fontSize: '1.2rem',
-                            background: 'linear-gradient(135deg, #6d77fa 0%, #b8aafa 100%)',
+                            background: '#343434',
                             border: 'none',
-                            color: 'white',
+                            color: '#ffffff',
                             textTransform: 'uppercase',
                             letterSpacing: '1px'
                         }}

@@ -62,19 +62,21 @@ export default function ProductCard({ product }: { product: Product }) {
                         )}
                     </div>
                     <div className="card-body d-flex flex-column p-3" style={{ backgroundColor: '#fff' }}>
-                        <h5 className="card-title mb-2 text-dark" style={{
+                        <h5 className="card-title mb-2" style={{
                             fontFamily: 'var(--font-heading)',
                             fontSize: '1.1rem',
-                            fontWeight: '600'
+                            fontWeight: '700',
+                            color: '#00075e'
                         }}>
                             {product.title}
                         </h5>
-                        <p className="card-text text-muted small mb-3 flex-grow-1" style={{
+                        <p className="card-text small mb-3 flex-grow-1" style={{
                             lineHeight: '1.5',
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
                             WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
+                            overflow: 'hidden',
+                            color: '#374151'
                         }}>
                             {product.description}
                         </p>
@@ -82,26 +84,29 @@ export default function ProductCard({ product }: { product: Product }) {
                             <div>
                                 {product.discount_percent && product.discount_percent > 0 ? (
                                     <>
-                                        <div className="text-muted text-decoration-line-through small">
+                                        <div className="text-decoration-line-through small" style={{ color: '#9ca3af' }}>
                                             {product.price} грн
                                         </div>
-                                        <span className="fw-bold text-danger" style={{ fontSize: '1.35rem' }}>
+                                        <span className="fw-bold" style={{ fontSize: '1.35rem', color: '#ff0066' }}>
                                             {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                         </span>
                                     </>
                                 ) : (
-                                    <span className="fw-bold" style={{ fontSize: '1.25rem', color: '#000' }}>
+                                    <span className="fw-bold" style={{ fontSize: '1.25rem', color: '#111827' }}>
                                         {product.price} грн
                                     </span>
                                 )}
                             </div>
                             <button
-                                className="btn btn-dark btn-sm px-3"
+                                className="btn btn-sm px-3"
                                 onClick={addToCart}
                                 style={{
                                     borderRadius: '20px',
                                     fontFamily: 'var(--font-heading)',
-                                    fontWeight: '500'
+                                    fontWeight: '600',
+                                    backgroundColor: '#343434',
+                                    color: '#ffffff',
+                                    border: 'none'
                                 }}
                             >
                                 {product.availability === 'pre_order' ? 'Предзаказ' : 'Купити'}
