@@ -29,14 +29,37 @@ export default function CheckoutPage() {
 
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-    // Generate a random 6-character alphanumeric order ID
-    const generateOrderId = () => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let result = '';
-        for (let i = 0; i < 6; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
+    // Generate a random 6-digit numeric order ID
+    const generateOrderId = async (): Promise<string> => {
+        let orderId = '';
+        let isUnique = false;
+        let attempts = 0;
+        const maxAttempts = 10;
+
+        while (!isUnique && attempts < maxAttempts) {
+            // Generate 6-digit number (100000 to 999999)
+            orderId = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Check if this ID already exists
+            const { data, error } = await supabase
+                .from('orders')
+                .select('id')
+                .eq('id', orderId)
+                .single();
+
+            if (error && error.code === 'PGRST116') {
+                // PGRST116 means no rows found, so ID is unique
+                isUnique = true;
+            }
+
+            attempts++;
         }
-        return result;
+
+        if (!isUnique) {
+            throw new Error('Не вдалося згенерувати унікальний номер замовлення');
+        }
+
+        return orderId;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -44,8 +67,8 @@ export default function CheckoutPage() {
         setLoading(true);
 
         try {
-            // Generate order ID
-            const orderId = generateOrderId();
+            // Generate unique order ID
+            const orderId = await generateOrderId();
 
             // Create Order
             const { data: order, error: orderError } = await supabase
@@ -73,7 +96,7 @@ export default function CheckoutPage() {
                 order_id: order.id,
                 product_id: item.id,
                 quantity: item.quantity,
-                price_at_time: item.price
+                price: item.price
             }));
 
             const { error: itemsError } = await supabase

@@ -77,6 +77,14 @@ create policy "Public can create order items"
   on order_items for insert
   with check ( true );
 
+create policy "Public can view order items"
+  on order_items for select
+  using ( true );
+
+create policy "Public can delete order items"
+  on order_items for delete
+  using ( true );
+
 -- Insert some dummy data
 insert into products (title, description, price, image_url, images) values
 ('The Great Gatsby', 'A classic novel of the Jazz Age.', 15.99, 'https://covers.openlibrary.org/b/id/7222246-L.jpg', ARRAY['https://covers.openlibrary.org/b/id/7222246-L.jpg', 'https://covers.openlibrary.org/b/id/7222246-M.jpg']),

@@ -78,17 +78,32 @@ export default function AdminPage() {
             return;
         }
 
-        const { error } = await supabase
-            .from('orders')
-            .delete()
-            .eq('id', id);
+        try {
+            // First delete order items
+            const { error: itemsError } = await supabase
+                .from('order_items')
+                .delete()
+                .eq('order_id', id);
 
-        if (error) {
-            alert('Помилка видалення замовлення');
-            console.error(error);
-        } else {
+            if (itemsError) {
+                throw itemsError;
+            }
+
+            // Then delete the order
+            const { error: orderError } = await supabase
+                .from('orders')
+                .delete()
+                .eq('id', id);
+
+            if (orderError) {
+                throw orderError;
+            }
+
             alert('Замовлення успішно видалено');
             fetchOrders();
+        } catch (error) {
+            alert('Помилка видалення замовлення');
+            console.error(error);
         }
     };
 
