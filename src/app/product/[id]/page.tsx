@@ -207,8 +207,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     )}
                 </div>
             </div>
-                </div>
-            </div>
 
             {/* Script for sticky button behavior */}
             <script dangerouslySetInnerHTML={{
