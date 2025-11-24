@@ -53,15 +53,15 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                     <div className="d-grid gap-2 d-sm-flex justify-content-center">
                         <Link 
                             href="/track" 
-                            className="btn btn-outline-primary"
-                            style={{ fontFamily: 'var(--font-heading)' }}
+                            className="btn btn-outline-primary d-flex align-items-center justify-content-center"
+                            style={{ fontFamily: 'var(--font-heading)', minHeight: '48px' }}
                         >
                             Відстежити замовлення
                         </Link>
                         <Link 
                             href="/" 
-                            className="btn btn-primary"
-                            style={{ fontFamily: 'var(--font-heading)' }}
+                            className="btn btn-primary d-flex align-items-center justify-content-center"
+                            style={{ fontFamily: 'var(--font-heading)', minHeight: '48px' }}
                         >
                             Продовжити покупки
                         </Link>

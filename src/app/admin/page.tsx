@@ -81,35 +81,18 @@ export default function AdminPage() {
         try {
             console.log('Deleting order:', id);
 
-            // First delete order items
-            const { data: itemsData, error: itemsError, count: itemsCount } = await supabase
-                .from('order_items')
-                .delete()
-                .eq('order_id', id)
-                .select();
+            // Используем RPC функцию для удаления заказа
+            const { data, error } = await supabase
+                .rpc('delete_order_with_items', { order_id_param: id });
 
-            console.log('Deleted order items:', itemsData, 'Count:', itemsCount);
+            console.log('Delete result:', data);
 
-            if (itemsError) {
-                console.error('Error deleting order items:', itemsError);
-                throw itemsError;
+            if (error) {
+                console.error('Error deleting order:', error);
+                throw error;
             }
 
-            // Then delete the order
-            const { data: orderData, error: orderError, count: orderCount } = await supabase
-                .from('orders')
-                .delete()
-                .eq('id', id)
-                .select();
-
-            console.log('Deleted order:', orderData, 'Count:', orderCount);
-
-            if (orderError) {
-                console.error('Error deleting order:', orderError);
-                throw orderError;
-            }
-
-            if (!orderData || orderData.length === 0) {
+            if (!data || !data.success) {
                 throw new Error('Замовлення не знайдено або вже видалено');
             }
 
