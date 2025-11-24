@@ -79,31 +79,45 @@ export default function AdminPage() {
         }
 
         try {
+            console.log('Deleting order:', id);
+
             // First delete order items
-            const { error: itemsError } = await supabase
+            const { data: itemsData, error: itemsError, count: itemsCount } = await supabase
                 .from('order_items')
                 .delete()
-                .eq('order_id', id);
+                .eq('order_id', id)
+                .select();
+
+            console.log('Deleted order items:', itemsData, 'Count:', itemsCount);
 
             if (itemsError) {
+                console.error('Error deleting order items:', itemsError);
                 throw itemsError;
             }
 
             // Then delete the order
-            const { error: orderError } = await supabase
+            const { data: orderData, error: orderError, count: orderCount } = await supabase
                 .from('orders')
                 .delete()
-                .eq('id', id);
+                .eq('id', id)
+                .select();
+
+            console.log('Deleted order:', orderData, 'Count:', orderCount);
 
             if (orderError) {
+                console.error('Error deleting order:', orderError);
                 throw orderError;
+            }
+
+            if (!orderData || orderData.length === 0) {
+                throw new Error('Замовлення не знайдено або вже видалено');
             }
 
             alert('Замовлення успішно видалено');
             fetchOrders();
-        } catch (error) {
-            alert('Помилка видалення замовлення');
-            console.error(error);
+        } catch (error: any) {
+            alert('Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'));
+            console.error('Delete order error:', error);
         }
     };
 

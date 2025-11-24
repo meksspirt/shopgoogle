@@ -19,11 +19,11 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                         Дякуємо за покупку.
                     </p>
 
-                    <div className="alert alert-dark border border-secondary mb-4 p-3">
-                        <p className="mb-2 small" style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-secondary)' }}>
+                    <div className="alert alert-light border border-secondary mb-4 p-4" style={{ backgroundColor: '#f8f9fa' }}>
+                        <p className="mb-2 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#495057', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
                             Номер вашого замовлення:
                         </p>
-                        <h3 className="fw-bold text-primary m-0" style={{ fontFamily: 'var(--font-heading)', fontSize: '2rem', letterSpacing: '2px' }}>
+                        <h3 className="fw-bold m-0" style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', letterSpacing: '3px', color: '#0d6efd' }}>
                             {orderId}
                         </h3>
                     </div>
