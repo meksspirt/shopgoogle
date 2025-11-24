@@ -119,7 +119,7 @@ export default function TrackOrderPage() {
 
                                 {status.tracking_number && (
                                     <a 
-                                        href={`https://novaposhta.ua/tracking/?cargo_number=${status.tracking_number}`}
+                                        href={`https://novaposhta.ua/tracking/${status.tracking_number}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="text-decoration-none"

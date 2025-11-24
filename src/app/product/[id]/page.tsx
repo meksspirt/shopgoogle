@@ -32,20 +32,15 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </nav>
 
             <div className="row g-5">
-                {/* Left Column: Gallery + Button */}
+                {/* Left Column: Gallery */}
                 <div className="col-md-6">
                     <div className="sticky-top" style={{ top: '120px' }}>
                         <ProductGallery images={product.images || [product.image_url]} />
                         
-                        {/* Button under gallery - desktop only */}
-                        <div className="mt-4 d-none d-md-block">
+                        {/* Sticky button under gallery - shown when main button scrolls out */}
+                        <div id="sticky-cart-button" className="mt-4 d-none">
                             <AddToCartButton product={product} />
                         </div>
-                    </div>
-                    
-                    {/* Button for mobile */}
-                    <div className="mt-4 d-md-none">
-                        <AddToCartButton product={product} />
                     </div>
                     
                     {/* Description - shown below gallery on mobile/tablet */}
@@ -101,6 +96,21 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         </div>
                     </div>
 
+                    {product.stock_quantity !== undefined && (
+                        <div className="mb-3">
+                            <small style={{ color: product.stock_quantity > 10 ? '#28a745' : product.stock_quantity > 0 ? '#ffc107' : '#dc3545', fontFamily: 'var(--font-heading)', fontWeight: '600' }}>
+                                {product.stock_quantity > 10 ? `✓ В наявності (${product.stock_quantity} од.)` :
+                                 product.stock_quantity > 0 ? `⚠ Залишилось ${product.stock_quantity} од.` :
+                                 '✗ Немає в наявності'}
+                            </small>
+                        </div>
+                    )}
+
+                    {/* Main cart button */}
+                    <div id="main-cart-button" className="mb-4">
+                        <AddToCartButton product={product} />
+                    </div>
+
                     <hr className="my-4" />
 
                     {/* Description - shown in right column on desktop */}
@@ -112,6 +122,33 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     </div>
                 </div>
             </div>
+
+            {/* Script for sticky button behavior */}
+            <script dangerouslySetInnerHTML={{
+                __html: `
+                    if (typeof window !== 'undefined') {
+                        const mainButton = document.getElementById('main-cart-button');
+                        const stickyButton = document.getElementById('sticky-cart-button');
+                        
+                        if (mainButton && stickyButton) {
+                            const observer = new IntersectionObserver(
+                                ([entry]) => {
+                                    if (entry.isIntersecting) {
+                                        stickyButton.classList.add('d-none');
+                                        stickyButton.classList.remove('d-block');
+                                    } else {
+                                        stickyButton.classList.remove('d-none');
+                                        stickyButton.classList.add('d-block');
+                                    }
+                                },
+                                { threshold: 0, rootMargin: '-100px 0px 0px 0px' }
+                            );
+                            
+                            observer.observe(mainButton);
+                        }
+                    }
+                `
+            }} />
         </div>
     );
 }

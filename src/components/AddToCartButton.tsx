@@ -26,6 +26,17 @@ export default function AddToCartButton({ product }: { product: any }) {
     const addToCart = () => {
         const cart = JSON.parse(localStorage.getItem('cart') || '[]');
         const existingItem = cart.find((item: any) => item.id === product.id);
+        const maxQuantity = product.stock_quantity || 999;
+
+        // Calculate total quantity that would be in cart
+        const currentCartQuantity = existingItem ? existingItem.quantity : 0;
+        const totalQuantity = currentCartQuantity + quantity;
+
+        // Check if we have enough stock
+        if (totalQuantity > maxQuantity) {
+            alert(`На складі доступно лише ${maxQuantity} од. товару. У вашому кошику вже є ${currentCartQuantity} од.`);
+            return;
+        }
 
         if (existingItem) {
             existingItem.quantity += quantity;
@@ -47,7 +58,10 @@ export default function AddToCartButton({ product }: { product: any }) {
     };
 
     const increaseQuantity = () => {
-        setQuantity(quantity + 1);
+        const maxQuantity = product.stock_quantity || 999;
+        if (quantity < maxQuantity) {
+            setQuantity(quantity + 1);
+        }
     };
 
     return (
@@ -129,9 +143,14 @@ export default function AddToCartButton({ product }: { product: any }) {
                         type="number"
                         className="form-control text-center quantity-input"
                         value={quantity}
-                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        onChange={(e) => {
+                            const maxQuantity = product.stock_quantity || 999;
+                            const value = parseInt(e.target.value) || 1;
+                            setQuantity(Math.max(1, Math.min(value, maxQuantity)));
+                        }}
                         style={{ width: '80px', height: '50px', fontSize: '1.2rem' }}
                         min="1"
+                        max={product.stock_quantity || 999}
                     />
                     <button
                         className="btn quantity-btn"

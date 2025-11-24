@@ -34,7 +34,15 @@ export default function CartPage() {
     const updateQuantity = (id: number, delta: number) => {
         const newCart = cart.map(item => {
             if (item.id === id) {
-                return { ...item, quantity: Math.max(1, item.quantity + delta) };
+                const maxQuantity = item.stock_quantity || 999;
+                const newQuantity = item.quantity + delta;
+                
+                if (newQuantity > maxQuantity) {
+                    alert(`На складі доступно лише ${maxQuantity} од. товару`);
+                    return item;
+                }
+                
+                return { ...item, quantity: Math.max(1, Math.min(newQuantity, maxQuantity)) };
             }
             return item;
         });
