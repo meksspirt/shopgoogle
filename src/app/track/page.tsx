@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import { useSearchParams } from 'next/navigation';
 
-export default function TrackOrderPage() {
+function TrackOrderContent() {
     const searchParams = useSearchParams();
     const orderIdFromUrl = searchParams.get('orderId');
     
@@ -186,5 +186,23 @@ export default function TrackOrderPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function TrackOrderPage() {
+    return (
+        <Suspense fallback={
+            <div className="container py-5">
+                <div className="row justify-content-center">
+                    <div className="col-md-6 text-center">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Завантаження...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }>
+            <TrackOrderContent />
+        </Suspense>
     );
 }
