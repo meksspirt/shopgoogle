@@ -77,6 +77,7 @@ a:hover {
   background-color: var(--primary-color) !important;
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 7, 94, 0.1);
+  z-index: 1000;
 }
 
 .navbar-brand {
@@ -97,6 +98,15 @@ a:hover {
 
 .nav-link:hover {
   color: var(--link-hover) !important;
+}
+
+/* Main content padding to prevent overlap with sticky navbar */
+main {
+  padding-top: 0;
+}
+
+main.min-vh-100 {
+  padding-top: 0;
 }
 
 /* Card Overrides */

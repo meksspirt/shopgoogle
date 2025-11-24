@@ -34,7 +34,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
             <div className="row g-4">
                 {/* Left Column: Gallery */}
                 <div className="col-lg-5 col-md-6">
-                    <div className="sticky-top" style={{ top: '100px' }}>
+                    <div className="sticky-top" style={{ top: '80px' }}>
                         <ProductGallery images={product.images || [product.image_url]} />
                         
                         {/* Sticky button under gallery - shown when main button scrolls out */}
