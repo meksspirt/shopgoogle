@@ -138,9 +138,9 @@ export default function AddToCartButton({ product }: { product: any }) {
                 {!isOutOfStock && (
                     <div className="d-flex align-items-center gap-3 mb-3">
                         <button
-                            className="btn quantity-btn"
+                            className="btn quantity-btn d-flex align-items-center justify-content-center"
                             onClick={decreaseQuantity}
-                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
+                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold', padding: 0 }}
                         >
                             −
                         </button>
@@ -153,14 +153,14 @@ export default function AddToCartButton({ product }: { product: any }) {
                                 const value = parseInt(e.target.value) || 1;
                                 setQuantity(Math.max(1, Math.min(value, maxQuantity)));
                             }}
-                            style={{ width: '80px', height: '50px', fontSize: '1.2rem' }}
+                            style={{ width: '80px', height: '50px', fontSize: '1.2rem', padding: 0 }}
                             min="1"
                             max={product.stock_quantity || 999}
                         />
                         <button
-                            className="btn quantity-btn"
+                            className="btn quantity-btn d-flex align-items-center justify-content-center"
                             onClick={increaseQuantity}
-                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold' }}
+                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold', padding: 0 }}
                         >
                             +
                         </button>
