@@ -61,29 +61,61 @@ export default function TrackOrderPage() {
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     {status && (
-                        <div className="card shadow border-0" style={{ backgroundColor: 'var(--card-bg)' }}>
-                            <div className="card-header border-bottom border-secondary py-3" style={{ backgroundColor: 'var(--secondary-color)' }}>
-                                <h5 className="mb-0 text-white">Статус замовлення</h5>
+                        <div className="card shadow-lg border-0" style={{ backgroundColor: 'var(--card-bg)' }}>
+                            <div className="card-header border-bottom border-secondary py-4" style={{ backgroundColor: '#6d77fa' }}>
+                                <h5 className="mb-0 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff' }}>
+                                    Статус замовлення
+                                </h5>
                             </div>
-                            <div className="card-body">
-                                <h5 className="card-title text-white mb-3">Замовлення #{status.id}</h5>
-                                <p className="card-text text-white">
-                                    <strong className="text-muted">Статус:</strong> <span className={`badge ms-2 ${status.status === 'pending' ? 'bg-warning' :
-                                        status.status === 'shipped' ? 'bg-info' :
-                                            status.status === 'delivered' ? 'bg-success' : 'bg-secondary'
-                                        }`}>
-                                        {status.status === 'pending' ? 'Очікується' :
-                                            status.status === 'shipped' ? 'Відправлено' :
-                                                status.status === 'delivered' ? 'Доставлено' :
-                                                    status.status === 'cancelled' ? 'Скасовано' : status.status}
-                                    </span>
-                                </p>
-                                <p className="card-text text-white">
-                                    <strong className="text-muted">Сума:</strong> {status.total_amount} грн
-                                </p>
-                                <p className="card-text text-white">
-                                    <strong className="text-muted">Дата:</strong> {new Date(status.created_at).toLocaleDateString()}
-                                </p>
+                            <div className="card-body p-4">
+                                <h5 className="mb-4 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#e6f1ff', fontSize: '1.5rem' }}>
+                                    Замовлення #{status.id}
+                                </h5>
+                                
+                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                            Статус:
+                                        </span>
+                                        <span className={`badge px-4 py-2 ${
+                                            status.status === 'pending' ? 'bg-warning text-dark' :
+                                            status.status === 'shipped' ? 'bg-info text-dark' :
+                                            status.status === 'delivered' ? 'bg-success' : 
+                                            'bg-secondary'
+                                        }`} style={{ fontSize: '1rem', fontFamily: 'var(--font-heading)', fontWeight: '600' }}>
+                                            {status.status === 'pending' ? 'Очікується' :
+                                             status.status === 'shipped' ? 'Відправлено' :
+                                             status.status === 'delivered' ? 'Доставлено' :
+                                             status.status === 'cancelled' ? 'Скасовано' : status.status}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                            Сума:
+                                        </span>
+                                        <span className="fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.3rem' }}>
+                                            {status.total_amount} грн
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div className="p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                            Дата:
+                                        </span>
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.1rem' }}>
+                                            {new Date(status.created_at).toLocaleDateString('uk-UA', { 
+                                                year: 'numeric', 
+                                                month: 'long', 
+                                                day: 'numeric' 
+                                            })}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}

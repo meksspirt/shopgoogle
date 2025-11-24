@@ -27,7 +27,13 @@ export default function CheckoutPage() {
         setCart(savedCart);
     }, [router]);
 
-    const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    // Calculate total with discounts
+    const totalWithoutDiscount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const totalDiscount = cart.reduce((acc, item) => {
+        const discount = item.discount_percent || 0;
+        return acc + (item.price * item.quantity * discount / 100);
+    }, 0);
+    const total = totalWithoutDiscount - totalDiscount;
 
     // Generate a random 6-digit numeric order ID
     const generateOrderId = async (): Promise<string> => {
@@ -142,9 +148,23 @@ export default function CheckoutPage() {
                                 <div className="flex-grow-1">
                                     <h6 className="mb-1 fw-bold">{item.title}</h6>
                                     <div className="text-muted small">Кількість: {item.quantity}</div>
+                                    {item.discount_percent > 0 && (
+                                        <span className="badge bg-danger small">-{item.discount_percent}%</span>
+                                    )}
                                 </div>
                                 <div className="text-end">
-                                    <div className="fw-bold text-primary">{(item.price * item.quantity).toFixed(2)} грн</div>
+                                    {item.discount_percent > 0 ? (
+                                        <>
+                                            <div className="fw-bold text-success">
+                                                {(item.price * (1 - item.discount_percent / 100) * item.quantity).toFixed(2)} грн
+                                            </div>
+                                            <div className="text-muted text-decoration-line-through small">
+                                                {(item.price * item.quantity).toFixed(2)} грн
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <div className="fw-bold text-primary">{(item.price * item.quantity).toFixed(2)} грн</div>
+                                    )}
                                 </div>
                             </div>
                         ))}
@@ -153,8 +173,14 @@ export default function CheckoutPage() {
                     <div className="mt-4 p-4 rounded" style={{ backgroundColor: 'var(--card-bg)' }}>
                         <div className="d-flex justify-content-between mb-2">
                             <span className="text-muted">Сума товарів</span>
-                            <span>{total.toFixed(2)} грн</span>
+                            <span>{totalWithoutDiscount.toFixed(2)} грн</span>
                         </div>
+                        {totalDiscount > 0 && (
+                            <div className="d-flex justify-content-between mb-2">
+                                <span className="text-success">Знижка</span>
+                                <span className="text-success">-{totalDiscount.toFixed(2)} грн</span>
+                            </div>
+                        )}
                         <div className="d-flex justify-content-between mb-2">
                             <span className="text-muted">Доставка</span>
                             <span>За тарифами перевізника</span>

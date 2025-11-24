@@ -36,6 +36,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     <ProductGallery images={product.images || [product.image_url]} />
                 </div>
                 <div className="col-md-6">
+                    <div className="sticky-top" style={{ top: '100px' }}>
                     {product.availability === 'pre_order' && (
                         <div className="mb-3">
                             <span className="badge bg-warning text-dark px-4 py-2" style={{ fontSize: '1rem', fontWeight: '600' }}>
@@ -47,9 +48,27 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         {product.title}
                     </h1>
 
-                    <h2 className="mb-4" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                        {product.price} грн
-                    </h2>
+                    <div className="mb-4">
+                        {product.discount_percent > 0 ? (
+                            <div className="d-flex align-items-center gap-3">
+                                <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
+                                    {(product.price * (1 - product.discount_percent / 100)).toFixed(2)} грн
+                                </h2>
+                                <div className="d-flex flex-column">
+                                    <span className="text-decoration-line-through text-muted" style={{ fontSize: '1.2rem' }}>
+                                        {product.price} грн
+                                    </span>
+                                    <span className="badge bg-danger" style={{ fontSize: '0.9rem', width: 'fit-content' }}>
+                                        -{product.discount_percent}%
+                                    </span>
+                                </div>
+                            </div>
+                        ) : (
+                            <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                                {product.price} грн
+                            </h2>
+                        )}
+                    </div>
 
                     <div className="alert alert-info d-flex align-items-center mb-4" role="alert" style={{ backgroundColor: 'rgba(56, 74, 158, 0.2)', borderColor: 'var(--primary-color)', color: '#e6f1ff' }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-patch-check-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
@@ -71,6 +90,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         <p className="text-muted" style={{ lineHeight: '1.7' }}>
                             {product.description}
                         </p>
+                    </div>
                     </div>
                 </div>
             </div>

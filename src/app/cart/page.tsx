@@ -77,7 +77,14 @@ export default function CartPage() {
     };
 
     const selectedCartItems = cart.filter(item => selectedItems.includes(item.id));
-    const total = selectedCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    
+    // Calculate totals with discount
+    const totalWithoutDiscount = selectedCartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const totalDiscount = selectedCartItems.reduce((acc, item) => {
+        const discount = item.discount_percent || 0;
+        return acc + (item.price * item.quantity * discount / 100);
+    }, 0);
+    const total = totalWithoutDiscount - totalDiscount;
     const totalItems = selectedCartItems.reduce((acc, item) => acc + item.quantity, 0);
 
     // Filter recommended products: exclude items already in cart
@@ -150,13 +157,16 @@ export default function CartPage() {
 
                                         {/* Info */}
                                         <div className="col">
-                                            <h5 className="mb-2 text-white" style={{ fontSize: '1.1rem' }}>{item.title}</h5>
+                                            <Link href={`/product/${item.id}`} className="text-decoration-none">
+                                                <h5 className="mb-2 text-white" style={{ fontSize: '1.1rem', cursor: 'pointer' }}>
+                                                    {item.title}
+                                                </h5>
+                                            </Link>
                                             <div className="text-muted small mb-3">
                                                 <span className="me-3">Колір: стандартний</span>
                                                 <span>Вага: 1 кг</span>
                                             </div>
                                             <div className="d-flex gap-3">
-                                                <button className="btn btn-link p-0 text-decoration-none text-muted small">В обране</button>
                                                 <button className="btn btn-link p-0 text-decoration-none text-danger small" onClick={() => removeItem(item.id)}>Видалити</button>
                                             </div>
                                         </div>
@@ -164,8 +174,17 @@ export default function CartPage() {
                                         {/* Price & Quantity */}
                                         <div className="col-auto text-end d-flex flex-column align-items-end justify-content-between" style={{ minHeight: '120px' }}>
                                             <div className="mb-3">
-                                                <h4 className="mb-0 text-white fw-bold">{item.price} ₴</h4>
-                                                <div className="text-muted text-decoration-line-through small">{(item.price * 1.2).toFixed(0)} ₴</div>
+                                                {item.discount_percent > 0 ? (
+                                                    <>
+                                                        <h4 className="mb-0 text-success fw-bold">
+                                                            {(item.price * (1 - item.discount_percent / 100)).toFixed(0)} ₴
+                                                        </h4>
+                                                        <div className="text-muted text-decoration-line-through small">{item.price} ₴</div>
+                                                        <div className="badge bg-danger small">-{item.discount_percent}%</div>
+                                                    </>
+                                                ) : (
+                                                    <h4 className="mb-0 text-white fw-bold">{item.price} ₴</h4>
+                                                )}
                                             </div>
 
                                             <div className="input-group input-group-sm" style={{ width: '100px' }}>
@@ -197,12 +216,14 @@ export default function CartPage() {
 
                             <div className="d-flex justify-content-between mb-2 text-white">
                                 <span>Товари ({totalItems})</span>
-                                <span>{total.toFixed(0)} ₴</span>
+                                <span>{totalWithoutDiscount.toFixed(0)} ₴</span>
                             </div>
-                            <div className="d-flex justify-content-between mb-4 text-danger">
-                                <span>Знижка</span>
-                                <span>- 0 ₴</span>
-                            </div>
+                            {totalDiscount > 0 && (
+                                <div className="d-flex justify-content-between mb-4 text-success">
+                                    <span>Знижка</span>
+                                    <span>- {totalDiscount.toFixed(0)} ₴</span>
+                                </div>
+                            )}
 
                             <hr className="border-secondary" />
 

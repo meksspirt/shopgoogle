@@ -22,6 +22,7 @@ export default function AdminPage() {
     });
     const [editingProduct, setEditingProduct] = useState<any>(null);
     const [creatingProduct, setCreatingProduct] = useState(false);
+    const [showCreateForm, setShowCreateForm] = useState(false);
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -206,7 +207,103 @@ export default function AdminPage() {
                 </div>
             </div>
 
-            {/* Create Product Section */}
+            {/* Orders List - MOVED TO TOP */}
+            <h3 className="mb-4 fw-bold">Замовлення</h3>
+            <div className="card shadow-lg border-0 mb-5" style={{ backgroundColor: 'var(--card-bg)' }}>
+                <div className="card-body p-0">
+                    <div className="table-responsive">
+                        <table className="table table-dark table-hover mb-0">
+                            <thead style={{ backgroundColor: 'var(--secondary-color)' }}>
+                                <tr>
+                                    <th className="py-3">ID / Дата</th>
+                                    <th className="py-3">Клієнт</th>
+                                    <th className="py-3">Доставка</th>
+                                    <th className="py-3">Інфо</th>
+                                    <th className="py-3">Сума</th>
+                                    <th className="py-3">Статус</th>
+                                    <th className="py-3">Дії</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {orders.map((order) => (
+                                    <tr key={order.id}>
+                                        <td className="py-3">
+                                            <small className="text-muted d-block" title={order.id}>
+                                                {order.id}
+                                            </small>
+                                            <small className="text-secondary">{new Date(order.created_at).toLocaleDateString()}</small>
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="fw-bold text-white">{order.customer_name}</div>
+                                            <small className="d-block text-secondary">{order.customer_email}</small>
+                                            <small className="d-block text-secondary">{order.customer_phone}</small>
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="text-white">{order.customer_city}</div>
+                                            <small className="text-secondary">НП: {order.nova_poshta_branch}</small>
+                                        </td>
+                                        <td className="py-3">
+                                            {order.instagram_nick && (
+                                                <div className="small text-secondary">
+                                                    Inst: <span className="text-primary">@{order.instagram_nick}</span>
+                                                </div>
+                                            )}
+                                            {order.visited_psychologist && (
+                                                <span className="badge bg-info text-dark mt-1">Психолог: Так</span>
+                                            )}
+                                        </td>
+                                        <td className="py-3">
+                                            <span className="text-warning fw-bold">{order.total_amount} грн</span>
+                                        </td>
+                                        <td className="py-3">
+                                            <span className={`badge bg-${order.status === 'pending' ? 'warning' :
+                                                order.status === 'shipped' ? 'info' :
+                                                    order.status === 'delivered' ? 'success' : 'secondary'
+                                                }`}>
+                                                {order.status}
+                                            </span>
+                                        </td>
+                                        <td className="py-3">
+                                            <div className="d-flex flex-column gap-2">
+                                                <select
+                                                    className="form-select form-select-sm bg-dark text-white border-secondary"
+                                                    value={order.status}
+                                                    onChange={(e) => updateStatus(order.id, e.target.value)}
+                                                >
+                                                    <option value="pending">Очікується</option>
+                                                    <option value="shipped">Відправлено</option>
+                                                    <option value="delivered">Доставлено</option>
+                                                    <option value="cancelled">Скасовано</option>
+                                                </select>
+                                                <button
+                                                    className="btn btn-danger btn-sm"
+                                                    onClick={() => deleteOrder(order.id, order.id.slice(0, 8))}
+                                                >
+                                                    Видалити
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            {/* Products Section */}
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h3 className="fw-bold mb-0">Товари</h3>
+                <button 
+                    className="btn btn-success"
+                    onClick={() => setShowCreateForm(!showCreateForm)}
+                >
+                    {showCreateForm ? '✕ Закрити форму' : '+ Додати новий товар'}
+                </button>
+            </div>
+
+            {/* Create Product Section - Collapsible */}
+            {showCreateForm && (
             <div className="card shadow-lg border-0 mb-5" style={{ backgroundColor: 'var(--card-bg)' }}>
                 <div className="card-header bg-transparent border-bottom border-secondary py-3">
                     <h4 className="mb-0 fw-bold text-success">Додати новий товар</h4>
@@ -286,6 +383,7 @@ export default function AdminPage() {
                     </form>
                 </div>
             </div>
+            )}
 
             {/* Products List */}
             <h3 className="mb-4 fw-bold">Товари</h3>
@@ -414,89 +512,6 @@ export default function AdminPage() {
                 </div>
             )}
 
-            {/* Orders List */}
-            <h3 className="mb-4 fw-bold">Замовлення</h3>
-            <div className="card shadow-lg border-0" style={{ backgroundColor: 'var(--card-bg)' }}>
-                <div className="card-body p-0">
-                    <div className="table-responsive">
-                        <table className="table table-dark table-hover mb-0">
-                            <thead style={{ backgroundColor: 'var(--secondary-color)' }}>
-                                <tr>
-                                    <th className="py-3">ID / Дата</th>
-                                    <th className="py-3">Клієнт</th>
-                                    <th className="py-3">Доставка</th>
-                                    <th className="py-3">Інфо</th>
-                                    <th className="py-3">Сума</th>
-                                    <th className="py-3">Статус</th>
-                                    <th className="py-3">Дії</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {orders.map((order) => (
-                                    <tr key={order.id}>
-                                        <td className="py-3">
-                                            <small className="text-muted d-block" title={order.id}>
-                                                {order.id}
-                                            </small>
-                                            <small className="text-secondary">{new Date(order.created_at).toLocaleDateString()}</small>
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="fw-bold text-white">{order.customer_name}</div>
-                                            <small className="d-block text-secondary">{order.customer_email}</small>
-                                            <small className="d-block text-secondary">{order.customer_phone}</small>
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="text-white">{order.customer_city}</div>
-                                            <small className="text-secondary">НП: {order.nova_poshta_branch}</small>
-                                        </td>
-                                        <td className="py-3">
-                                            {order.instagram_nick && (
-                                                <div className="small text-secondary">
-                                                    Inst: <span className="text-primary">@{order.instagram_nick}</span>
-                                                </div>
-                                            )}
-                                            {order.visited_psychologist && (
-                                                <span className="badge bg-info text-dark mt-1">Психолог: Так</span>
-                                            )}
-                                        </td>
-                                        <td className="py-3">
-                                            <span className="text-warning fw-bold">{order.total_amount} грн</span>
-                                        </td>
-                                        <td className="py-3">
-                                            <span className={`badge bg-${order.status === 'pending' ? 'warning' :
-                                                order.status === 'shipped' ? 'info' :
-                                                    order.status === 'delivered' ? 'success' : 'secondary'
-                                                }`}>
-                                                {order.status}
-                                            </span>
-                                        </td>
-                                        <td className="py-3">
-                                            <div className="d-flex flex-column gap-2">
-                                                <select
-                                                    className="form-select form-select-sm bg-dark text-white border-secondary"
-                                                    value={order.status}
-                                                    onChange={(e) => updateStatus(order.id, e.target.value)}
-                                                >
-                                                    <option value="pending">Очікується</option>
-                                                    <option value="shipped">Відправлено</option>
-                                                    <option value="delivered">Доставлено</option>
-                                                    <option value="cancelled">Скасовано</option>
-                                                </select>
-                                                <button
-                                                    className="btn btn-danger btn-sm"
-                                                    onClick={() => deleteOrder(order.id, order.id.slice(0, 8))}
-                                                >
-                                                    Видалити
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
