@@ -16,7 +16,8 @@ export default function AdminPage() {
         description: '',
         price: '',
         images: [] as string[],
-        mainImageIndex: 0
+        mainImageIndex: 0,
+        availability: 'in_stock' as 'in_stock' | 'pre_order'
     });
     const [editingProduct, setEditingProduct] = useState<any>(null);
     const [creatingProduct, setCreatingProduct] = useState(false);
@@ -108,13 +109,14 @@ export default function AdminPage() {
                     description: newProduct.description,
                     price: parseFloat(newProduct.price),
                     image_url: newProduct.images[newProduct.mainImageIndex],
-                    images: newProduct.images
+                    images: newProduct.images,
+                    availability: newProduct.availability
                 }]);
 
             if (error) throw error;
 
             alert('Товар успішно створено!');
-            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0 });
+            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock' });
             fetchProducts();
         } catch (error: any) {
             console.error('Error creating product:', error);
@@ -137,7 +139,8 @@ export default function AdminPage() {
                     description: editingProduct.description,
                     price: parseFloat(editingProduct.price),
                     image_url: editingProduct.images[editingProduct.mainImageIndex || 0],
-                    images: editingProduct.images
+                    images: editingProduct.images,
+                    availability: editingProduct.availability
                 })
                 .eq('id', editingProduct.id);
 
@@ -224,6 +227,17 @@ export default function AdminPage() {
                                     value={newProduct.description}
                                     onChange={e => setNewProduct({ ...newProduct, description: e.target.value })}
                                 ></textarea>
+                            </div>
+                            <div className="col-md-6">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Наявність</label>
+                                <select
+                                    className="form-select form-select-lg bg-dark text-white border-secondary"
+                                    value={newProduct.availability}
+                                    onChange={e => setNewProduct({ ...newProduct, availability: e.target.value as 'in_stock' | 'pre_order' })}
+                                >
+                                    <option value="in_stock">В наявності</option>
+                                    <option value="pre_order">Предзаказ</option>
+                                </select>
                             </div>
                             <div className="col-12">
                                 <ImageUpload
@@ -325,6 +339,17 @@ export default function AdminPage() {
                                                 value={editingProduct.description}
                                                 onChange={e => setEditingProduct({ ...editingProduct, description: e.target.value })}
                                             ></textarea>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Наявність</label>
+                                            <select
+                                                className="form-select bg-dark text-white border-secondary"
+                                                value={editingProduct.availability || 'in_stock'}
+                                                onChange={e => setEditingProduct({ ...editingProduct, availability: e.target.value })}
+                                            >
+                                                <option value="in_stock">В наявності</option>
+                                                <option value="pre_order">Предзаказ</option>
+                                            </select>
                                         </div>
                                         <div className="col-12">
                                             <ImageUpload

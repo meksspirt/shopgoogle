@@ -17,12 +17,12 @@
   /* Using Color 5 for secondary text */
 
   /* Fonts */
-  --font-heading: 'Cormorant SC', serif;
+  --font-heading: 'Tektur', sans-serif;
   --font-body: 'Cormorant SC', serif;
 }
 
 body {
-  font-family: 'Cormorant SC', serif;
+  font-family: 'Tektur', sans-serif;
   background-color: var(--bg-color);
   color: var(--text-primary);
   min-height: 100vh;
@@ -143,7 +143,8 @@ a:hover {
 }
 
 .form-control::placeholder {
-  color: rgba(184, 170, 250, 0.6); /* Lighter version of accent color */
+  color: rgba(184, 170, 250, 0.6);
+  /* Lighter version of accent color */
 }
 
 .form-label {

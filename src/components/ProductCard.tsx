@@ -11,6 +11,7 @@ interface Product {
     description: string;
     price: number;
     image_url: string;
+    availability?: string;
 }
 
 export default function ProductCard({ product }: { product: Product }) {
@@ -44,6 +45,13 @@ export default function ProductCard({ product }: { product: Product }) {
                             className="object-fit-cover"
                             style={{ transition: 'transform 0.3s ease' }}
                         />
+                        {product.availability === 'pre_order' && (
+                            <div className="position-absolute top-0 end-0 m-2">
+                                <span className="badge bg-warning text-dark px-3 py-2" style={{ fontSize: '0.85rem', fontWeight: '600' }}>
+                                    Предзаказ
+                                </span>
+                            </div>
+                        )}
                     </div>
                     <div className="card-body d-flex flex-column p-3" style={{ backgroundColor: '#fff' }}>
                         <h5 className="card-title mb-2 text-dark" style={{
@@ -75,7 +83,7 @@ export default function ProductCard({ product }: { product: Product }) {
                                     fontWeight: '500'
                                 }}
                             >
-                                Купити
+                                {product.availability === 'pre_order' ? 'Предзаказ' : 'Купити'}
                             </button>
                         </div>
                     </div>

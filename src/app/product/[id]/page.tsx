@@ -36,6 +36,13 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     <ProductGallery images={product.images || [product.image_url]} />
                 </div>
                 <div className="col-md-6">
+                    {product.availability === 'pre_order' && (
+                        <div className="mb-3">
+                            <span className="badge bg-warning text-dark px-4 py-2" style={{ fontSize: '1rem', fontWeight: '600' }}>
+                                Предзаказ
+                            </span>
+                        </div>
+                    )}
                     <h1 className="mb-4" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: '600' }}>
                         {product.title}
                     </h1>
