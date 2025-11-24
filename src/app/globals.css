@@ -1,37 +1,40 @@
 :root {
-  /* Color Scheme */
-  --primary-color: #00075e;
-  /* Primary color - темно-синий */
-  
-  --secondary-text: #e0e0e0;
-  /* Secondary text - светло-серый */
-  
-  --card-bg: #f5f5f5;
-  /* Product card background - светло-бежевый */
-  
-  --accent-button: #ffd700;
-  /* Accent button - золотисто-желтый */
-  
-  --link-color: #3b82f6;
-  /* Link and hover - синий */
-  --link-hover: #3b82f6;
-  
-  --discount-price: #ff0066;
-  /* Discount price - розовый */
-  
-  --hover-text: #e0e0e0;
-  /* Hover text */
-  
+  /* Color Scheme - Оптимизировано для читаемости */
   --bg-color: #ffffff;
-  /* Основной фон - белый */
+  /* Основной фон сайта - белый */
+  
+  --primary-color: #00075e;
+  /* Глубокий темно-синий - текст и заголовки */
+  
+  --accent-button: #343434;
+  /* Темный графит - кнопки и footer */
+  
+  --link-color: #00075e;
+  /* Ссылки - темно-синий для лучшей читаемости */
+  --link-hover: #6366f1;
+  /* Hover - яркий индиго */
+  
+  --card-bg: #ffffff;
+  /* Фон карточек - белый */
+  
+  --discount-price: #22c55e;
+  /* Цена - зеленый (позитивный) */
+  --old-price: #9ca3af;
+  /* Старая цена - серый */
+  --accent-badge: #fbbf24;
+  /* Акцентные бейджи - желтый */
+  --sale-badge: #ff0066;
+  /* Скидка - розовый */
 
   /* Text Colors */
-  --text-primary: #00075e;
-  /* Основной текст - темно-синий */
+  --text-primary: #1f2937;
+  /* Основной текст - темно-серый (лучше чем чистый синий) */
+  --text-secondary: #6b7280;
+  /* Второстепенный текст - средний серый */
+  --text-muted: #9ca3af;
+  /* Приглушенный текст */
   --text-light: #ffffff;
-  /* Светлый текст */
-  --text-dark: #000000;
-  /* Темный текст */
+  /* Светлый текст для темных фонов */
 
   /* Fonts */
   --font-logo: var(--font-carelia), serif;
@@ -54,6 +57,11 @@ p, span, div, a, button, input, textarea, select, label {
   font-family: var(--font-quincy, serif) !important;
 }
 
+p {
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
 h1,
 h2,
 h3,
@@ -73,6 +81,7 @@ a {
 
 a:hover {
   color: var(--link-hover);
+  text-decoration: underline;
 }
 
 /* Navbar Overrides */
@@ -99,13 +108,14 @@ a:hover {
 }
 
 .nav-link:hover {
-  color: var(--hover-text) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-decoration: none;
 }
 
 /* Card Overrides */
 .card {
   background-color: var(--card-bg);
-  border: none;
+  border: 1px solid rgba(0, 7, 94, 0.1);
   border-radius: 4px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
@@ -117,18 +127,18 @@ a:hover {
 }
 
 .card-title {
-  color: var(--text-dark);
+  color: var(--primary-color);
 }
 
 .card-text {
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 /* Button Overrides */
 .btn-primary {
   background-color: var(--accent-button);
   border: 1px solid var(--accent-button);
-  color: var(--text-dark);
+  color: var(--text-light);
   border-radius: 4px;
   padding: 0.75rem 1.5rem;
   font-family: var(--font-quincy, serif);
@@ -136,10 +146,10 @@ a:hover {
 }
 
 .btn-primary:hover {
-  background-color: #e6c200;
-  border-color: #e6c200;
-  color: var(--text-dark);
-  opacity: 0.95;
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: var(--text-light);
+  opacity: 0.9;
 }
 
 .btn-outline-primary {
@@ -155,7 +165,11 @@ a:hover {
 
 /* Utilities */
 .text-muted {
-  color: var(--secondary-text) !important;
+  color: var(--text-muted) !important;
+}
+
+.lead {
+  color: var(--text-secondary) !important;
 }
 
 .bg-light {
@@ -166,39 +180,56 @@ a:hover {
   background-color: var(--bg-color) !important;
 }
 
-/* Discount Price */
-.text-danger, .discount-price {
+/* Price Styling */
+.discount-price, .text-success {
   color: var(--discount-price) !important;
+  font-weight: 700;
 }
 
-/* Badge Danger */
+.old-price {
+  color: var(--old-price) !important;
+  text-decoration: line-through;
+}
+
+.text-danger {
+  color: var(--sale-badge) !important;
+}
+
+/* Badge */
 .badge.bg-danger {
-  background-color: var(--discount-price) !important;
-  color: var(--text-light) !important;
+  background-color: var(--sale-badge) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--accent-badge) !important;
+  color: var(--text-primary) !important;
 }
 
 /* Form Controls */
 .form-control {
   background-color: var(--bg-color);
-  border: 1px solid var(--secondary-text);
+  border: 2px solid #e5e7eb;
   color: var(--text-primary);
+  padding: 0.75rem 1rem;
 }
 
 .form-control::placeholder {
-  color: var(--secondary-text);
+  color: var(--text-muted);
 }
 
 .form-label {
   color: var(--text-primary);
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 0.5rem;
 }
 
 .form-control:focus {
   background-color: var(--bg-color);
-  border-color: var(--link-color);
+  border-color: var(--primary-color);
   color: var(--text-primary);
-  box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
+  outline: none;
 }
 
 /* Table */
@@ -222,8 +253,6 @@ footer, .bg-dark {
   color: var(--text-light) !important;
 }
 
-/* Badge */
-.badge {
-  background-color: var(--accent-button) !important;
-  color: var(--text-dark) !important;
+footer small {
+  opacity: 0.9;
 }
