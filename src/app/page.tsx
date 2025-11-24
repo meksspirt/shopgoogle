@@ -40,6 +40,31 @@ export default async function Home() {
           ))}
         </div>
       )}
+
+      {/* About the Author Section */}
+      <div className="mt-5 pt-5 border-top border-secondary">
+        <div className="row align-items-center">
+          <div className="col-md-4 text-center mb-4 mb-md-0">
+            <div className="position-relative d-inline-block rounded-circle overflow-hidden border border-3 border-primary" style={{ width: '200px', height: '200px' }}>
+              {/* Placeholder for Author Image - using a generic professional avatar */}
+              <img
+                src="https://placehold.co/200x200/384a9e/ffffff?text=Author"
+                alt="Author"
+                className="w-100 h-100 object-fit-cover"
+              />
+            </div>
+          </div>
+          <div className="col-md-8">
+            <h2 className="mb-4 fw-bold text-white">Про Автора</h2>
+            <p className="lead text-light mb-4">
+              Привіт! Я професійний психолог з багаторічним досвідом. Моя мета — допомогти вам знайти гармонію та покращити якість вашого життя через перевірені методики та знання.
+            </p>
+            <p className="text-muted">
+              Всі матеріали та книги, представлені в цьому магазині, ретельно відібрані та створені з урахуванням сучасних психологічних досліджень. Я вірю, що кожен заслуговує на щасливе та збалансоване життя.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
