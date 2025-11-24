@@ -912,6 +912,58 @@ export default function AdminPage() {
                                                 onChange={e => setEditingProduct({ ...editingProduct, stock_quantity: parseInt(e.target.value) || 0 })}
                                             />
                                         </div>
+                                        
+                                        {/* Book Characteristics */}
+                                        <div className="col-12"><hr className="border-secondary my-3" /><h6 className="text-white">Характеристики книги</h6></div>
+                                        
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Автор</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.author || ''} onChange={e => setEditingProduct({ ...editingProduct, author: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Видавництво</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.publisher || ''} onChange={e => setEditingProduct({ ...editingProduct, publisher: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Перекладач</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.translator || ''} onChange={e => setEditingProduct({ ...editingProduct, translator: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Рік видання</label>
+                                            <input type="number" className="form-control bg-dark text-white border-secondary" value={editingProduct.year || new Date().getFullYear()} onChange={e => setEditingProduct({ ...editingProduct, year: parseInt(e.target.value) || new Date().getFullYear() })} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Мова</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.language || 'Українська'} onChange={e => setEditingProduct({ ...editingProduct, language: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Кількість сторінок</label>
+                                            <input type="number" className="form-control bg-dark text-white border-secondary" value={editingProduct.pages || 0} onChange={e => setEditingProduct({ ...editingProduct, pages: parseInt(e.target.value) || 0 })} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Обкладинка</label>
+                                            <select className="form-select bg-dark text-white border-secondary" value={editingProduct.cover_type || ''} onChange={e => setEditingProduct({ ...editingProduct, cover_type: e.target.value })}>
+                                                <option value="">Оберіть</option>
+                                                <option value="Тверда">Тверда</option>
+                                                <option value="М'яка">М'яка</option>
+                                            </select>
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">ISBN</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.isbn || ''} onChange={e => setEditingProduct({ ...editingProduct, isbn: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Формат</label>
+                                            <input type="text" className="form-control bg-dark text-white border-secondary" placeholder="140x210мм" value={editingProduct.format || ''} onChange={e => setEditingProduct({ ...editingProduct, format: e.target.value })} />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Тип книги</label>
+                                            <select className="form-select bg-dark text-white border-secondary" value={editingProduct.book_type || 'Паперова книга'} onChange={e => setEditingProduct({ ...editingProduct, book_type: e.target.value })}>
+                                                <option value="Паперова книга">Паперова книга</option>
+                                                <option value="Електронна книга">Електронна книга</option>
+                                            </select>
+                                        </div>
+
                                         <div className="col-12">
                                             <ImageUpload
                                                 onUploadComplete={(urls, mainIndex) => setEditingProduct({ ...editingProduct, images: urls, mainImageIndex: mainIndex })}

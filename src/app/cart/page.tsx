@@ -17,9 +17,24 @@ export default function CartPage() {
     useEffect(() => {
         setMounted(true);
         const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
-        setCart(savedCart);
+        // Validate and correct quantities based on stock
+        const correctedCart = savedCart.map((item: any) => {
+            if (item.stock_quantity !== undefined && item.quantity > item.stock_quantity) {
+                return { ...item, quantity: Math.max(1, item.stock_quantity) };
+            }
+            return item;
+        });
+        
+        // Update cart if corrections were made
+        if (JSON.stringify(correctedCart) !== JSON.stringify(savedCart)) {
+            localStorage.setItem('cart', JSON.stringify(correctedCart));
+            setCart(correctedCart);
+        } else {
+            setCart(savedCart);
+        }
+        
         // Select all by default
-        setSelectedItems(savedCart.map((item: any) => item.id));
+        setSelectedItems(correctedCart.map((item: any) => item.id));
 
         // Fetch recommended products
         const fetchRecommended = async () => {
