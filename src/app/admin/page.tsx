@@ -18,11 +18,13 @@ export default function AdminPage() {
         images: [] as string[],
         mainImageIndex: 0,
         availability: 'in_stock' as 'in_stock' | 'pre_order',
-        discount_percent: 0
+        discount_percent: 0,
+        stock_quantity: 0
     });
     const [editingProduct, setEditingProduct] = useState<any>(null);
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const [trackingNumbers, setTrackingNumbers] = useState<{ [key: string]: string }>({});
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -84,6 +86,13 @@ export default function AdminPage() {
             alert('Помилка оновлення ТТН');
             console.error(error);
         } else {
+            alert('ТТН успішно збережено!');
+            // Clear the tracking number from state
+            setTrackingNumbers(prev => {
+                const newState = { ...prev };
+                delete newState[id];
+                return newState;
+            });
             fetchOrders();
         }
     };
@@ -144,13 +153,14 @@ export default function AdminPage() {
                     image_url: newProduct.images[newProduct.mainImageIndex],
                     images: newProduct.images,
                     availability: newProduct.availability,
-                    discount_percent: parseInt(newProduct.discount_percent.toString()) || 0
+                    discount_percent: parseInt(newProduct.discount_percent.toString()) || 0,
+                    stock_quantity: parseInt(newProduct.stock_quantity.toString()) || 0
                 }]);
 
             if (error) throw error;
 
             alert('Товар успішно створено!');
-            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock', discount_percent: 0 });
+            setNewProduct({ title: '', description: '', price: '', images: [], mainImageIndex: 0, availability: 'in_stock', discount_percent: 0, stock_quantity: 0 });
             fetchProducts();
         } catch (error: any) {
             console.error('Error creating product:', error);
@@ -175,7 +185,8 @@ export default function AdminPage() {
                     image_url: editingProduct.images[editingProduct.mainImageIndex || 0],
                     images: editingProduct.images,
                     availability: editingProduct.availability,
-                    discount_percent: parseInt(editingProduct.discount_percent?.toString() || '0') || 0
+                    discount_percent: parseInt(editingProduct.discount_percent?.toString() || '0') || 0,
+                    stock_quantity: parseInt(editingProduct.stock_quantity?.toString() || '0') || 0
                 })
                 .eq('id', editingProduct.id);
 
@@ -280,16 +291,23 @@ export default function AdminPage() {
                                                      order.status === 'delivered' ? 'Доставлено' :
                                                      order.status === 'cancelled' ? 'Скасовано' : order.status}
                                                 </span>
-                                                {order.status === 'shipped' && (
+                                                <div className="d-flex gap-1">
                                                     <input
                                                         type="text"
                                                         className="form-control form-control-sm bg-dark text-white border-secondary"
-                                                        placeholder="ТТН"
-                                                        defaultValue={order.tracking_number || ''}
-                                                        onBlur={(e) => updateTrackingNumber(order.id, e.target.value)}
+                                                        placeholder="ТТН Нова Пошта"
+                                                        value={trackingNumbers[order.id] !== undefined ? trackingNumbers[order.id] : (order.tracking_number || '')}
+                                                        onChange={(e) => setTrackingNumbers(prev => ({ ...prev, [order.id]: e.target.value }))}
                                                         style={{ fontSize: '0.85rem' }}
                                                     />
-                                                )}
+                                                    <button
+                                                        className="btn btn-success btn-sm px-2"
+                                                        onClick={() => updateTrackingNumber(order.id, trackingNumbers[order.id] !== undefined ? trackingNumbers[order.id] : (order.tracking_number || ''))}
+                                                        title="Зберегти ТТН"
+                                                    >
+                                                        💾
+                                                    </button>
+                                                </div>
                                             </div>
                                         </td>
                                         <td className="py-3">
@@ -385,16 +403,27 @@ export default function AdminPage() {
                                     <option value="pre_order">Предзаказ</option>
                                 </select>
                             </div>
-                            <div className="col-md-6">
+                            <div className="col-md-4">
                                 <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
                                 <input
                                     type="number"
                                     min="0"
                                     max="100"
-                                    className="form-select-lg bg-dark text-white border-secondary"
+                                    className="form-control form-control-lg bg-dark text-white border-secondary"
                                     value={newProduct.discount_percent}
                                     onChange={e => setNewProduct({ ...newProduct, discount_percent: parseInt(e.target.value) || 0 })}
-                                    style={{ width: '100%', padding: '0.5rem', borderRadius: '0.375rem', border: '1px solid' }}
+                                />
+                            </div>
+                            <div className="col-md-4">
+                                <label className="form-label small text-muted text-uppercase fw-bold">Кількість на складі</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    className="form-control form-control-lg bg-dark text-white border-secondary"
+                                    required
+                                    placeholder="0"
+                                    value={newProduct.stock_quantity}
+                                    onChange={e => setNewProduct({ ...newProduct, stock_quantity: parseInt(e.target.value) || 0 })}
                                 />
                             </div>
                             <div className="col-12">
@@ -509,7 +538,7 @@ export default function AdminPage() {
                                                 <option value="pre_order">Предзаказ</option>
                                             </select>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-4">
                                             <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
                                             <input
                                                 type="number"
@@ -518,6 +547,16 @@ export default function AdminPage() {
                                                 className="form-control bg-dark text-white border-secondary"
                                                 value={editingProduct.discount_percent || 0}
                                                 onChange={e => setEditingProduct({ ...editingProduct, discount_percent: parseInt(e.target.value) || 0 })}
+                                            />
+                                        </div>
+                                        <div className="col-md-4">
+                                            <label className="form-label small text-muted text-uppercase fw-bold">Кількість на складі</label>
+                                            <input
+                                                type="number"
+                                                min="0"
+                                                className="form-control bg-dark text-white border-secondary"
+                                                value={editingProduct.stock_quantity || 0}
+                                                onChange={e => setEditingProduct({ ...editingProduct, stock_quantity: parseInt(e.target.value) || 0 })}
                                             />
                                         </div>
                                         <div className="col-12">

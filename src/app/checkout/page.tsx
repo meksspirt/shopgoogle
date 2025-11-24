@@ -111,6 +111,31 @@ export default function CheckoutPage() {
 
             if (itemsError) throw itemsError;
 
+            // Update stock quantity for each product
+            for (const item of cart) {
+                const { data: product, error: fetchError } = await supabase
+                    .from('products')
+                    .select('stock_quantity')
+                    .eq('id', item.id)
+                    .single();
+
+                if (fetchError) {
+                    console.error('Error fetching product:', fetchError);
+                    continue;
+                }
+
+                const newStockQuantity = Math.max(0, (product.stock_quantity || 0) - item.quantity);
+
+                const { error: updateError } = await supabase
+                    .from('products')
+                    .update({ stock_quantity: newStockQuantity })
+                    .eq('id', item.id);
+
+                if (updateError) {
+                    console.error('Error updating stock:', updateError);
+                }
+            }
+
             // Clear Cart
             localStorage.removeItem('cart');
             window.dispatchEvent(new Event('cartUpdated'));

@@ -32,9 +32,20 @@ export default async function ProductPage({ params }: { params: { id: string } }
             </nav>
 
             <div className="row g-5">
+                {/* Left Column: Gallery + Button */}
                 <div className="col-md-6">
-                    <div className="sticky-top" style={{ top: '100px' }}>
+                    <div className="sticky-top" style={{ top: '120px' }}>
                         <ProductGallery images={product.images || [product.image_url]} />
+                        
+                        {/* Button under gallery - desktop only */}
+                        <div className="mt-4 d-none d-md-block">
+                            <AddToCartButton product={product} />
+                        </div>
+                    </div>
+                    
+                    {/* Button for mobile */}
+                    <div className="mt-4 d-md-none">
+                        <AddToCartButton product={product} />
                     </div>
                     
                     {/* Description - shown below gallery on mobile/tablet */}
@@ -45,63 +56,59 @@ export default async function ProductPage({ params }: { params: { id: string } }
                         </p>
                     </div>
                 </div>
+
+                {/* Right Column: Product Info */}
                 <div className="col-md-6">
-                    <div className="sticky-top" style={{ top: '100px' }}>
-                        {product.availability === 'pre_order' && (
-                            <div className="mb-3">
-                                <span className="badge bg-warning text-dark px-4 py-2" style={{ fontSize: '1rem', fontWeight: '600' }}>
-                                    Предзаказ
-                                </span>
-                            </div>
-                        )}
-                        <h1 className="mb-4" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: '600' }}>
-                            {product.title}
-                        </h1>
+                    {product.availability === 'pre_order' && (
+                        <div className="mb-3">
+                            <span className="badge bg-warning text-dark px-4 py-2" style={{ fontSize: '1rem', fontWeight: '600' }}>
+                                Предзаказ
+                            </span>
+                        </div>
+                    )}
+                    <h1 className="mb-4" style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: '600' }}>
+                        {product.title}
+                    </h1>
 
-                        <div className="mb-4">
-                            {product.discount_percent > 0 ? (
-                                <div className="d-flex align-items-center gap-3">
-                                    <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
-                                        {Math.round(product.price * (1 - product.discount_percent / 100))} грн
-                                    </h2>
-                                    <div className="d-flex flex-column">
-                                        <span className="text-decoration-line-through text-muted" style={{ fontSize: '1.2rem' }}>
-                                            {Math.round(product.price)} грн
-                                        </span>
-                                        <span className="badge bg-danger" style={{ fontSize: '0.9rem', width: 'fit-content' }}>
-                                            -{product.discount_percent}%
-                                        </span>
-                                    </div>
-                                </div>
-                            ) : (
-                                <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
-                                    {Math.round(product.price)} грн
+                    <div className="mb-4">
+                        {product.discount_percent > 0 ? (
+                            <div className="d-flex align-items-center gap-3">
+                                <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold', color: '#28a745' }}>
+                                    {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                 </h2>
-                            )}
-                        </div>
-
-                        <div className="alert alert-info d-flex align-items-center mb-4" role="alert" style={{ backgroundColor: 'rgba(56, 74, 158, 0.2)', borderColor: 'var(--primary-color)', color: '#e6f1ff' }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-patch-check-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
-                                <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896-.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.638.896.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.638-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
-                            </svg>
-                            <div>
-                                Товар розроблений професійним психологом.
+                                <div className="d-flex flex-column">
+                                    <span className="text-decoration-line-through text-muted" style={{ fontSize: '1.2rem' }}>
+                                        {Math.round(product.price)} грн
+                                    </span>
+                                    <span className="badge bg-danger" style={{ fontSize: '0.9rem', width: 'fit-content' }}>
+                                        -{product.discount_percent}%
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <h2 className="mb-0" style={{ fontSize: '2rem', fontWeight: 'bold' }}>
+                                {Math.round(product.price)} грн
+                            </h2>
+                        )}
+                    </div>
 
-                        <div className="mb-4">
-                            <AddToCartButton product={product} />
+                    <div className="alert alert-info d-flex align-items-center mb-4" role="alert" style={{ backgroundColor: 'rgba(56, 74, 158, 0.2)', borderColor: 'var(--primary-color)', color: '#e6f1ff' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-patch-check-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                            <path d="M10.067.87a2.89 2.89 0 0 0-4.134 0l-.622.638-.896-.011a2.89 2.89 0 0 0-2.924 2.924l.01.896-.636.622a2.89 2.89 0 0 0 0 4.134l.638.622-.011.896a2.89 2.89 0 0 0 2.924 2.924l.896-.01.622.636a2.89 2.89 0 0 0 4.134 0l.622-.638.896.011a2.89 2.89 0 0 0 2.924-2.924l-.01-.896.636-.622a2.89 2.89 0 0 0 0-4.134l-.638-.622.011-.896a2.89 2.89 0 0 0-2.924-2.924l-.896.01-.622-.636zm.287 5.984-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708.708z" />
+                        </svg>
+                        <div>
+                            Товар розроблений професійним психологом.
                         </div>
+                    </div>
 
-                        <hr className="my-4" />
+                    <hr className="my-4" />
 
-                        {/* Description - shown in sticky sidebar on desktop */}
-                        <div className="mt-4 d-none d-md-block">
-                            <h5 className="fw-bold mb-3">Опис</h5>
-                            <p className="text-muted" style={{ lineHeight: '1.7' }}>
-                                {product.description}
-                            </p>
-                        </div>
+                    {/* Description - shown in right column on desktop */}
+                    <div className="mt-4 d-none d-md-block">
+                        <h5 className="fw-bold mb-3">Опис</h5>
+                        <p className="text-muted" style={{ lineHeight: '1.7' }}>
+                            {product.description}
+                        </p>
                     </div>
                 </div>
             </div>
