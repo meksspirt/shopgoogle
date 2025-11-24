@@ -109,7 +109,7 @@ export default function CheckoutPage() {
                             <div key={item.id} className="p-3 rounded d-flex align-items-center gap-3" style={{ backgroundColor: 'var(--card-bg)' }}>
                                 <div className="position-relative flex-shrink-0" style={{ width: '80px', height: '80px' }}>
                                     <Image
-                                        src={item.image_url || 'https://placehold.co/100x100'}
+                                        src={item.image_url}
                                         alt={item.title}
                                         fill
                                         className="object-fit-cover rounded"

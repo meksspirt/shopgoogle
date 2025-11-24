@@ -140,7 +140,7 @@ export default function CartPage() {
                                             />
                                             <div className="position-relative rounded overflow-hidden bg-white" style={{ height: '120px', width: '120px' }}>
                                                 <Image
-                                                    src={item.image_url || 'https://placehold.co/120x120'}
+                                                    src={item.image_url}
                                                     alt={item.title}
                                                     fill
                                                     className="object-fit-contain p-2"
@@ -225,7 +225,7 @@ export default function CartPage() {
                                 <div className="card h-100 border-0 shadow-sm" style={{ backgroundColor: 'var(--card-bg)' }}>
                                     <div className="position-relative bg-white rounded-top overflow-hidden" style={{ height: '200px' }}>
                                         <Image
-                                            src={product.image_url || 'https://placehold.co/200x200'}
+                                            src={product.image_url}
                                             alt={product.title}
                                             fill
                                             className="object-fit-contain p-3"

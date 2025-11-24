@@ -249,7 +249,7 @@ export default function AdminPage() {
                         <div className="card shadow-sm h-100" style={{ backgroundColor: 'var(--card-bg)' }}>
                             <div className="position-relative" style={{ height: '200px' }}>
                                 <Image
-                                    src={product.image_url || 'https://placehold.co/400x600'}
+                                    src={product.image_url}
                                     alt={product.title}
                                     fill
                                     className="object-fit-cover"

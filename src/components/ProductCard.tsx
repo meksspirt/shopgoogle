@@ -38,7 +38,7 @@ export default function ProductCard({ product }: { product: Product }) {
                 <div className="card h-100 shadow-sm hover-effect border-0" style={{ backgroundColor: '#fff' }}>
                     <div className="position-relative" style={{ height: '350px', overflow: 'hidden' }}>
                         <Image
-                            src={product.image_url || 'https://placehold.co/400x600'}
+                            src={product.image_url}
                             alt={product.title}
                             fill
                             className="object-fit-cover"

@@ -12,7 +12,7 @@ export default function ProductGallery({ images }: { images: string[] }) {
     // If no images, show placeholder
     const displayImages = images && images.length > 0
         ? images
-        : ['https://placehold.co/600x800?text=No+Image'];
+        : [images[0]];
 
     const slides = displayImages.map(src => ({ src }));
 
