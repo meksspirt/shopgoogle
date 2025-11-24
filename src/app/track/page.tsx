@@ -50,19 +50,24 @@ function TrackOrderContent() {
         <div className="container py-5">
             <div className="row justify-content-center">
                 <div className="col-md-6">
-                    <h1 className="text-center mb-4" style={{ fontFamily: 'var(--font-heading)' }}>Відстежити замовлення</h1>
-                    <div className="card shadow-sm mb-4" style={{ backgroundColor: 'var(--card-bg)' }}>
+                    <h1 className="text-center mb-4" style={{ fontFamily: 'var(--font-heading)', color: '#00075e' }}>Відстежити замовлення</h1>
+                    <div className="card shadow-sm mb-4" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}>
                         <div className="card-body">
                             <form onSubmit={handleTrack}>
                                 <div className="mb-3">
-                                    <label className="form-label text-muted small text-uppercase fw-bold">Номер замовлення</label>
+                                    <label className="form-label small text-uppercase fw-bold" style={{ color: '#374151' }}>Номер замовлення</label>
                                     <input
                                         type="text"
-                                        className="form-control form-control-lg bg-dark text-white border-secondary"
+                                        className="form-control form-control-lg"
                                         placeholder="напр. 530819"
                                         value={orderId}
                                         onChange={(e) => setOrderId(e.target.value)}
                                         required
+                                        style={{ 
+                                            backgroundColor: '#ffffff',
+                                            color: '#111827',
+                                            border: '2px solid #00075e'
+                                        }}
                                     />
                                 </div>
                                 <button type="submit" className="btn btn-primary w-100 btn-lg" disabled={loading}>
@@ -75,20 +80,20 @@ function TrackOrderContent() {
                     {error && <div className="alert alert-danger">{error}</div>}
 
                     {status && (
-                        <div className="card shadow-lg border-0" style={{ backgroundColor: 'var(--card-bg)' }}>
-                            <div className="card-header border-bottom border-secondary py-4" style={{ backgroundColor: '#6d77fa' }}>
+                        <div className="card shadow-lg" style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}>
+                            <div className="card-header border-bottom py-4" style={{ backgroundColor: '#00075e', borderBottom: '1px solid #e5e7eb' }}>
                                 <h5 className="mb-0 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff' }}>
                                     Статус замовлення
                                 </h5>
                             </div>
                             <div className="card-body p-4">
-                                <h5 className="mb-4 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#e6f1ff', fontSize: '1.5rem' }}>
+                                <h5 className="mb-4 fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#00075e', fontSize: '1.5rem' }}>
                                     Замовлення #{status.id}
                                 </h5>
                                 
-                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#374151', fontSize: '1.1rem' }}>
                                             Статус:
                                         </span>
                                         <span className={`badge px-4 py-2 ${
@@ -105,23 +110,23 @@ function TrackOrderContent() {
                                     </div>
                                 </div>
 
-                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                <div className="mb-3 p-3 rounded" style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#374151', fontSize: '1.1rem' }}>
                                             Сума:
                                         </span>
-                                        <span className="fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.3rem' }}>
+                                        <span className="fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#111827', fontSize: '1.3rem' }}>
                                             {status.total_amount} грн
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="p-3 rounded" style={{ backgroundColor: 'rgba(255,255,255,0.05)' }}>
+                                <div className="p-3 rounded" style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb' }}>
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#374151', fontSize: '1.1rem' }}>
                                             Дата:
                                         </span>
-                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.1rem' }}>
+                                        <span style={{ fontFamily: 'var(--font-heading)', color: '#111827', fontSize: '1.1rem' }}>
                                             {new Date(status.created_at).toLocaleDateString('uk-UA', { 
                                                 year: 'numeric', 
                                                 month: 'long', 
@@ -139,20 +144,22 @@ function TrackOrderContent() {
                                         className="text-decoration-none"
                                     >
                                         <div className="p-4 rounded mt-3" style={{ 
-                                            background: 'linear-gradient(135deg, #6d77fa 0%, #b8aafa 100%)',
+                                            background: '#343434',
                                             cursor: 'pointer',
                                             transition: 'transform 0.2s, box-shadow 0.2s'
                                         }}
                                         onMouseEnter={(e) => {
                                             e.currentTarget.style.transform = 'translateY(-2px)';
-                                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(109, 119, 250, 0.4)';
+                                            e.currentTarget.style.boxShadow = '0 8px 20px rgba(52, 52, 52, 0.4)';
+                                            e.currentTarget.style.background = '#00075e';
                                         }}
                                         onMouseLeave={(e) => {
                                             e.currentTarget.style.transform = 'translateY(0)';
                                             e.currentTarget.style.boxShadow = 'none';
+                                            e.currentTarget.style.background = '#343434';
                                         }}>
                                             <div className="d-flex align-items-center justify-content-between mb-2">
-                                                <span style={{ fontFamily: 'var(--font-heading)', color: 'rgba(255,255,255,0.9)', fontSize: '1rem' }}>
+                                                <span style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1rem' }}>
                                                     ТТН Нова Пошта:
                                                 </span>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16">
@@ -169,7 +176,7 @@ function TrackOrderContent() {
                                             }}>
                                                 {status.tracking_number}
                                             </div>
-                                            <div className="d-flex align-items-center gap-2" style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.9rem' }}>
+                                            <div className="d-flex align-items-center gap-2" style={{ color: '#ffffff', fontSize: '0.9rem' }}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                                     <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
                                                 </svg>
