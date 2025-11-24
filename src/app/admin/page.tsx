@@ -74,6 +74,20 @@ export default function AdminPage() {
         }
     };
 
+    const updateTrackingNumber = async (id: string, trackingNumber: string) => {
+        const { error } = await supabase
+            .from('orders')
+            .update({ tracking_number: trackingNumber })
+            .eq('id', id);
+
+        if (error) {
+            alert('Помилка оновлення ТТН');
+            console.error(error);
+        } else {
+            fetchOrders();
+        }
+    };
+
     const deleteOrder = async (id: string, orderNumber: string) => {
         if (!confirm(`Ви впевнені, що хочете видалити замовлення ${orderNumber}?`)) {
             return;
@@ -220,7 +234,7 @@ export default function AdminPage() {
                                     <th className="py-3">Доставка</th>
                                     <th className="py-3">Інфо</th>
                                     <th className="py-3">Сума</th>
-                                    <th className="py-3">Статус</th>
+                                    <th className="py-3">Статус / ТТН</th>
                                     <th className="py-3">Дії</th>
                                 </tr>
                             </thead>
@@ -256,12 +270,27 @@ export default function AdminPage() {
                                             <span className="text-warning fw-bold">{order.total_amount} грн</span>
                                         </td>
                                         <td className="py-3">
-                                            <span className={`badge bg-${order.status === 'pending' ? 'warning' :
-                                                order.status === 'shipped' ? 'info' :
-                                                    order.status === 'delivered' ? 'success' : 'secondary'
-                                                }`}>
-                                                {order.status}
-                                            </span>
+                                            <div className="d-flex flex-column gap-2">
+                                                <span className={`badge bg-${order.status === 'pending' ? 'warning' :
+                                                    order.status === 'shipped' ? 'info' :
+                                                        order.status === 'delivered' ? 'success' : 'secondary'
+                                                    }`}>
+                                                    {order.status === 'pending' ? 'Очікується' :
+                                                     order.status === 'shipped' ? 'Відправлено' :
+                                                     order.status === 'delivered' ? 'Доставлено' :
+                                                     order.status === 'cancelled' ? 'Скасовано' : order.status}
+                                                </span>
+                                                {order.status === 'shipped' && (
+                                                    <input
+                                                        type="text"
+                                                        className="form-control form-control-sm bg-dark text-white border-secondary"
+                                                        placeholder="ТТН"
+                                                        defaultValue={order.tracking_number || ''}
+                                                        onBlur={(e) => updateTrackingNumber(order.id, e.target.value)}
+                                                        style={{ fontSize: '0.85rem' }}
+                                                    />
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="py-3">
                                             <div className="d-flex flex-column gap-2">

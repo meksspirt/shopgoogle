@@ -145,14 +145,16 @@ export default function CartPage() {
                                                 onChange={() => toggleSelect(item.id)}
                                                 style={{ cursor: 'pointer' }}
                                             />
-                                            <div className="position-relative rounded overflow-hidden bg-white" style={{ height: '120px', width: '120px' }}>
-                                                <Image
-                                                    src={item.image_url}
-                                                    alt={item.title}
-                                                    fill
-                                                    className="object-fit-contain p-2"
-                                                />
-                                            </div>
+                                            <Link href={`/product/${item.id}`} className="text-decoration-none">
+                                                <div className="position-relative rounded overflow-hidden bg-white" style={{ height: '120px', width: '120px', cursor: 'pointer' }}>
+                                                    <Image
+                                                        src={item.image_url}
+                                                        alt={item.title}
+                                                        fill
+                                                        className="object-fit-contain p-2"
+                                                    />
+                                                </div>
+                                            </Link>
                                         </div>
 
                                         {/* Info */}

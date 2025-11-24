@@ -116,6 +116,30 @@ export default function TrackOrderPage() {
                                         </span>
                                     </div>
                                 </div>
+
+                                {status.status === 'shipped' && status.tracking_number && (
+                                    <div className="p-3 rounded mt-3" style={{ backgroundColor: 'rgba(109, 119, 250, 0.2)', border: '1px solid #6d77fa' }}>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <span style={{ fontFamily: 'var(--font-heading)', color: '#b8aafa', fontSize: '1.1rem' }}>
+                                                ТТН Нова Пошта:
+                                            </span>
+                                            <span className="fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#ffffff', fontSize: '1.2rem', letterSpacing: '1px' }}>
+                                                {status.tracking_number}
+                                            </span>
+                                        </div>
+                                        <div className="mt-2 text-center">
+                                            <a 
+                                                href={`https://novaposhta.ua/tracking/?cargo_number=${status.tracking_number}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="btn btn-sm btn-outline-light"
+                                                style={{ fontFamily: 'var(--font-heading)' }}
+                                            >
+                                                Відстежити на сайті Нової Пошти →
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}

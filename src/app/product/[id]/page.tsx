@@ -33,7 +33,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
             <div className="row g-5">
                 <div className="col-md-6">
-                    <ProductGallery images={product.images || [product.image_url]} />
+                    <div className="sticky-top" style={{ top: '100px' }}>
+                        <ProductGallery images={product.images || [product.image_url]} />
+                    </div>
                     
                     {/* Description - shown below gallery on mobile/tablet */}
                     <div className="mt-5 d-md-none">
