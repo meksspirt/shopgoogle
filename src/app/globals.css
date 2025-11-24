@@ -1,42 +1,38 @@
 :root {
-  /* New Color Scheme */
+  /* Color Scheme */
+  --bg-color: #ffffff;
+  /* Основной фон сайта - белый */
+  
   --primary-color: #00075e;
-  /* Primary dark blue */
-  --bg-color: #00075e;
-  /* Main background */
-  
-  --card-bg: #f5f5f5;
-  /* Product card background - light beige */
-  --card-bg-alt: #f5f5f5;
-  /* Alternative card background */
-  
-  --secondary-text: #e0e0e0;
-  /* Secondary text - light gray */
-  --hover-text: #e0e0e0;
-  /* Hover text color */
+  /* Глубокий темно-синий - текст и заголовки */
   
   --accent-button: #343434;
-  /* Accent button - dark gray/black */
-  --discount-price: #ff0066;
-  /* Discount price - pink/red */
-  --accent-badge: #ff0066;
-  /* Accent badge color */
+  /* Темный графит - кнопки и footer */
   
   --link-color: #b9b8c5;
-  /* Link color - light purple/gray */
-  --link-hover: #3b82f6;
-  /* Link hover - blue */
+  /* Светлый серо-лиловый - ссылки и hover */
+  --link-hover: #b9b8c5;
+  /* Hover состояние */
+  
+  --card-bg: #ffffff;
+  /* Фон карточек - белый */
+  
+  --discount-price: #ff0066;
+  /* Цена со скидкой */
+  --accent-badge: #ff0066;
+  /* Акцентные бейджи */
 
   /* Text Colors */
-  --text-primary: #ffffff;
-  --text-dark: #000000;
-  /* Dark text for light backgrounds */
+  --text-primary: #00075e;
+  /* Основной текст - темно-синий */
+  --text-secondary: #b9b8c5;
+  /* Второстепенный текст */
+  --text-light: #ffffff;
+  /* Светлый текст для темных фонов */
 
   /* Fonts */
   --font-logo: var(--font-carelia), serif;
-  /* Carelia Font for logo */
   --font-body: var(--font-quincy), serif;
-  /* Main site font - using local Quincy CF */
   --font-heading: var(--font-quincy), serif;
 }
 
@@ -62,7 +58,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-quincy, serif) !important;
-  color: #e6f1ff;
+  color: var(--primary-color);
   font-weight: 700;
 }
 
@@ -78,9 +74,9 @@ a:hover {
 
 /* Navbar Overrides */
 .navbar {
-  background-color: rgba(10, 25, 47, 0.95) !important;
+  background-color: var(--primary-color) !important;
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 7, 94, 0.1);
 }
 
 .navbar-brand {
@@ -89,25 +85,27 @@ a:hover {
   letter-spacing: 2px;
   font-weight: normal;
   font-style: normal;
+  color: var(--text-light) !important;
 }
 
 .nav-link {
-  color: var(--text-primary) !important;
+  color: var(--text-light) !important;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .nav-link:hover {
-  color: var(--hover-text) !important;
+  color: var(--link-hover) !important;
 }
 
 /* Card Overrides */
 .card {
   background-color: var(--card-bg);
-  border: none;
+  border: 1px solid rgba(0, 7, 94, 0.1);
   border-radius: 4px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .card:hover {
@@ -116,18 +114,18 @@ a:hover {
 }
 
 .card-title {
-  color: var(--text-dark);
+  color: var(--primary-color);
 }
 
 .card-text {
-  color: var(--text-dark);
+  color: var(--text-primary);
 }
 
 /* Button Overrides */
 .btn-primary {
   background-color: var(--accent-button);
   border: 1px solid var(--accent-button);
-  color: #ffffff;
+  color: var(--text-light);
   border-radius: 4px;
   padding: 0.75rem 1.5rem;
   font-family: var(--font-quincy, serif);
@@ -137,23 +135,24 @@ a:hover {
 .btn-primary:hover {
   background-color: #1a1a1a;
   border-color: #1a1a1a;
-  color: #ffffff;
+  color: var(--text-light);
+  opacity: 0.9;
 }
 
 .btn-outline-primary {
-  color: var(--text-primary);
-  border-color: var(--text-secondary);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .btn-outline-primary:hover {
-  background-color: var(--secondary-color);
-  border-color: var(--text-primary);
-  color: #fff;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-light);
 }
 
 /* Utilities */
 .text-muted {
-  color: var(--secondary-text) !important;
+  color: var(--text-secondary) !important;
 }
 
 .bg-light {
@@ -161,7 +160,7 @@ a:hover {
 }
 
 .bg-white {
-  background-color: var(--card-bg) !important;
+  background-color: var(--bg-color) !important;
 }
 
 /* Discount Price */
@@ -176,27 +175,26 @@ a:hover {
 
 /* Form Controls */
 .form-control {
-  background-color: #172a45;
-  border: 1px solid #303c55;
+  background-color: var(--bg-color);
+  border: 1px solid var(--link-color);
   color: var(--text-primary);
 }
 
 .form-control::placeholder {
-  color: rgba(184, 170, 250, 0.6);
-  /* Lighter version of accent color */
+  color: var(--text-secondary);
 }
 
 .form-label {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
 .form-control:focus {
-  background-color: #172a45;
-  border-color: var(--accent-color);
+  background-color: var(--bg-color);
+  border-color: var(--primary-color);
   color: var(--text-primary);
-  box-shadow: 0 0 0 0.25rem rgba(100, 255, 218, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(0, 7, 94, 0.1);
 }
 
 /* Table */
@@ -205,11 +203,17 @@ a:hover {
 }
 
 .table-light {
-  background-color: var(--secondary-color);
+  background-color: var(--bg-color);
   color: var(--text-primary);
 }
 
 .table-hover tbody tr:hover {
   color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(185, 184, 197, 0.1);
+}
+
+/* Footer */
+footer, .bg-dark {
+  background-color: var(--accent-button) !important;
+  color: var(--text-light) !important;
 }
