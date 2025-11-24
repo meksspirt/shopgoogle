@@ -131,6 +131,18 @@ export default function AddToCartButton({ product }: { product: any }) {
                     box-shadow: 0 0 0 0.2rem rgba(0, 7, 94, 0.15);
                     background: #ffffff;
                 }
+                
+                /* Убираем стрелки у input type="number" */
+                .quantity-input::-webkit-outer-spin-button,
+                .quantity-input::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                    margin: 0;
+                }
+                
+                .quantity-input[type=number] {
+                    -moz-appearance: textfield;
+                    appearance: textfield;
+                }
             `}</style>
 
             <div>
@@ -140,7 +152,14 @@ export default function AddToCartButton({ product }: { product: any }) {
                         <button
                             className="btn quantity-btn d-flex align-items-center justify-content-center"
                             onClick={decreaseQuantity}
-                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold', padding: 0 }}
+                            style={{ 
+                                width: '50px', 
+                                height: '50px', 
+                                fontSize: '1.5rem', 
+                                fontWeight: 'bold', 
+                                padding: 0,
+                                lineHeight: 1
+                            }}
                         >
                             −
                         </button>
@@ -153,14 +172,27 @@ export default function AddToCartButton({ product }: { product: any }) {
                                 const value = parseInt(e.target.value) || 1;
                                 setQuantity(Math.max(1, Math.min(value, maxQuantity)));
                             }}
-                            style={{ width: '80px', height: '50px', fontSize: '1.2rem', padding: 0 }}
+                            style={{ 
+                                width: '80px', 
+                                height: '50px', 
+                                fontSize: '1.2rem', 
+                                padding: 0,
+                                lineHeight: '50px'
+                            }}
                             min="1"
                             max={product.stock_quantity || 999}
                         />
                         <button
                             className="btn quantity-btn d-flex align-items-center justify-content-center"
                             onClick={increaseQuantity}
-                            style={{ width: '50px', height: '50px', fontSize: '1.5rem', fontWeight: 'bold', padding: 0 }}
+                            style={{ 
+                                width: '50px', 
+                                height: '50px', 
+                                fontSize: '1.5rem', 
+                                fontWeight: 'bold', 
+                                padding: 0,
+                                lineHeight: 1
+                            }}
                         >
                             +
                         </button>

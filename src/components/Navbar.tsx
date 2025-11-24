@@ -47,11 +47,20 @@ export default function Navbar() {
                                 Відстежити замовлення
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link href="/cart" className="nav-link position-relative">
+                        <li className="nav-item position-relative">
+                            <Link href="/cart" className="nav-link">
                                 Кошик
                                 {cartCount > 0 && (
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    <span 
+                                        className="position-absolute badge rounded-pill bg-danger" 
+                                        style={{ 
+                                            top: '0', 
+                                            right: '-10px',
+                                            fontSize: '0.7rem',
+                                            padding: '0.25em 0.5em',
+                                            minWidth: '1.5em'
+                                        }}
+                                    >
                                         {cartCount}
                                     </span>
                                 )}
