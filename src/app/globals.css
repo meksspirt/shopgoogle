@@ -1,20 +1,36 @@
 :root {
-  /* New Color Scheme - #00075e as primary */
-  --bg-color: #00075e;
-  /* Main dark blue background */
-  --card-bg: #001a8a;
-  /* Lighter blue for cards */
+  /* New Color Scheme */
   --primary-color: #00075e;
-  /* Primary brand color */
-  --secondary-color: #0033cc;
-  /* Secondary blue */
-  --accent-color: #ffffff;
-  /* White for accents */
+  /* Primary dark blue */
+  --bg-color: #00075e;
+  /* Main background */
+  
+  --card-bg: #f5f5f5;
+  /* Product card background - light beige */
+  --card-bg-alt: #f5f5f5;
+  /* Alternative card background */
+  
+  --secondary-text: #e0e0e0;
+  /* Secondary text - light gray */
+  --hover-text: #e0e0e0;
+  /* Hover text color */
+  
+  --accent-button: #343434;
+  /* Accent button - dark gray/black */
+  --discount-price: #ff0066;
+  /* Discount price - pink/red */
+  --accent-badge: #ff0066;
+  /* Accent badge color */
+  
+  --link-color: #b9b8c5;
+  /* Link color - light purple/gray */
+  --link-hover: #3b82f6;
+  /* Link hover - blue */
 
   /* Text Colors */
   --text-primary: #ffffff;
-  --text-secondary: #e0e0e0;
-  /* Light gray for secondary text */
+  --text-dark: #000000;
+  /* Dark text for light backgrounds */
 
   /* Fonts */
   --font-logo: var(--font-carelia), serif;
@@ -51,13 +67,13 @@ h6 {
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--link-color);
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 a:hover {
-  color: #fff;
+  color: var(--link-hover);
 }
 
 /* Navbar Overrides */
@@ -83,7 +99,7 @@ a:hover {
 }
 
 .nav-link:hover {
-  color: var(--accent-color) !important;
+  color: var(--hover-text) !important;
 }
 
 /* Card Overrides */
@@ -96,22 +112,22 @@ a:hover {
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+  box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.2);
 }
 
 .card-title {
-  color: #e6f1ff;
+  color: var(--text-dark);
 }
 
 .card-text {
-  color: var(--text-secondary);
+  color: var(--text-dark);
 }
 
 /* Button Overrides */
 .btn-primary {
-  background-color: var(--accent-color);
-  border: 1px solid var(--accent-color);
-  color: var(--primary-color);
+  background-color: var(--accent-button);
+  border: 1px solid var(--accent-button);
+  color: #ffffff;
   border-radius: 4px;
   padding: 0.75rem 1.5rem;
   font-family: var(--font-quincy, serif);
@@ -119,9 +135,9 @@ a:hover {
 }
 
 .btn-primary:hover {
-  background-color: #f0f0f0;
-  border-color: #f0f0f0;
-  color: var(--primary-color);
+  background-color: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #ffffff;
 }
 
 .btn-outline-primary {
@@ -137,7 +153,7 @@ a:hover {
 
 /* Utilities */
 .text-muted {
-  color: var(--text-secondary) !important;
+  color: var(--secondary-text) !important;
 }
 
 .bg-light {
@@ -146,6 +162,16 @@ a:hover {
 
 .bg-white {
   background-color: var(--card-bg) !important;
+}
+
+/* Discount Price */
+.text-danger, .discount-price {
+  color: var(--discount-price) !important;
+}
+
+/* Badge */
+.badge.bg-danger {
+  background-color: var(--accent-badge) !important;
 }
 
 /* Form Controls */
