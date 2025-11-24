@@ -1,0 +1,65 @@
+'use client';
+
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+
+export default function Navbar() {
+    const [cartCount, setCartCount] = useState(0);
+
+    useEffect(() => {
+        // Initial check for cart items
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        setCartCount(cart.reduce((acc: number, item: any) => acc + item.quantity, 0));
+
+        // Listen for custom event 'cartUpdated'
+        const handleCartUpdate = () => {
+            const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+            setCartCount(updatedCart.reduce((acc: number, item: any) => acc + item.quantity, 0));
+        };
+
+        window.addEventListener('cartUpdated', handleCartUpdate);
+        return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+    }, []);
+
+    return (
+        <nav className="navbar navbar-expand-lg sticky-top">
+            <div className="container">
+                <Link href="/" className="navbar-brand fw-bold text-white">
+                    CalmCraft
+                </Link>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                >
+                    <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ms-auto">
+                        <li className="nav-item">
+                            <Link href="/" className="nav-link">
+                                Каталог
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link href="/track" className="nav-link">
+                                Відстежити замовлення
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link href="/cart" className="nav-link position-relative">
+                                Кошик
+                                {cartCount > 0 && (
+                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    );
+}
