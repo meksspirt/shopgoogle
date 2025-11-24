@@ -73,7 +73,7 @@ export default function CheckoutPage() {
                 order_id: order.id,
                 product_id: item.id,
                 quantity: item.quantity,
-                price: item.price
+                price_at_time: item.price
             }));
 
             const { error: itemsError } = await supabase
