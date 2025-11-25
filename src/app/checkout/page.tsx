@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
 import Image from 'next/image';
+import NovaPoshtaWidget from '@/components/NovaPoshtaWidget';
 
 export default function CheckoutPage() {
     const [cart, setCart] = useState<any[]>([]);
@@ -14,6 +15,8 @@ export default function CheckoutPage() {
         phone: '',
         city: '',
         novaPoshta: '',
+        novaPoshtaId: '',
+        fullAddress: '',
         instagram: '',
         psychologist: false
     });
@@ -105,9 +108,10 @@ export default function CheckoutPage() {
                     customer_name: formData.name,
                     customer_email: formData.email,
                     customer_phone: formData.phone,
-                    customer_address: `${formData.city}, Нова Пошта №${formData.novaPoshta}`,
+                    customer_address: formData.fullAddress || `${formData.city}, Нова Пошта №${formData.novaPoshta}`,
                     customer_city: formData.city,
                     nova_poshta_branch: formData.novaPoshta,
+                    nova_poshta_warehouse_id: formData.novaPoshtaId,
                     instagram_nick: formData.instagram,
                     visited_psychologist: formData.psychologist,
                     total_amount: total,
@@ -194,7 +198,7 @@ export default function CheckoutPage() {
             <div className="row g-5">
                 {/* Left Column: Product List */}
                 <div className="col-lg-6 order-lg-1">
-                    <h4 className="mb-4 text-secondary">Ваше замовлення</h4>
+                    <h4 className="mb-4" style={{ color: '#00075e' }}>Ваше замовлення</h4>
                     <div className="d-flex flex-column gap-3">
                         {cart.map((item) => (
                             <div key={item.id} className="p-3 rounded d-flex align-items-center gap-3" style={{ backgroundColor: 'var(--card-bg)' }}>
@@ -256,14 +260,20 @@ export default function CheckoutPage() {
 
                 {/* Right Column: Form */}
                 <div className="col-lg-6 order-lg-2">
-                    <h4 className="mb-4 text-secondary">Дані доставки</h4>
+                    <h4 className="mb-4" style={{ color: '#00075e' }}>Дані доставки</h4>
                     <form onSubmit={handleSubmit}>
                         <div className="row g-3">
                             <div className="col-12">
-                                <label className="form-label small text-muted text-uppercase fw-bold">ПІБ</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase', letterSpacing: '0.5px' }}>ПІБ</label>
                                 <input
                                     type="text"
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
+                                    className="form-control form-control-lg"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e',
+                                        borderRadius: '8px'
+                                    }}
                                     required
                                     value={formData.name}
                                     onChange={e => setFormData({ ...formData, name: e.target.value })}
@@ -272,10 +282,16 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className="col-md-6">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Телефон</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Телефон</label>
                                 <input
                                     type="tel"
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
+                                    className="form-control form-control-lg"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e',
+                                        borderRadius: '8px'
+                                    }}
                                     required
                                     value={formData.phone}
                                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
@@ -284,10 +300,16 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className="col-md-6">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Email</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Email</label>
                                 <input
                                     type="email"
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
+                                    className="form-control form-control-lg"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e',
+                                        borderRadius: '8px'
+                                    }}
                                     required
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
@@ -295,37 +317,47 @@ export default function CheckoutPage() {
                                 />
                             </div>
 
-                            <div className="col-md-6">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Місто</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
-                                    required
-                                    value={formData.city}
-                                    onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                    placeholder="Місто"
+                            <div className="col-12">
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Відділення Нової Пошти</label>
+                                <NovaPoshtaWidget
+                                    onSelect={(data) => {
+                                        setFormData({
+                                            ...formData,
+                                            city: data.city,
+                                            novaPoshta: data.warehouse,
+                                            novaPoshtaId: data.warehouseId,
+                                            fullAddress: data.fullAddress
+                                        });
+                                    }}
+                                    initialCity={formData.city}
+                                    initialWarehouse={formData.novaPoshta}
                                 />
-                            </div>
-
-                            <div className="col-md-6">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Відділення НП</label>
-                                <input
-                                    type="text"
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
-                                    required
-                                    value={formData.novaPoshta}
-                                    onChange={e => setFormData({ ...formData, novaPoshta: e.target.value })}
-                                    placeholder="№ відділення"
-                                />
+                                {!formData.city && (
+                                    <small className="text-danger d-block mt-2">
+                                        * Будь ласка, оберіть відділення Нової Пошти
+                                    </small>
+                                )}
                             </div>
 
                             <div className="col-12">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Instagram</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Instagram</label>
                                 <div className="input-group input-group-lg">
-                                    <span className="input-group-text bg-dark text-secondary border-secondary">@</span>
+                                    <span className="input-group-text" style={{
+                                        backgroundColor: '#f9fafb',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e',
+                                        borderRadius: '8px 0 0 8px'
+                                    }}>@</span>
                                     <input
                                         type="text"
-                                        className="form-control bg-dark text-white border-secondary"
+                                        className="form-control"
+                                        style={{
+                                            backgroundColor: '#ffffff',
+                                            border: '1px solid #e5e7eb',
+                                            borderLeft: 'none',
+                                            color: '#00075e',
+                                            borderRadius: '0 8px 8px 0'
+                                        }}
                                         value={formData.instagram}
                                         onChange={e => setFormData({ ...formData, instagram: e.target.value })}
                                         placeholder="username"
@@ -334,15 +366,22 @@ export default function CheckoutPage() {
                             </div>
 
                             <div className="col-12">
-                                <div className="form-check p-3 rounded border border-secondary" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }}>
+                                <div className="form-check p-3 rounded" style={{ 
+                                    backgroundColor: '#f9fafb',
+                                    border: '1px solid #e5e7eb'
+                                }}>
                                     <input
                                         type="checkbox"
-                                        className="form-check-input bg-dark border-secondary"
+                                        className="form-check-input"
+                                        style={{
+                                            backgroundColor: '#ffffff',
+                                            borderColor: '#00075e'
+                                        }}
                                         id="psychologistCheck"
                                         checked={formData.psychologist}
                                         onChange={e => setFormData({ ...formData, psychologist: e.target.checked })}
                                     />
-                                    <label className="form-check-label text-secondary" htmlFor="psychologistCheck">
+                                    <label className="form-check-label" style={{ color: '#00075e' }} htmlFor="psychologistCheck">
                                         Чи зверталися ви до психолога? (необов'язково)
                                     </label>
                                 </div>
@@ -352,9 +391,9 @@ export default function CheckoutPage() {
                                 <button
                                     type="submit"
                                     className="btn btn-primary w-100 btn-lg py-3 fw-bold text-uppercase ls-1 shadow-lg"
-                                    disabled={loading}
+                                    disabled={loading || !formData.city}
                                 >
-                                    {loading ? 'Обробка...' : `Сплатити ${Math.round(total)} грн`}
+                                    {loading ? 'Обробка...' : !formData.city ? 'Оберіть відділення НП' : `Сплатити ${Math.round(total)} грн`}
                                 </button>
                             </div>
                         </div>

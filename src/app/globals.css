@@ -185,26 +185,62 @@ main.min-vh-100 {
 
 /* Form Controls */
 .form-control {
-  background-color: var(--bg-color);
-  border: 1px solid var(--link-color);
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
   color: var(--text-primary);
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .form-control::placeholder {
-  color: var(--text-secondary);
+  color: #9ca3af;
 }
 
 .form-label {
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
 }
 
 .form-control:focus {
-  background-color: var(--bg-color);
+  background-color: #ffffff;
   border-color: var(--primary-color);
   color: var(--text-primary);
-  box-shadow: 0 0 0 0.25rem rgba(0, 7, 94, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
+  outline: none;
+}
+
+.form-control:hover:not(:focus) {
+  border-color: #d1d5db;
+}
+
+/* Input Group */
+.input-group-text {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: var(--text-primary);
+}
+
+/* Checkbox */
+.form-check-input {
+  background-color: #ffffff;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
+  border-color: var(--primary-color);
+}
+
+.form-check-label {
+  cursor: pointer;
 }
 
 /* Table */
@@ -226,4 +262,48 @@ main.min-vh-100 {
 footer, .bg-dark {
   background-color: var(--accent-button) !important;
   color: var(--text-light) !important;
+}
+/* Nova
+ Poshta Widget Styles */
+.nova-poshta-button {
+  font-family: var(--font-quincy, serif) !important;
+}
+
+.nova-poshta-button:hover {
+  border-color: var(--primary-color) !important;
+  background-color: rgba(0, 7, 94, 0.05) !important;
+}
+
+.nova-poshta-button span {
+  font-family: var(--font-quincy, serif) !important;
+}
+
+/* Modal styles for Nova Poshta widget */
+@media screen and (max-width: 767px) {
+  .nova-poshta-modal {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+  
+  .nova-poshta-modal-header {
+    display: none !important;
+  }
+  
+  .nova-poshta-modal-iframe {
+    height: 100% !important;
+  }
+}
+
+/* Nova Poshta Widget Styles */
+.nova-poshta-button {
+  font-family: var(--font-quincy, serif) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.nova-poshta-button:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.nova-poshta-button span {
+  font-family: var(--font-quincy, serif) !important;
 }

@@ -395,7 +395,17 @@ export default function AdminPage() {
                                         </td>
                                         <td className="py-3">
                                             <div className="text-white">{order.customer_city}</div>
-                                            <small className="text-secondary">НП: {order.nova_poshta_branch}</small>
+                                            <small className="text-secondary d-block">НП: {order.nova_poshta_branch}</small>
+                                            {order.nova_poshta_warehouse_id && (
+                                                <small className="text-muted d-block">ID: {order.nova_poshta_warehouse_id}</small>
+                                            )}
+                                            {order.customer_address && (
+                                                <small className="text-info d-block" title={order.customer_address}>
+                                                    {order.customer_address.length > 30 
+                                                        ? order.customer_address.substring(0, 30) + '...' 
+                                                        : order.customer_address}
+                                                </small>
+                                            )}
                                         </td>
                                         <td className="py-3">
                                             {order.instagram_nick && (
