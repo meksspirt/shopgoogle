@@ -355,52 +355,98 @@ export default function AdminPage() {
     return (
         <div className="container py-5">
             <div className="d-flex justify-content-between align-items-center mb-5">
-                <h1 className="fw-bold" style={{ fontFamily: 'var(--font-heading)' }}>Панель адміністратора</h1>
+                <h1 className="fw-bold" style={{ fontFamily: 'var(--font-heading)', color: '#00075e' }}>Панель адміністратора</h1>
                 <div className="d-flex gap-2">
-                    <button className="btn btn-outline-primary" onClick={() => { fetchOrders(); fetchProducts(); }}>Оновити</button>
-                    <button className="btn btn-outline-danger" onClick={handleLogout}>Вийти</button>
+                    <button 
+                        className="btn" 
+                        onClick={() => { fetchOrders(); fetchProducts(); }}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            border: '2px solid #00075e',
+                            color: '#00075e',
+                            fontWeight: 600,
+                            borderRadius: '8px',
+                            padding: '0.5rem 1.5rem'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#00075e';
+                            e.currentTarget.style.color = '#ffffff';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = '#00075e';
+                        }}
+                    >
+                        Оновити
+                    </button>
+                    <button 
+                        className="btn" 
+                        onClick={handleLogout}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            border: '2px solid #dc3545',
+                            color: '#dc3545',
+                            fontWeight: 600,
+                            borderRadius: '8px',
+                            padding: '0.5rem 1.5rem'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#dc3545';
+                            e.currentTarget.style.color = '#ffffff';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = '#dc3545';
+                        }}
+                    >
+                        Вийти
+                    </button>
                 </div>
             </div>
 
             {/* Orders List - MOVED TO TOP */}
-            <h3 className="mb-4 fw-bold">Замовлення</h3>
-            <div className="card shadow-lg border-0 mb-5" style={{ backgroundColor: 'var(--card-bg)' }}>
+            <h3 className="mb-4 fw-bold" style={{ color: '#00075e' }}>Замовлення</h3>
+            <div className="card shadow-sm border mb-5" style={{ 
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px'
+            }}>
                 <div className="card-body p-0">
                     <div className="table-responsive">
-                        <table className="table table-dark table-hover mb-0">
-                            <thead style={{ backgroundColor: 'var(--secondary-color)' }}>
+                        <table className="table table-hover mb-0">
+                            <thead style={{ backgroundColor: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
                                 <tr>
-                                    <th className="py-3">ID / Дата</th>
-                                    <th className="py-3">Клієнт</th>
-                                    <th className="py-3">Доставка</th>
-                                    <th className="py-3">Інфо</th>
-                                    <th className="py-3">Сума</th>
-                                    <th className="py-3">Статус / ТТН</th>
-                                    <th className="py-3">Дії</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>ID / Дата</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Клієнт</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Доставка</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Інфо</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Сума</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Статус / ТТН</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Дії</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {orders.map((order) => (
-                                    <tr key={order.id}>
+                                    <tr key={order.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
                                         <td className="py-3">
-                                            <small className="text-muted d-block" title={order.id}>
+                                            <small className="d-block" style={{ color: '#6b7280', fontSize: '0.75rem' }} title={order.id}>
                                                 {order.id}
                                             </small>
-                                            <small className="text-secondary">{new Date(order.created_at).toLocaleDateString()}</small>
+                                            <small style={{ color: '#9ca3af', fontSize: '0.75rem' }}>{new Date(order.created_at).toLocaleDateString()}</small>
                                         </td>
                                         <td className="py-3">
-                                            <div className="fw-bold text-white">{order.customer_name}</div>
-                                            <small className="d-block text-secondary">{order.customer_email}</small>
-                                            <small className="d-block text-secondary">{order.customer_phone}</small>
+                                            <div className="fw-bold" style={{ color: '#00075e' }}>{order.customer_name}</div>
+                                            <small className="d-block" style={{ color: '#6b7280', fontSize: '0.8rem' }}>{order.customer_email}</small>
+                                            <small className="d-block" style={{ color: '#6b7280', fontSize: '0.8rem' }}>{order.customer_phone}</small>
                                         </td>
                                         <td className="py-3">
-                                            <div className="text-white">{order.customer_city}</div>
-                                            <small className="text-secondary d-block">НП: {order.nova_poshta_branch}</small>
+                                            <div style={{ color: '#00075e', fontWeight: 500 }}>{order.customer_city}</div>
+                                            <small className="d-block" style={{ color: '#6b7280', fontSize: '0.8rem' }}>НП: {order.nova_poshta_branch}</small>
                                             {order.nova_poshta_warehouse_id && (
-                                                <small className="text-muted d-block">ID: {order.nova_poshta_warehouse_id}</small>
+                                                <small className="d-block" style={{ color: '#9ca3af', fontSize: '0.75rem' }}>ID: {order.nova_poshta_warehouse_id}</small>
                                             )}
                                             {order.customer_address && (
-                                                <small className="text-info d-block" title={order.customer_address}>
+                                                <small className="d-block" style={{ color: '#3b82f6', fontSize: '0.75rem' }} title={order.customer_address}>
                                                     {order.customer_address.length > 30 
                                                         ? order.customer_address.substring(0, 30) + '...' 
                                                         : order.customer_address}
@@ -409,13 +455,13 @@ export default function AdminPage() {
                                         </td>
                                         <td className="py-3">
                                             {order.instagram_nick && (
-                                                <div className="small text-secondary">
+                                                <div className="small" style={{ color: '#6b7280' }}>
                                                     Inst: <a 
                                                         href={`https://www.instagram.com/${order.instagram_nick.replace('@', '')}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="text-primary text-decoration-none"
-                                                        style={{ cursor: 'pointer' }}
+                                                        className="text-decoration-none"
+                                                        style={{ cursor: 'pointer', color: '#3b82f6' }}
                                                         onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
                                                         onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                                                     >
@@ -424,11 +470,11 @@ export default function AdminPage() {
                                                 </div>
                                             )}
                                             {order.visited_psychologist && (
-                                                <span className="badge bg-info text-dark mt-1">Психолог: Так</span>
+                                                <span className="badge mt-1" style={{ backgroundColor: '#dbeafe', color: '#1e40af' }}>Психолог: Так</span>
                                             )}
                                         </td>
                                         <td className="py-3">
-                                            <span className="text-warning fw-bold">{order.total_amount} грн</span>
+                                            <span className="fw-bold" style={{ color: '#f59e0b' }}>{order.total_amount} грн</span>
                                         </td>
                                         <td className="py-3">
                                             <div className="d-flex flex-column gap-2">
@@ -444,11 +490,16 @@ export default function AdminPage() {
                                                 <div className="d-flex gap-1">
                                                     <input
                                                         type="text"
-                                                        className="form-control form-control-sm bg-dark text-white border-secondary"
+                                                        className="form-control form-control-sm"
                                                         placeholder="ТТН Нова Пошта"
                                                         value={trackingNumbers[order.id] !== undefined ? trackingNumbers[order.id] : (order.tracking_number || '')}
                                                         onChange={(e) => setTrackingNumbers(prev => ({ ...prev, [order.id]: e.target.value }))}
-                                                        style={{ fontSize: '0.85rem' }}
+                                                        style={{ 
+                                                            fontSize: '0.85rem',
+                                                            backgroundColor: '#ffffff',
+                                                            border: '1px solid #e5e7eb',
+                                                            color: '#00075e'
+                                                        }}
                                                     />
                                                     <button
                                                         className="btn btn-success btn-sm px-2"
@@ -463,9 +514,14 @@ export default function AdminPage() {
                                         <td className="py-3">
                                             <div className="d-flex flex-column gap-2">
                                                 <select
-                                                    className="form-select form-select-sm bg-dark text-white border-secondary"
+                                                    className="form-select form-select-sm"
                                                     value={order.status}
                                                     onChange={(e) => updateStatus(order.id, e.target.value)}
+                                                    style={{
+                                                        backgroundColor: '#ffffff',
+                                                        border: '1px solid #e5e7eb',
+                                                        color: '#00075e'
+                                                    }}
                                                 >
                                                     <option value="pending">Очікується</option>
                                                     <option value="shipped">Відправлено</option>
@@ -490,10 +546,18 @@ export default function AdminPage() {
 
             {/* Products Section */}
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h3 className="fw-bold mb-0">Товари</h3>
+                <h3 className="fw-bold mb-0" style={{ color: '#00075e' }}>Товари</h3>
                 <button 
-                    className="btn btn-success"
+                    className="btn"
                     onClick={() => setShowCreateForm(!showCreateForm)}
+                    style={{
+                        backgroundColor: showCreateForm ? '#ffffff' : '#28a745',
+                        border: showCreateForm ? '2px solid #6b7280' : '2px solid #28a745',
+                        color: showCreateForm ? '#6b7280' : '#ffffff',
+                        fontWeight: 600,
+                        borderRadius: '8px',
+                        padding: '0.5rem 1.5rem'
+                    }}
                 >
                     {showCreateForm ? '✕ Закрити форму' : '+ Додати новий товар'}
                 </button>
@@ -691,21 +755,34 @@ export default function AdminPage() {
             </div>
 
             {/* Promo Codes Section */}
-            <h3 className="mb-4 fw-bold mt-5">Промокоди</h3>
+            <h3 className="mb-4 fw-bold mt-5" style={{ color: '#00075e' }}>Промокоди</h3>
             
             {/* Create Promo Code Form */}
-            <div className="card shadow-lg border-0 mb-4" style={{ backgroundColor: 'var(--card-bg)' }}>
-                <div className="card-header bg-transparent border-bottom border-secondary py-3">
-                    <h5 className="mb-0 fw-bold text-success">Створити промокод</h5>
+            <div className="card shadow-sm mb-4" style={{ 
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px'
+            }}>
+                <div className="card-header py-3" style={{ 
+                    backgroundColor: '#f9fafb',
+                    borderBottom: '1px solid #e5e7eb',
+                    borderRadius: '12px 12px 0 0'
+                }}>
+                    <h5 className="mb-0 fw-bold" style={{ color: '#28a745' }}>Створити промокод</h5>
                 </div>
                 <div className="card-body p-4">
                     <form onSubmit={handleCreatePromoCode}>
                         <div className="row g-3">
                             <div className="col-md-3">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Код промокоду</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Код промокоду</label>
                                 <input
                                     type="text"
-                                    className="form-control bg-dark text-white border-secondary"
+                                    className="form-control"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e'
+                                    }}
                                     required
                                     placeholder="SUMMER2024"
                                     value={newPromoCode.code}
@@ -713,9 +790,14 @@ export default function AdminPage() {
                                 />
                             </div>
                             <div className="col-md-3">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Тип знижки</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Тип знижки</label>
                                 <select
-                                    className="form-select bg-dark text-white border-secondary"
+                                    className="form-select"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e'
+                                    }}
                                     value={newPromoCode.discount_type}
                                     onChange={e => setNewPromoCode({ ...newPromoCode, discount_type: e.target.value as 'percent' | 'fixed' })}
                                 >
@@ -725,12 +807,17 @@ export default function AdminPage() {
                             </div>
                             {newPromoCode.discount_type === 'percent' ? (
                                 <div className="col-md-2">
-                                    <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
+                                    <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Знижка (%)</label>
                                     <input
                                         type="number"
                                         min="1"
                                         max="100"
-                                        className="form-control bg-dark text-white border-secondary"
+                                        className="form-control"
+                                        style={{
+                                            backgroundColor: '#ffffff',
+                                            border: '1px solid #e5e7eb',
+                                            color: '#00075e'
+                                        }}
                                         required
                                         value={newPromoCode.discount_percent}
                                         onChange={e => setNewPromoCode({ ...newPromoCode, discount_percent: parseInt(e.target.value) || 0 })}
@@ -738,11 +825,16 @@ export default function AdminPage() {
                                 </div>
                             ) : (
                                 <div className="col-md-2">
-                                    <label className="form-label small text-muted text-uppercase fw-bold">Знижка (грн)</label>
+                                    <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Знижка (грн)</label>
                                     <input
                                         type="number"
                                         min="1"
-                                        className="form-control bg-dark text-white border-secondary"
+                                        className="form-control"
+                                        style={{
+                                            backgroundColor: '#ffffff',
+                                            border: '1px solid #e5e7eb',
+                                            color: '#00075e'
+                                        }}
                                         required
                                         value={newPromoCode.discount_amount}
                                         onChange={e => setNewPromoCode({ ...newPromoCode, discount_amount: parseFloat(e.target.value) || 0 })}
@@ -750,31 +842,46 @@ export default function AdminPage() {
                                 </div>
                             )}
                             <div className="col-md-2">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Мін. сума</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Мін. сума</label>
                                 <input
                                     type="number"
                                     min="0"
-                                    className="form-control bg-dark text-white border-secondary"
+                                    className="form-control"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e'
+                                    }}
                                     value={newPromoCode.min_order_amount}
                                     onChange={e => setNewPromoCode({ ...newPromoCode, min_order_amount: parseFloat(e.target.value) || 0 })}
                                 />
                             </div>
                             <div className="col-md-2">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Макс. використань</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Макс. використань</label>
                                 <input
                                     type="number"
                                     min="1"
-                                    className="form-control bg-dark text-white border-secondary"
+                                    className="form-control"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e'
+                                    }}
                                     placeholder="Необмежено"
                                     value={newPromoCode.max_uses || ''}
                                     onChange={e => setNewPromoCode({ ...newPromoCode, max_uses: e.target.value ? parseInt(e.target.value) : null })}
                                 />
                             </div>
                             <div className="col-md-4">
-                                <label className="form-label small text-muted text-uppercase fw-bold">Діє до</label>
+                                <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>Діє до</label>
                                 <input
                                     type="datetime-local"
-                                    className="form-control bg-dark text-white border-secondary"
+                                    className="form-control"
+                                    style={{
+                                        backgroundColor: '#ffffff',
+                                        border: '1px solid #e5e7eb',
+                                        color: '#00075e'
+                                    }}
                                     value={newPromoCode.valid_until}
                                     onChange={e => setNewPromoCode({ ...newPromoCode, valid_until: e.target.value })}
                                 />
@@ -788,43 +895,47 @@ export default function AdminPage() {
             </div>
 
             {/* Promo Codes List */}
-            <div className="card shadow-lg border-0 mb-5" style={{ backgroundColor: 'var(--card-bg)' }}>
+            <div className="card shadow-sm mb-5" style={{ 
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px'
+            }}>
                 <div className="card-body p-0">
                     <div className="table-responsive">
-                        <table className="table table-dark table-hover mb-0">
-                            <thead style={{ backgroundColor: 'var(--secondary-color)' }}>
+                        <table className="table table-hover mb-0">
+                            <thead style={{ backgroundColor: '#f9fafb', borderBottom: '2px solid #e5e7eb' }}>
                                 <tr>
-                                    <th className="py-3">Код</th>
-                                    <th className="py-3">Знижка</th>
-                                    <th className="py-3">Мін. сума</th>
-                                    <th className="py-3">Використання</th>
-                                    <th className="py-3">Діє до</th>
-                                    <th className="py-3">Статус</th>
-                                    <th className="py-3">Дії</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Код</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Знижка</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Мін. сума</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Використання</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Діє до</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Статус</th>
+                                    <th className="py-3" style={{ color: '#00075e', fontWeight: 600 }}>Дії</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {promoCodes.map((promo) => (
-                                    <tr key={promo.id}>
+                                    <tr key={promo.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
                                         <td className="py-3">
-                                            <span className="fw-bold text-warning">{promo.code}</span>
+                                            <span className="fw-bold" style={{ color: '#f59e0b' }}>{promo.code}</span>
                                         </td>
                                         <td className="py-3">
                                             {promo.discount_percent ? 
-                                                <span className="text-success">{promo.discount_percent}%</span> :
-                                                <span className="text-success">{promo.discount_amount} грн</span>
+                                                <span style={{ color: '#28a745', fontWeight: 600 }}>{promo.discount_percent}%</span> :
+                                                <span style={{ color: '#28a745', fontWeight: 600 }}>{promo.discount_amount} грн</span>
                                             }
                                         </td>
                                         <td className="py-3">
-                                            <span className="text-muted">{promo.min_order_amount} грн</span>
+                                            <span style={{ color: '#6b7280' }}>{promo.min_order_amount} грн</span>
                                         </td>
                                         <td className="py-3">
-                                            <span className="text-white">
+                                            <span style={{ color: '#00075e', fontWeight: 500 }}>
                                                 {promo.current_uses || 0} / {promo.max_uses || '∞'}
                                             </span>
                                         </td>
                                         <td className="py-3">
-                                            <span className="text-muted small">
+                                            <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>
                                                 {promo.valid_until ? new Date(promo.valid_until).toLocaleDateString('uk-UA') : 'Безстроково'}
                                             </span>
                                         </td>
