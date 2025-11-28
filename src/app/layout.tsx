@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import localFont from "next/font/local";
 
 // Настройка кастомного шрифта Quincy CF
@@ -62,11 +63,7 @@ export default function RootLayout({
         <main className="min-vh-100">
           {children}
         </main>
-        <footer className="bg-dark text-white text-center py-4 mt-auto">
-          <div className="container">
-            <small className="opacity-75">&copy; 2024 CalmCraft. Всі права захищено.</small>
-          </div>
-        </footer>
+        <Footer />
       </body>
     </html>
   );

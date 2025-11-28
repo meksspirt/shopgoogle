@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
+    const [phone, setPhone] = useState('');
+    const [instagram, setInstagram] = useState('');
 
     useEffect(() => {
         // Initial check for cart items
@@ -19,6 +22,23 @@ export default function Navbar() {
 
         window.addEventListener('cartUpdated', handleCartUpdate);
         return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+    }, []);
+
+    useEffect(() => {
+        // Fetch settings
+        const fetchSettings = async () => {
+            const { data } = await supabase
+                .from('settings')
+                .select('*')
+                .in('key', ['support_phone', 'instagram_link']);
+
+            data?.forEach(setting => {
+                if (setting.key === 'support_phone') setPhone(setting.value || '');
+                if (setting.key === 'instagram_link') setInstagram(setting.value || '');
+            });
+        };
+
+        fetchSettings();
     }, []);
 
     return (
@@ -36,7 +56,22 @@ export default function Navbar() {
                     <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav ms-auto">
+                    <ul className="navbar-nav ms-auto align-items-lg-center">
+                        {phone && (
+                            <li className="nav-item me-3">
+                                <a href={`tel:${phone}`} className="nav-link d-flex align-items-center">
+                                    <span style={{ fontSize: '1.1rem', marginRight: '0.3rem' }}>📞</span>
+                                    {phone}
+                                </a>
+                            </li>
+                        )}
+                        {instagram && (
+                            <li className="nav-item me-3">
+                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="nav-link">
+                                    <span style={{ fontSize: '1.2rem' }}>📷</span>
+                                </a>
+                            </li>
+                        )}
                         <li className="nav-item">
                             <Link href="/" className="nav-link">
                                 Каталог

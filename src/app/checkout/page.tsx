@@ -9,6 +9,8 @@ import NovaPoshtaWidget from '@/components/NovaPoshtaWidget';
 export default function CheckoutPage() {
     const [cart, setCart] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
+    const [minOrderAmount, setMinOrderAmount] = useState(0);
+    const [freeDeliveryFrom, setFreeDeliveryFrom] = useState(0);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -29,6 +31,23 @@ export default function CheckoutPage() {
         }
         setCart(savedCart);
     }, [router]);
+
+    useEffect(() => {
+        // Fetch settings
+        const fetchSettings = async () => {
+            const { data } = await supabase
+                .from('settings')
+                .select('*')
+                .in('key', ['min_order_amount', 'free_delivery_from']);
+
+            data?.forEach(setting => {
+                if (setting.key === 'min_order_amount') setMinOrderAmount(parseFloat(setting.value) || 0);
+                if (setting.key === 'free_delivery_from') setFreeDeliveryFrom(parseFloat(setting.value) || 0);
+            });
+        };
+
+        fetchSettings();
+    }, []);
 
     // Calculate total with discounts
     const totalWithoutDiscount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -248,8 +267,22 @@ export default function CheckoutPage() {
                         )}
                         <div className="d-flex justify-content-between mb-2">
                             <span className="text-muted">Доставка</span>
-                            <span>За тарифами перевізника</span>
+                            {freeDeliveryFrom > 0 && total >= freeDeliveryFrom ? (
+                                <span className="text-success fw-bold">Безкоштовно 🎉</span>
+                            ) : (
+                                <span>За тарифами перевізника</span>
+                            )}
                         </div>
+                        {freeDeliveryFrom > 0 && total < freeDeliveryFrom && (
+                            <div className="alert alert-info py-2 px-3 mb-2" style={{ fontSize: '0.85rem' }}>
+                                Додайте ще {Math.round(freeDeliveryFrom - total)} грн для безкоштовної доставки
+                            </div>
+                        )}
+                        {minOrderAmount > 0 && total < minOrderAmount && (
+                            <div className="alert alert-warning py-2 px-3 mb-2" style={{ fontSize: '0.85rem' }}>
+                                Мінімальна сума замовлення: {minOrderAmount} грн
+                            </div>
+                        )}
                         <hr className="border-secondary my-3" />
                         <div className="d-flex justify-content-between align-items-center">
                             <span className="h5 mb-0">Всього до сплати</span>
@@ -398,9 +431,12 @@ export default function CheckoutPage() {
                                 <button
                                     type="submit"
                                     className="btn btn-primary w-100 btn-lg py-3 fw-bold text-uppercase ls-1 shadow-lg"
-                                    disabled={loading || !formData.city}
+                                    disabled={loading || !formData.city || (minOrderAmount > 0 && total < minOrderAmount)}
                                 >
-                                    {loading ? 'Обробка...' : !formData.city ? 'Оберіть відділення НП' : `Сплатити ${Math.round(total)} грн`}
+                                    {loading ? 'Обробка...' : 
+                                     !formData.city ? 'Оберіть відділення НП' : 
+                                     (minOrderAmount > 0 && total < minOrderAmount) ? `Мінімум ${minOrderAmount} грн` :
+                                     `Сплатити ${Math.round(total)} грн`}
                                 </button>
                             </div>
                         </div>

@@ -21,6 +21,22 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
         console.error('Error fetching order data:', error);
     }
 
+    // Fetch success message from settings
+    let successMessage = 'Дякуємо за покупку.';
+    try {
+        const { data } = await supabase
+            .from('settings')
+            .select('value')
+            .eq('key', 'success_message')
+            .single();
+        
+        if (data?.value) {
+            successMessage = data.value;
+        }
+    } catch (error) {
+        console.error('Error fetching success message:', error);
+    }
+
     // Parse name into first and last name
     const nameParts = orderData?.customer_name?.split(' ') || [];
     const firstName = nameParts[0] || '';
@@ -111,7 +127,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                         color: '#6b7280',
                         fontSize: '1rem'
                     }}>
-                        Дякуємо за покупку.
+                        {successMessage}
                     </p>
 
                     {/* Order Number */}
