@@ -72,9 +72,9 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
             {settingsList.map((setting) => (
                 <div key={setting.key} className="col-12">
                     <div className="setting-card p-3" style={{
-                        backgroundColor: '#f9fafb',
+                        backgroundColor: '#ffffff',
                         borderRadius: '8px',
-                        border: '1px solid #e5e7eb'
+                        border: '2px solid #e5e7eb'
                     }}>
                         <label className="form-label fw-bold mb-2" style={{ color: '#1f2937', fontSize: '0.95rem' }}>
                             {setting.label}
@@ -236,6 +236,36 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                 {activeTab === 'payments' && renderSettings(paymentsSettings)}
                 {activeTab === 'seo' && renderSettings(seoSettings)}
             </div>
+
+            <style jsx global>{`
+                #settings-modal .form-control,
+                #settings-modal .form-control::placeholder,
+                #settings-modal .form-label,
+                #settings-modal input,
+                #settings-modal textarea,
+                #settings-modal label {
+                    color: #1f2937 !important;
+                }
+
+                #settings-modal .form-control::placeholder {
+                    color: #9ca3af !important;
+                    opacity: 1 !important;
+                }
+
+                #settings-modal .form-control:focus {
+                    border-color: #00075e !important;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 7, 94, 0.1) !important;
+                }
+
+                #settings-modal .setting-card {
+                    transition: all 0.2s ease;
+                }
+
+                #settings-modal .setting-card:hover {
+                    border-color: #00075e !important;
+                    box-shadow: 0 2px 8px rgba(0, 7, 94, 0.1);
+                }
+            `}</style>
         </Modal>
     );
 }
