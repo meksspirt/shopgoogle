@@ -1,7 +1,7 @@
 'use client';
 
 import Modal from './Modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Setting {
     key: string;
@@ -22,6 +22,11 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
     const [activeTab, setActiveTab] = useState<'general' | 'contacts' | 'payments' | 'seo'>('general');
     const [localSettings, setLocalSettings] = useState(settings);
     const [savingKey, setSavingKey] = useState<string | null>(null);
+
+    // Синхронізуємо локальні налаштування з пропсами
+    useEffect(() => {
+        setLocalSettings(settings);
+    }, [settings]);
 
     const handleSave = async (key: string) => {
         setSavingKey(key);
