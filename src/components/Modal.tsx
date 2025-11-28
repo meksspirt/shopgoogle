@@ -24,18 +24,33 @@ export default function Modal({
 }: ModalProps) {
     
     useEffect(() => {
-        MicroModal.init({
-            onClose: onClose,
-            disableScroll: true,
-            awaitCloseAnimation: true
-        });
+        try {
+            MicroModal.init({
+                onClose: onClose,
+                disableScroll: true,
+                awaitCloseAnimation: true
+            });
+        } catch (error) {
+            console.error('MicroModal init error:', error);
+        }
     }, [onClose]);
 
     useEffect(() => {
-        if (isOpen) {
-            MicroModal.show(id);
-        } else {
-            MicroModal.close(id);
+        try {
+            if (isOpen) {
+                // Small delay to ensure DOM is ready
+                setTimeout(() => {
+                    MicroModal.show(id);
+                }, 10);
+            } else {
+                // Only try to close if modal is actually open
+                const modalElement = document.getElementById(id);
+                if (modalElement && modalElement.classList.contains('is-open')) {
+                    MicroModal.close(id);
+                }
+            }
+        } catch (error) {
+            console.error('MicroModal show/close error:', error);
         }
     }, [isOpen, id]);
 
