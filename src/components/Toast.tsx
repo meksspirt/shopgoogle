@@ -59,10 +59,11 @@ export default function Toast({ message, show, onClose }: ToastProps) {
                 <div
                     className="shadow-lg border-0 rounded-3"
                     style={{
-                        background: 'linear-gradient(135deg, #6d77fa 0%, #b8aafa 100%)',
+                        background: '#48A9A6',
                         minWidth: '320px',
                         maxWidth: '500px',
-                        padding: '16px 20px'
+                        padding: '16px 20px',
+                        boxShadow: '0 4px 12px rgba(72, 169, 166, 0.3)'
                     }}
                 >
                     <div className="d-flex align-items-center gap-3">
