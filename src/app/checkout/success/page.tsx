@@ -1,10 +1,88 @@
 import Link from 'next/link';
+import { supabase } from '@/lib/supabaseClient';
+import Script from 'next/script';
 
 export default async function SuccessPage({ searchParams }: { searchParams: { orderId: string } }) {
     const { orderId } = await searchParams;
 
+    // Fetch order data for enhanced conversion tracking
+    let orderData = null;
+    try {
+        const { data, error } = await supabase
+            .from('orders')
+            .select('customer_email, customer_phone, customer_name, customer_city')
+            .eq('id', orderId)
+            .single();
+        
+        if (!error && data) {
+            orderData = data;
+        }
+    } catch (error) {
+        console.error('Error fetching order data:', error);
+    }
+
+    // Parse name into first and last name
+    const nameParts = orderData?.customer_name?.split(' ') || [];
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    // Format phone to E.164 format (+380XXXXXXXXX)
+    const formatPhoneToE164 = (phone: string): string => {
+        if (!phone) return '';
+        
+        // Remove all non-digit characters
+        const digits = phone.replace(/\D/g, '');
+        
+        // If starts with 380, add +
+        if (digits.startsWith('380')) {
+            return '+' + digits;
+        }
+        
+        // If starts with 0, replace with +380
+        if (digits.startsWith('0')) {
+            return '+380' + digits.slice(1);
+        }
+        
+        // If starts with 80, replace with +3
+        if (digits.startsWith('80')) {
+            return '+3' + digits;
+        }
+        
+        // If just 9 digits, assume it's without country code
+        if (digits.length === 9) {
+            return '+380' + digits;
+        }
+        
+        // Otherwise return with + if not empty
+        return digits ? '+' + digits : '';
+    };
+
+    const formattedPhone = formatPhoneToE164(orderData?.customer_phone || '');
+
     return (
-        <div className="container py-5">
+        <>
+            {/* Enhanced Conversion Tracking Script */}
+            {orderData && (
+                <Script
+                    id="gtag-enhanced-conversion"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            gtag('set', 'user_data', {
+                                "email": ${JSON.stringify(orderData.customer_email || '')},
+                                "phone_number": ${JSON.stringify(formattedPhone)},
+                                "address": {
+                                    "first_name": ${JSON.stringify(firstName)},
+                                    "last_name": ${JSON.stringify(lastName)},
+                                    "city": ${JSON.stringify(orderData.customer_city || '')}
+                                }
+                            });
+                        `,
+                    }}
+                />
+            )}
+
+            <div className="container py-5">
             <div className="card shadow-sm mx-auto" style={{ 
                 maxWidth: '650px', 
                 backgroundColor: '#ffffff',
@@ -171,5 +249,6 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                 </div>
             </div>
         </div>
+        </>
     );
 }

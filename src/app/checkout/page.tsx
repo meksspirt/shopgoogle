@@ -293,10 +293,13 @@ export default function CheckoutPage() {
                                         borderRadius: '8px'
                                     }}
                                     required
+                                    pattern="^\+380\d{9}$"
                                     value={formData.phone}
                                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                    placeholder="+380..."
+                                    placeholder="+380XXXXXXXXX"
+                                    title="Введіть номер у форматі +380XXXXXXXXX (12 цифр)"
                                 />
+                                <small className="text-muted d-block mt-1">Формат: +380XXXXXXXXX</small>
                             </div>
 
                             <div className="col-md-6">
