@@ -6,7 +6,7 @@ import ImageUpload from '@/components/ImageUpload';
 import EditProductModal from '@/components/EditProductModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import AlertModal from '@/components/AlertModal';
-import SettingsPanel from '@/components/SettingsPanel';
+import SettingsModal from '@/components/SettingsModal';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -69,7 +69,7 @@ export default function AdminPage() {
     
     // Settings state
     const [settings, setSettings] = useState<{ [key: string]: string }>({});
-    const [savingSettings, setSavingSettings] = useState(false);
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
     
     const [newPromoCode, setNewPromoCode] = useState({
         code: '',
@@ -453,7 +453,31 @@ export default function AdminPage() {
                 <div className="d-flex gap-2">
                     <button 
                         className="btn" 
-                        onClick={() => { fetchOrders(); fetchProducts(); }}
+                        onClick={() => setShowSettingsModal(true)}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            border: '2px solid #6c757d',
+                            color: '#6c757d',
+                            fontWeight: 600,
+                            borderRadius: '8px',
+                            padding: '0.5rem 1.5rem',
+                            fontSize: '1.2rem'
+                        }}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#6c757d';
+                            e.currentTarget.style.color = '#ffffff';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = '#6c757d';
+                        }}
+                        title="Налаштування"
+                    >
+                        ⚙️
+                    </button>
+                    <button 
+                        className="btn" 
+                        onClick={() => { fetchOrders(); fetchProducts(); fetchSettings(); }}
                         style={{
                             backgroundColor: '#ffffff',
                             border: '2px solid #00075e',
@@ -1062,23 +1086,6 @@ export default function AdminPage() {
                 </div>
             </div>
 
-            {/* Settings Section */}
-            <h3 className="mb-4 fw-bold mt-5" style={{ color: '#00075e' }}>Налаштування</h3>
-            
-            <div className="card shadow-sm mb-5" style={{ 
-                backgroundColor: '#ffffff',
-                border: '1px solid #e5e7eb',
-                borderRadius: '12px'
-            }}>
-                <div className="card-body p-4">
-                    <SettingsPanel
-                        settings={settings}
-                        onSave={saveSetting}
-                        saving={savingSettings}
-                    />
-                </div>
-            </div>
-
             {/* Edit Product Modal */}
             <EditProductModal
                 product={editingProduct}
@@ -1108,6 +1115,14 @@ export default function AdminPage() {
                 type={alertModal.type}
                 isOpen={alertModal.isOpen}
                 onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+            />
+
+            {/* Settings Modal */}
+            <SettingsModal
+                isOpen={showSettingsModal}
+                onClose={() => setShowSettingsModal(false)}
+                settings={settings}
+                onSave={saveSetting}
             />
 
         </div>
