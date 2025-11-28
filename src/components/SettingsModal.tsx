@@ -155,7 +155,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
                             onClick={() => setActiveTab('general')}
                             style={{
-                                backgroundColor: activeTab === 'general' ? '#00075e' : '#f3f4f6',
+                                backgroundColor: activeTab === 'general' ? '#48A9A6' : '#f3f4f6',
                                 color: activeTab === 'general' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
                                 border: activeTab === 'general' ? 'none' : '2px solid #e5e7eb',
@@ -174,7 +174,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             className={`nav-link ${activeTab === 'contacts' ? 'active' : ''}`}
                             onClick={() => setActiveTab('contacts')}
                             style={{
-                                backgroundColor: activeTab === 'contacts' ? '#00075e' : '#f3f4f6',
+                                backgroundColor: activeTab === 'contacts' ? '#48A9A6' : '#f3f4f6',
                                 color: activeTab === 'contacts' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
                                 border: activeTab === 'contacts' ? 'none' : '2px solid #e5e7eb',
@@ -193,7 +193,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             className={`nav-link ${activeTab === 'payments' ? 'active' : ''}`}
                             onClick={() => setActiveTab('payments')}
                             style={{
-                                backgroundColor: activeTab === 'payments' ? '#00075e' : '#f3f4f6',
+                                backgroundColor: activeTab === 'payments' ? '#48A9A6' : '#f3f4f6',
                                 color: activeTab === 'payments' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
                                 border: activeTab === 'payments' ? 'none' : '2px solid #e5e7eb',
@@ -212,7 +212,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             className={`nav-link ${activeTab === 'seo' ? 'active' : ''}`}
                             onClick={() => setActiveTab('seo')}
                             style={{
-                                backgroundColor: activeTab === 'seo' ? '#00075e' : '#f3f4f6',
+                                backgroundColor: activeTab === 'seo' ? '#48A9A6' : '#f3f4f6',
                                 color: activeTab === 'seo' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
                                 border: activeTab === 'seo' ? 'none' : '2px solid #e5e7eb',
