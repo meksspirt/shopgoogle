@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabaseClient';
 
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
-    const [phone, setPhone] = useState('');
     const [instagram, setInstagram] = useState('');
     const [storeName, setStoreName] = useState('CalmCraft');
 
@@ -31,10 +30,9 @@ export default function Navbar() {
             const { data } = await supabase
                 .from('settings')
                 .select('*')
-                .in('key', ['support_phone', 'instagram_link', 'store_name']);
+                .in('key', ['instagram_link', 'store_name']);
 
             data?.forEach(setting => {
-                if (setting.key === 'support_phone') setPhone(setting.value || '');
                 if (setting.key === 'instagram_link') setInstagram(setting.value || '');
                 if (setting.key === 'store_name') setStoreName(setting.value || 'CalmCraft');
             });
@@ -59,14 +57,6 @@ export default function Navbar() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto align-items-lg-center">
-                        {phone && (
-                            <li className="nav-item me-3">
-                                <a href={`tel:${phone}`} className="nav-link d-flex align-items-center" style={{ color: 'var(--accent-button)' }}>
-                                    <span style={{ fontSize: '1.1rem', marginRight: '0.3rem' }}>📞</span>
-                                    {phone}
-                                </a>
-                            </li>
-                        )}
                         {instagram && (
                             <li className="nav-item me-3">
                                 <a href={instagram} target="_blank" rel="noopener noreferrer" className="nav-link" style={{ color: 'var(--accent-button)' }}>
