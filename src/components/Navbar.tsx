@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabaseClient';
 
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
-    const [instagram, setInstagram] = useState('');
     const [storeName, setStoreName] = useState('CalmCraft');
 
     useEffect(() => {
@@ -30,10 +29,9 @@ export default function Navbar() {
             const { data } = await supabase
                 .from('settings')
                 .select('*')
-                .in('key', ['instagram_link', 'store_name']);
+                .in('key', ['store_name']);
 
             data?.forEach(setting => {
-                if (setting.key === 'instagram_link') setInstagram(setting.value || '');
                 if (setting.key === 'store_name') setStoreName(setting.value || 'CalmCraft');
             });
         };
@@ -57,13 +55,6 @@ export default function Navbar() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto align-items-lg-center">
-                        {instagram && (
-                            <li className="nav-item me-3">
-                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="nav-link" style={{ color: 'var(--accent-button)' }}>
-                                    <span style={{ fontSize: '1.2rem' }}>📷</span>
-                                </a>
-                            </li>
-                        )}
                         <li className="nav-item">
                             <Link href="/" className="nav-link">
                                 Каталог
