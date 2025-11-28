@@ -46,9 +46,8 @@ export default async function Home() {
         <div className="row align-items-center">
           <div className="col-md-4 text-center mb-4 mb-md-0">
             <div className="position-relative d-inline-block rounded-circle overflow-hidden border border-3" style={{ width: '200px', height: '200px', borderColor: 'var(--primary-color)' }}>
-              {/* Placeholder for Author Image - using a generic professional avatar */}
               <img
-                src="https://placehold.co/200x200/00075e/ffffff?text=Author"
+                src="https://uugsiyattuabotlmegfe.supabase.co/storage/v1/object/public/product-images/portretdevyshki11_1.jpg.webp"
                 alt="Author"
                 className="w-100 h-100 object-fit-cover"
               />

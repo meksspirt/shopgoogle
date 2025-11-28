@@ -40,9 +40,9 @@ export default function Footer() {
                         <h6 className="fw-bold mb-3">Контакти</h6>
                         {instagram && (
                             <p className="small mb-2">
-                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
-                                    <span className="me-2" style={{ color: 'var(--accent-button)' }}>📷</span>
-                                    Instagram
+                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none d-flex align-items-center" style={{ opacity: 0.9 }}>
+                                    <span className="me-2" style={{ color: 'var(--accent-button)', fontSize: '1.2rem', lineHeight: 1 }}>📷</span>
+                                    <span>Instagram</span>
                                 </a>
                             </p>
                         )}
