@@ -377,14 +377,18 @@ export default function CheckoutPage() {
                                         type="checkbox"
                                         className="form-check-input"
                                         style={{
-                                            backgroundColor: '#ffffff',
-                                            borderColor: '#00075e'
+                                            width: '20px',
+                                            height: '20px',
+                                            backgroundColor: formData.psychologist ? '#00075e' : '#ffffff',
+                                            borderColor: '#00075e',
+                                            borderWidth: '2px',
+                                            cursor: 'pointer'
                                         }}
                                         id="psychologistCheck"
                                         checked={formData.psychologist}
                                         onChange={e => setFormData({ ...formData, psychologist: e.target.checked })}
                                     />
-                                    <label className="form-check-label" style={{ color: '#00075e' }} htmlFor="psychologistCheck">
+                                    <label className="form-check-label ms-2" style={{ color: '#00075e', cursor: 'pointer' }} htmlFor="psychologistCheck">
                                         Чи зверталися ви до психолога? (необов'язково)
                                     </label>
                                 </div>
