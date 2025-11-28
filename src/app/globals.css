@@ -1,32 +1,35 @@
 :root {
-  /* Color Scheme */
+  /* Color Scheme - Clinical Focus */
   --bg-color: #ffffff;
-  /* Основной фон сайта - белый */
+  /* Основной фон сайта - чистый белый */
   
   --primary-color: #00075e;
   /* Глубокий темно-синий - текст и заголовки */
   
-  --accent-button: #343434;
-  /* Темный графит - кнопки и footer */
+  --accent-button: #48A9A6;
+  /* Приглушенная бирюза - кнопки CTA */
   
-  --link-color: #b9b8c5;
-  /* Светлый серо-лиловый - ссылки и hover */
-  --link-hover: #b9b8c5;
-  /* Hover состояние */
+  --secondary-bg: #EAF4F4;
+  /* Светлая мята - вторичный фон для цитат и отзывов */
+  
+  --link-color: #48A9A6;
+  /* Бирюзовый - ссылки */
+  --link-hover: #3a8a87;
+  /* Темнее бирюзовый - hover состояние */
   
   --card-bg: #ffffff;
   /* Фон карточек - белый */
   
-  --discount-price: #ff0066;
-  /* Цена со скидкой */
-  --accent-badge: #ff0066;
-  /* Акцентные бейджи */
+  --discount-price: #48A9A6;
+  /* Цена со скидкой - бирюзовый акцент */
+  --accent-badge: #48A9A6;
+  /* Акцентные бейджи - бирюзовый */
 
   /* Text Colors */
   --text-primary: #00075e;
   /* Основной текст - темно-синий */
-  --text-secondary: #b9b8c5;
-  /* Второстепенный текст */
+  --text-secondary: #5a6c7d;
+  /* Второстепенный текст - приглушенный синий */
   --text-light: #ffffff;
   /* Светлый текст для темных фонов */
 
@@ -143,10 +146,10 @@ main.min-vh-100 {
 }
 
 .btn-primary:hover {
-  background-color: #1a1a1a;
-  border-color: #1a1a1a;
+  background-color: #3a8a87;
+  border-color: #3a8a87;
   color: var(--text-light);
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .btn-outline-primary {
@@ -255,7 +258,7 @@ main.min-vh-100 {
 
 .table-hover tbody tr:hover {
   color: var(--text-primary);
-  background-color: rgba(185, 184, 197, 0.1);
+  background-color: var(--secondary-bg);
 }
 
 /* Footer */
