@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, ReactNode } from 'react';
-import MicroModal from 'micromodal';
 
 interface ModalProps {
     id: string;
@@ -24,35 +23,32 @@ export default function Modal({
 }: ModalProps) {
     
     useEffect(() => {
-        try {
-            MicroModal.init({
-                onClose: onClose,
-                disableScroll: true,
-                awaitCloseAnimation: true
-            });
-        } catch (error) {
-            console.error('MicroModal init error:', error);
+        // Disable body scroll when modal is open
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
         }
-    }, [onClose]);
+
+        // Cleanup on unmount
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
 
     useEffect(() => {
-        try {
-            if (isOpen) {
-                // Small delay to ensure DOM is ready
-                setTimeout(() => {
-                    MicroModal.show(id);
-                }, 10);
-            } else {
-                // Only try to close if modal is actually open
-                const modalElement = document.getElementById(id);
-                if (modalElement && modalElement.classList.contains('is-open')) {
-                    MicroModal.close(id);
-                }
+        // Close on Escape key
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && isOpen) {
+                onClose();
             }
-        } catch (error) {
-            console.error('MicroModal show/close error:', error);
-        }
-    }, [isOpen, id]);
+        };
+
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, [isOpen, onClose]);
+
+    if (!isOpen) return null;
 
     const sizeClasses = {
         sm: 'max-w-md',
@@ -63,179 +59,133 @@ export default function Modal({
 
     return (
         <div 
-            className="modal micromodal-slide" 
-            id={id} 
-            aria-hidden="true"
+            className="modal-overlay" 
+            onClick={onClose}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1050,
+                animation: 'fadeIn 0.2s ease-out'
+            }}
         >
-            <div className="modal__overlay" tabIndex={-1} data-micromodal-close>
-                <div 
-                    className={`modal__container ${sizeClasses[size]}`}
-                    role="dialog" 
-                    aria-modal="true" 
-                    aria-labelledby={`${id}-title`}
-                    onClick={(e) => e.stopPropagation()}
+            <div 
+                className={`modal-container ${sizeClasses[size]}`}
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                    backgroundColor: '#ffffff',
+                    maxWidth: size === 'sm' ? '500px' : size === 'md' ? '700px' : size === 'lg' ? '900px' : '1200px',
+                    width: '90%',
+                    maxHeight: '90vh',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                    animation: 'slideIn 0.3s ease-out',
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}
+            >
+                <header 
+                    className="modal-header"
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        padding: '1.5rem',
+                        borderBottom: '1px solid #e5e7eb',
+                        backgroundColor: '#f9fafb',
+                        flexShrink: 0
+                    }}
                 >
-                    <header className="modal__header">
-                        <h2 className="modal__title" id={`${id}-title`}>
-                            {title}
-                        </h2>
-                        {showCloseButton && (
-                            <button 
-                                className="modal__close" 
-                                aria-label="Close modal" 
-                                data-micromodal-close
-                            >
-                                ✕
-                            </button>
-                        )}
-                    </header>
-                    <main className="modal__content" id={`${id}-content`}>
-                        {children}
-                    </main>
-                </div>
+                    <h2 
+                        style={{
+                            margin: 0,
+                            fontSize: '1.5rem',
+                            fontWeight: 700,
+                            color: '#00075e',
+                            fontFamily: 'var(--font-heading)'
+                        }}
+                    >
+                        {title}
+                    </h2>
+                    {showCloseButton && (
+                        <button 
+                            onClick={onClose}
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                fontSize: '1.75rem',
+                                fontWeight: 700,
+                                color: '#6b7280',
+                                cursor: 'pointer',
+                                padding: 0,
+                                width: '32px',
+                                height: '32px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderRadius: '4px',
+                                transition: 'all 0.2s ease'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = '#e5e7eb';
+                                e.currentTarget.style.color = '#00075e';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = 'transparent';
+                                e.currentTarget.style.color = '#6b7280';
+                            }}
+                        >
+                            ✕
+                        </button>
+                    )}
+                </header>
+                <main 
+                    style={{
+                        padding: '1.5rem',
+                        overflowY: 'auto',
+                        flex: 1
+                    }}
+                >
+                    {children}
+                </main>
             </div>
 
-            <style jsx>{`
-                .modal {
-                    display: none;
-                }
-
-                .modal.is-open {
-                    display: block;
-                }
-
-                .modal__overlay {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background: rgba(0, 0, 0, 0.6);
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    z-index: 1050;
-                }
-
-                .modal__container {
-                    background-color: #ffffff;
-                    padding: 0;
-                    max-width: 90%;
-                    max-height: 90vh;
-                    border-radius: 12px;
-                    overflow-y: auto;
-                    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-                }
-
-                .modal__header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 1.5rem;
-                    border-bottom: 1px solid #e5e7eb;
-                    background-color: #f9fafb;
-                    border-radius: 12px 12px 0 0;
-                }
-
-                .modal__title {
-                    margin: 0;
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: #00075e;
-                    font-family: var(--font-heading);
-                }
-
-                .modal__close {
-                    background: transparent;
-                    border: none;
-                    font-size: 1.75rem;
-                    font-weight: 700;
-                    color: #6b7280;
-                    cursor: pointer;
-                    padding: 0;
-                    width: 32px;
-                    height: 32px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 4px;
-                    transition: all 0.2s ease;
-                }
-
-                .modal__close:hover {
-                    background-color: #e5e7eb;
-                    color: #00075e;
-                }
-
-                .modal__content {
-                    padding: 1.5rem;
-                }
-
-                @keyframes mmfadeIn {
+            <style jsx global>{`
+                @keyframes fadeIn {
                     from { opacity: 0; }
                     to { opacity: 1; }
                 }
 
-                @keyframes mmfadeOut {
-                    from { opacity: 1; }
-                    to { opacity: 0; }
-                }
-
-                @keyframes mmslideIn {
-                    from { transform: translateY(15%); }
-                    to { transform: translateY(0); }
-                }
-
-                @keyframes mmslideOut {
-                    from { transform: translateY(0); }
-                    to { transform: translateY(-10%); }
-                }
-
-                .micromodal-slide {
-                    display: none;
-                }
-
-                .micromodal-slide.is-open {
-                    display: block;
-                }
-
-                .micromodal-slide[aria-hidden="false"] .modal__overlay {
-                    animation: mmfadeIn 0.3s cubic-bezier(0.0, 0.0, 0.2, 1);
-                }
-
-                .micromodal-slide[aria-hidden="false"] .modal__container {
-                    animation: mmslideIn 0.3s cubic-bezier(0, 0, 0.2, 1);
-                }
-
-                .micromodal-slide[aria-hidden="true"] .modal__overlay {
-                    animation: mmfadeOut 0.3s cubic-bezier(0.0, 0.0, 0.2, 1);
-                }
-
-                .micromodal-slide[aria-hidden="true"] .modal__container {
-                    animation: mmslideOut 0.3s cubic-bezier(0, 0, 0.2, 1);
-                }
-
-                .micromodal-slide .modal__container,
-                .micromodal-slide .modal__overlay {
-                    will-change: transform;
+                @keyframes slideIn {
+                    from { 
+                        opacity: 0;
+                        transform: translateY(-20px) scale(0.95);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
                 }
 
                 @media (max-width: 768px) {
-                    .modal__container {
-                        max-width: 95%;
-                        max-height: 95vh;
+                    .modal-container {
+                        width: 95% !important;
+                        max-height: 95vh !important;
                     }
 
-                    .modal__header {
-                        padding: 1rem;
+                    .modal-header {
+                        padding: 1rem !important;
                     }
 
-                    .modal__content {
-                        padding: 1rem;
-                    }
-
-                    .modal__title {
-                        font-size: 1.25rem;
+                    .modal-header h2 {
+                        font-size: 1.25rem !important;
                     }
                 }
             `}</style>
