@@ -6,6 +6,7 @@ import ImageUpload from '@/components/ImageUpload';
 import EditProductModal from '@/components/EditProductModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import AlertModal from '@/components/AlertModal';
+import SettingsPanel from '@/components/SettingsPanel';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -67,7 +68,7 @@ export default function AdminPage() {
     });
     
     // Settings state
-    const [monobankLink, setMonobankLink] = useState('');
+    const [settings, setSettings] = useState<{ [key: string]: string }>({});
     const [savingSettings, setSavingSettings] = useState(false);
     
     const [newPromoCode, setNewPromoCode] = useState({
@@ -134,26 +135,26 @@ export default function AdminPage() {
     const fetchSettings = async () => {
         const { data, error } = await supabase
             .from('settings')
-            .select('*')
-            .eq('key', 'monobank_payment_link')
-            .single();
+            .select('*');
 
         if (error) {
             console.error('Error fetching settings:', error);
         } else if (data) {
-            setMonobankLink(data.value || '');
+            const settingsObj: { [key: string]: string } = {};
+            data.forEach(setting => {
+                settingsObj[setting.key] = setting.value || '';
+            });
+            setSettings(settingsObj);
         }
     };
 
-    const saveMonobankLink = async () => {
-        setSavingSettings(true);
+    const saveSetting = async (key: string, value: string) => {
         try {
             const { error } = await supabase
                 .from('settings')
                 .upsert({
-                    key: 'monobank_payment_link',
-                    value: monobankLink,
-                    description: 'Посилання на оплату через Monobank',
+                    key: key,
+                    value: value,
                     updated_at: new Date().toISOString()
                 }, {
                     onConflict: 'key'
@@ -161,12 +162,13 @@ export default function AdminPage() {
 
             if (error) throw error;
 
-            showAlert('Успіх', 'Посилання на Monobank збережено!', 'success');
+            showAlert('Успіх', 'Налаштування збережено!', 'success');
+            
+            // Update local state
+            setSettings(prev => ({ ...prev, [key]: value }));
         } catch (error: any) {
-            console.error('Error saving settings:', error);
-            showAlert('Помилка', 'Помилка збереження налаштувань: ' + error.message, 'error');
-        } finally {
-            setSavingSettings(false);
+            console.error('Error saving setting:', error);
+            showAlert('Помилка', 'Помилка збереження: ' + error.message, 'error');
         }
     };
 
@@ -1068,50 +1070,12 @@ export default function AdminPage() {
                 border: '1px solid #e5e7eb',
                 borderRadius: '12px'
             }}>
-                <div className="card-header py-3" style={{ 
-                    backgroundColor: '#f9fafb',
-                    borderBottom: '1px solid #e5e7eb',
-                    borderRadius: '12px 12px 0 0'
-                }}>
-                    <h5 className="mb-0 fw-bold" style={{ color: '#00075e' }}>Посилання на оплату Monobank</h5>
-                </div>
                 <div className="card-body p-4">
-                    <div className="row g-3">
-                        <div className="col-12">
-                            <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>
-                                URL посилання
-                            </label>
-                            <input
-                                type="url"
-                                className="form-control form-control-lg"
-                                style={{
-                                    backgroundColor: '#ffffff',
-                                    border: '1px solid #e5e7eb',
-                                    color: '#00075e'
-                                }}
-                                placeholder="https://send.monobank.ua/jar/..."
-                                value={monobankLink}
-                                onChange={e => setMonobankLink(e.target.value)}
-                            />
-                            <small className="text-muted d-block mt-2">
-                                Це посилання буде використовуватися на сторінці успішного оформлення замовлення
-                            </small>
-                        </div>
-                        <div className="col-12">
-                            <button 
-                                type="button"
-                                className="btn btn-primary px-5"
-                                onClick={saveMonobankLink}
-                                disabled={savingSettings}
-                                style={{
-                                    fontWeight: 600,
-                                    borderRadius: '8px'
-                                }}
-                            >
-                                {savingSettings ? 'Збереження...' : 'Зберегти налаштування'}
-                            </button>
-                        </div>
-                    </div>
+                    <SettingsPanel
+                        settings={settings}
+                        onSave={saveSetting}
+                        saving={savingSettings}
+                    />
                 </div>
             </div>
 
