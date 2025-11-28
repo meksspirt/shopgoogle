@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import Script from 'next/script';
+import SuccessPageButtons from '@/components/SuccessPageButtons';
 
 export default async function SuccessPage({ searchParams }: { searchParams: { orderId: string } }) {
     const { orderId } = await searchParams;
@@ -163,89 +163,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
                         Ви можете використовувати цей номер для відстеження статусу замовлення.
                     </p>
 
-                    {/* Payment Button */}
-                    <div className="d-grid gap-3 mb-4">
-                        <a 
-                            href="https://sitechecker.pro/ru/website-safety/" 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="btn btn-lg py-3 fw-bold"
-                            style={{ 
-                                fontFamily: 'var(--font-body)', 
-                                textTransform: 'uppercase', 
-                                letterSpacing: '1px',
-                                backgroundColor: '#28a745',
-                                borderColor: '#28a745',
-                                color: '#ffffff',
-                                borderRadius: '8px',
-                                transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#218838';
-                                e.currentTarget.style.borderColor = '#1e7e34';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#28a745';
-                                e.currentTarget.style.borderColor = '#28a745';
-                            }}
-                        >
-                            💳 Оплатити через Monobank
-                        </a>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="d-grid gap-2 d-sm-flex justify-content-center">
-                        <Link 
-                            href={`/track?orderId=${orderId}`}
-                            className="btn d-flex align-items-center justify-content-center"
-                            style={{ 
-                                fontFamily: 'var(--font-body)', 
-                                minHeight: '48px',
-                                backgroundColor: '#ffffff',
-                                border: '2px solid #00075e',
-                                color: '#00075e',
-                                borderRadius: '8px',
-                                fontWeight: 600,
-                                padding: '0.75rem 1.5rem',
-                                transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#00075e';
-                                e.currentTarget.style.color = '#ffffff';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#ffffff';
-                                e.currentTarget.style.color = '#00075e';
-                            }}
-                        >
-                            Відстежити замовлення
-                        </Link>
-                        <Link 
-                            href="/" 
-                            className="btn d-flex align-items-center justify-content-center"
-                            style={{ 
-                                fontFamily: 'var(--font-body)', 
-                                minHeight: '48px',
-                                backgroundColor: '#343434',
-                                border: '2px solid #343434',
-                                color: '#ffffff',
-                                borderRadius: '8px',
-                                fontWeight: 600,
-                                padding: '0.75rem 1.5rem',
-                                transition: 'all 0.2s ease'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.backgroundColor = '#1a1a1a';
-                                e.currentTarget.style.borderColor = '#1a1a1a';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.backgroundColor = '#343434';
-                                e.currentTarget.style.borderColor = '#343434';
-                            }}
-                        >
-                            Продовжити покупки
-                        </Link>
-                    </div>
+                    <SuccessPageButtons orderId={orderId} />
                 </div>
             </div>
         </div>
