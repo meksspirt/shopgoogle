@@ -131,16 +131,15 @@ export default function ImageUpload({
 
     return (
         <div>
-            <label className="form-label small text-muted text-uppercase fw-bold">
+            <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>
                 Зображення товару ({imageUrls.length}/{maxImages})
             </label>
-            <p className="small text-muted mb-3">Клікніть на зображення, щоб зробити його головним</p>
+            <p className="small mb-3" style={{ color: '#6b7280' }}>Клікніть на зображення, щоб зробити його головним</p>
 
             {/* Upload Area */}
             {imageUrls.length < maxImages && (
                 <div
-                    className={`border border-2 rounded p-4 text-center mb-3 ${isDragging ? 'border-primary bg-primary bg-opacity-10' : 'border-secondary'
-                        } ${uploading ? 'opacity-50' : ''}`}
+                    className={`border border-2 rounded p-4 text-center mb-3 ${uploading ? 'opacity-50' : ''}`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
@@ -148,7 +147,9 @@ export default function ImageUpload({
                     style={{
                         cursor: uploading ? 'not-allowed' : 'pointer',
                         minHeight: '150px',
-                        backgroundColor: 'var(--card-bg)',
+                        backgroundColor: isDragging ? '#f0f9ff' : '#f9fafb',
+                        borderColor: isDragging ? '#3b82f6' : '#e5e7eb',
+                        transition: 'all 0.2s ease'
                     }}
                 >
                     <div className="d-flex flex-column align-items-center justify-content-center" style={{ minHeight: '120px' }}>
@@ -158,15 +159,15 @@ export default function ImageUpload({
                             height="48"
                             fill="currentColor"
                             viewBox="0 0 16 16"
-                            style={{ color: 'var(--text-secondary)' }}
+                            style={{ color: '#6b7280' }}
                         >
                             <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
                             <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z" />
                         </svg>
-                        <p className="text-muted mb-2">
+                        <p className="mb-2" style={{ color: '#6b7280' }}>
                             {uploading ? 'Завантаження...' : 'Перетягніть зображення сюди або клікніть для вибору'}
                         </p>
-                        <p className="text-muted small">PNG, JPG, GIF до 5MB (можна кілька)</p>
+                        <p className="small" style={{ color: '#9ca3af' }}>PNG, JPG, GIF до 5MB (можна кілька)</p>
                     </div>
 
                     <input

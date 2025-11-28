@@ -21,6 +21,10 @@ export default function EditProductModal({
     
     if (!product) return null;
 
+    const inputClass = "form-control";
+    const selectClass = "form-select";
+    const labelClass = "form-label small fw-bold text-uppercase";
+
     return (
         <Modal
             id="edit-product-modal"
@@ -37,12 +41,7 @@ export default function EditProductModal({
                         </label>
                         <input
                             type="text"
-                            className="form-control"
-                            style={{
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #e5e7eb',
-                                color: '#00075e'
-                            }}
+                            className="form-control edit-product-input"
                             required
                             value={product.title}
                             onChange={e => onChange({ ...product, title: e.target.value })}
@@ -56,11 +55,6 @@ export default function EditProductModal({
                             type="number"
                             step="0.01"
                             className="form-control"
-                            style={{
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #e5e7eb',
-                                color: '#00075e'
-                            }}
                             required
                             value={product.price}
                             onChange={e => onChange({ ...product, price: e.target.value })}
@@ -323,6 +317,52 @@ export default function EditProductModal({
                     </button>
                 </div>
             </form>
+
+            <style jsx global>{`
+                #edit-product-modal .modal__content {
+                    background-color: #ffffff !important;
+                }
+                
+                #edit-product-modal .form-control,
+                #edit-product-modal .form-select,
+                #edit-product-modal textarea {
+                    background-color: #ffffff !important;
+                    border: 1px solid #e5e7eb !important;
+                    color: #00075e !important;
+                }
+
+                #edit-product-modal .form-control::placeholder,
+                #edit-product-modal textarea::placeholder {
+                    color: #9ca3af !important;
+                    opacity: 1 !important;
+                }
+
+                #edit-product-modal .form-control:focus,
+                #edit-product-modal .form-select:focus,
+                #edit-product-modal textarea:focus {
+                    background-color: #ffffff !important;
+                    border-color: #00075e !important;
+                    color: #00075e !important;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 7, 94, 0.1) !important;
+                }
+
+                #edit-product-modal .form-label {
+                    color: #00075e !important;
+                }
+
+                #edit-product-modal option {
+                    background-color: #ffffff !important;
+                    color: #00075e !important;
+                }
+
+                #edit-product-modal h6 {
+                    color: #00075e !important;
+                }
+
+                #edit-product-modal hr {
+                    border-color: #e5e7eb !important;
+                }
+            `}</style>
         </Modal>
     );
 }

@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 import ImageUpload from '@/components/ImageUpload';
+import EditProductModal from '@/components/EditProductModal';
+import ConfirmModal from '@/components/ConfirmModal';
+import AlertModal from '@/components/AlertModal';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -37,6 +40,32 @@ export default function AdminPage() {
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [trackingNumbers, setTrackingNumbers] = useState<{ [key: string]: string }>({});
+    
+    // Modal states
+    const [confirmModal, setConfirmModal] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: () => {}
+    });
+    
+    const [alertModal, setAlertModal] = useState<{
+        isOpen: boolean;
+        title: string;
+        message: string;
+        type: 'success' | 'error' | 'warning' | 'info';
+    }>({
+        isOpen: false,
+        title: '',
+        message: '',
+        type: 'info'
+    });
+    
     const [newPromoCode, setNewPromoCode] = useState({
         code: '',
         discount_type: 'percent' as 'percent' | 'fixed',
@@ -46,6 +75,25 @@ export default function AdminPage() {
         max_uses: null as number | null,
         valid_until: ''
     });
+
+    // Helper functions for modals
+    const showConfirm = (title: string, message: string, onConfirm: () => void) => {
+        setConfirmModal({
+            isOpen: true,
+            title,
+            message,
+            onConfirm
+        });
+    };
+
+    const showAlert = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'info') => {
+        setAlertModal({
+            isOpen: true,
+            title,
+            message,
+            type
+        });
+    };
 
     const fetchOrders = async () => {
         setLoading(true);
@@ -101,7 +149,7 @@ export default function AdminPage() {
             .eq('id', id);
 
         if (error) {
-            alert('Помилка оновлення статусу');
+            showAlert('Помилка', 'Помилка оновлення статусу', 'error');
             console.error(error);
         } else {
             fetchOrders();
@@ -115,10 +163,10 @@ export default function AdminPage() {
             .eq('id', id);
 
         if (error) {
-            alert('Помилка оновлення ТТН');
+            showAlert('Помилка', 'Помилка оновлення ТТН', 'error');
             console.error(error);
         } else {
-            alert('ТТН успішно збережено!');
+            showAlert('Успіх', 'ТТН успішно збережено!', 'success');
             // Clear the tracking number from state
             setTrackingNumbers(prev => {
                 const newState = { ...prev };
@@ -130,11 +178,11 @@ export default function AdminPage() {
     };
 
     const deleteOrder = async (id: string, orderNumber: string) => {
-        if (!confirm(`Ви впевнені, що хочете видалити замовлення ${orderNumber}?`)) {
-            return;
-        }
-
-        try {
+        showConfirm(
+            'Підтвердження видалення',
+            `Ви впевнені, що хочете видалити замовлення ${orderNumber}?`,
+            async () => {
+                try {
             console.log('Deleting order:', id);
 
             // Используем RPC функцию для удаления заказа
@@ -152,24 +200,26 @@ export default function AdminPage() {
                 throw new Error('Замовлення не знайдено або вже видалено');
             }
 
-            // Обновляем список заказов
-            await fetchOrders();
-            
-            alert('Замовлення успішно видалено');
-        } catch (error: any) {
-            alert('Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'));
-            console.error('Delete order error:', error);
-            
-            // Обновляем список в любом случае
-            await fetchOrders();
-        }
+                    // Обновляем список заказов
+                    await fetchOrders();
+                    
+                    showAlert('Успіх', 'Замовлення успішно видалено', 'success');
+                } catch (error: any) {
+                    showAlert('Помилка', 'Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'), 'error');
+                    console.error('Delete order error:', error);
+                    
+                    // Обновляем список в любом случае
+                    await fetchOrders();
+                }
+            }
+        );
     };
 
     const handleCreateProduct = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (newProduct.images.length === 0) {
-            alert('Будь ласка, завантажте принаймні одне зображення товару');
+            showAlert('Увага', 'Будь ласка, завантажте принаймні одне зображення товару', 'warning');
             return;
         }
 
@@ -201,7 +251,7 @@ export default function AdminPage() {
 
             if (error) throw error;
 
-            alert('Товар успішно створено!');
+            showAlert('Успіх', 'Товар успішно створено!', 'success');
             setNewProduct({ 
                 title: '', 
                 description: '', 
@@ -225,7 +275,7 @@ export default function AdminPage() {
             fetchProducts();
         } catch (error: any) {
             console.error('Error creating product:', error);
-            alert('Помилка створення товару: ' + error.message);
+            showAlert('Помилка', 'Помилка створення товару: ' + error.message, 'error');
         } finally {
             setCreatingProduct(false);
         }
@@ -263,32 +313,34 @@ export default function AdminPage() {
 
             if (error) throw error;
 
-            alert('Товар успішно оновлено!');
+            showAlert('Успіх', 'Товар успішно оновлено!', 'success');
             setEditingProduct(null);
             fetchProducts();
         } catch (error: any) {
             console.error('Error updating product:', error);
-            alert('Помилка оновлення товару: ' + error.message);
+            showAlert('Помилка', 'Помилка оновлення товару: ' + error.message, 'error');
         }
     };
 
     const deleteProduct = async (id: number, title: string) => {
-        if (!confirm(`Ви впевнені, що хочете видалити товар "${title}"?`)) {
-            return;
-        }
+        showConfirm(
+            'Підтвердження видалення',
+            `Ви впевнені, що хочете видалити товар "${title}"?`,
+            async () => {
+                const { error } = await supabase
+                    .from('products')
+                    .delete()
+                    .eq('id', id);
 
-        const { error } = await supabase
-            .from('products')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            alert('Помилка видалення товару');
-            console.error(error);
-        } else {
-            alert('Товар успішно видалено');
-            fetchProducts();
-        }
+                if (error) {
+                    showAlert('Помилка', 'Помилка видалення товару', 'error');
+                    console.error(error);
+                } else {
+                    showAlert('Успіх', 'Товар успішно видалено', 'success');
+                    fetchProducts();
+                }
+            }
+        );
     };
 
     const handleCreatePromoCode = async (e: React.FormEvent) => {
@@ -308,32 +360,34 @@ export default function AdminPage() {
 
             if (error) throw error;
 
-            alert('Промокод успішно створено!');
+            showAlert('Успіх', 'Промокод успішно створено!', 'success');
             setNewPromoCode({ code: '', discount_type: 'percent', discount_percent: 0, discount_amount: 0, min_order_amount: 0, max_uses: null, valid_until: '' });
             fetchPromoCodes();
         } catch (error: any) {
             console.error('Error creating promo code:', error);
-            alert('Помилка створення промокоду: ' + error.message);
+            showAlert('Помилка', 'Помилка створення промокоду: ' + error.message, 'error');
         }
     };
 
     const deletePromoCode = async (id: number, code: string) => {
-        if (!confirm(`Ви впевнені, що хочете видалити промокод "${code}"?`)) {
-            return;
-        }
+        showConfirm(
+            'Підтвердження видалення',
+            `Ви впевнені, що хочете видалити промокод "${code}"?`,
+            async () => {
+                const { error } = await supabase
+                    .from('promo_codes')
+                    .delete()
+                    .eq('id', id);
 
-        const { error } = await supabase
-            .from('promo_codes')
-            .delete()
-            .eq('id', id);
-
-        if (error) {
-            alert('Помилка видалення промокоду');
-            console.error(error);
-        } else {
-            alert('Промокод успішно видалено');
-            fetchPromoCodes();
-        }
+                if (error) {
+                    showAlert('Помилка', 'Помилка видалення промокоду', 'error');
+                    console.error(error);
+                } else {
+                    showAlert('Успіх', 'Промокод успішно видалено', 'success');
+                    fetchPromoCodes();
+                }
+            }
+        );
     };
 
     const togglePromoCodeStatus = async (id: number, currentStatus: boolean) => {
@@ -343,7 +397,7 @@ export default function AdminPage() {
             .eq('id', id);
 
         if (error) {
-            alert('Помилка оновлення статусу');
+            showAlert('Помилка', 'Помилка оновлення статусу', 'error');
             console.error(error);
         } else {
             fetchPromoCodes();
@@ -969,151 +1023,35 @@ export default function AdminPage() {
             </div>
 
             {/* Edit Product Modal */}
-            {editingProduct && (
-                <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setEditingProduct(null)}>
-                    <div className="modal-dialog modal-lg" onClick={(e) => e.stopPropagation()}>
-                        <div className="modal-content" style={{ backgroundColor: 'var(--card-bg)' }}>
-                            <div className="modal-header border-secondary">
-                                <h5 className="modal-title text-white">Редагувати товар</h5>
-                                <button type="button" className="btn-close btn-close-white" onClick={() => setEditingProduct(null)}></button>
-                            </div>
-                            <div className="modal-body">
-                                <form onSubmit={handleUpdateProduct}>
-                                    <div className="row g-3">
-                                        <div className="col-md-6">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Назва книги</label>
-                                            <input
-                                                type="text"
-                                                className="form-control bg-dark text-white border-secondary"
-                                                required
-                                                value={editingProduct.title}
-                                                onChange={e => setEditingProduct({ ...editingProduct, title: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Ціна (грн)</label>
-                                            <input
-                                                type="number"
-                                                step="0.01"
-                                                className="form-control bg-dark text-white border-secondary"
-                                                required
-                                                value={editingProduct.price}
-                                                onChange={e => setEditingProduct({ ...editingProduct, price: e.target.value })}
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Опис</label>
-                                            <textarea
-                                                className="form-control bg-dark text-white border-secondary"
-                                                rows={3}
-                                                required
-                                                value={editingProduct.description}
-                                                onChange={e => setEditingProduct({ ...editingProduct, description: e.target.value })}
-                                            ></textarea>
-                                        </div>
-                                        <div className="col-md-6">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Наявність</label>
-                                            <select
-                                                className="form-select bg-dark text-white border-secondary"
-                                                value={editingProduct.availability || 'in_stock'}
-                                                onChange={e => setEditingProduct({ ...editingProduct, availability: e.target.value })}
-                                            >
-                                                <option value="in_stock">В наявності</option>
-                                                <option value="pre_order">Предзаказ</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Знижка (%)</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                max="100"
-                                                className="form-control bg-dark text-white border-secondary"
-                                                value={editingProduct.discount_percent || 0}
-                                                onChange={e => setEditingProduct({ ...editingProduct, discount_percent: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Кількість на складі</label>
-                                            <input
-                                                type="number"
-                                                min="0"
-                                                className="form-control bg-dark text-white border-secondary"
-                                                value={editingProduct.stock_quantity || 0}
-                                                onChange={e => setEditingProduct({ ...editingProduct, stock_quantity: parseInt(e.target.value) || 0 })}
-                                            />
-                                        </div>
-                                        
-                                        {/* Book Characteristics */}
-                                        <div className="col-12"><hr className="border-secondary my-3" /><h6 className="text-white">Характеристики книги</h6></div>
-                                        
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Автор</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.author || ''} onChange={e => setEditingProduct({ ...editingProduct, author: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Видавництво</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.publisher || ''} onChange={e => setEditingProduct({ ...editingProduct, publisher: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Перекладач</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.translator || ''} onChange={e => setEditingProduct({ ...editingProduct, translator: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Рік видання</label>
-                                            <input type="number" className="form-control bg-dark text-white border-secondary" value={editingProduct.year || new Date().getFullYear()} onChange={e => setEditingProduct({ ...editingProduct, year: parseInt(e.target.value) || new Date().getFullYear() })} />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Мова</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.language || 'Українська'} onChange={e => setEditingProduct({ ...editingProduct, language: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Кількість сторінок</label>
-                                            <input type="number" className="form-control bg-dark text-white border-secondary" value={editingProduct.pages || 0} onChange={e => setEditingProduct({ ...editingProduct, pages: parseInt(e.target.value) || 0 })} />
-                                        </div>
-                                        <div className="col-md-3">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Обкладинка</label>
-                                            <select className="form-select bg-dark text-white border-secondary" value={editingProduct.cover_type || ''} onChange={e => setEditingProduct({ ...editingProduct, cover_type: e.target.value })}>
-                                                <option value="">Оберіть</option>
-                                                <option value="Тверда">Тверда</option>
-                                                <option value="М'яка">М'яка</option>
-                                            </select>
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">ISBN</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" value={editingProduct.isbn || ''} onChange={e => setEditingProduct({ ...editingProduct, isbn: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Формат</label>
-                                            <input type="text" className="form-control bg-dark text-white border-secondary" placeholder="140x210мм" value={editingProduct.format || ''} onChange={e => setEditingProduct({ ...editingProduct, format: e.target.value })} />
-                                        </div>
-                                        <div className="col-md-4">
-                                            <label className="form-label small text-muted text-uppercase fw-bold">Тип книги</label>
-                                            <select className="form-select bg-dark text-white border-secondary" value={editingProduct.book_type || 'Паперова книга'} onChange={e => setEditingProduct({ ...editingProduct, book_type: e.target.value })}>
-                                                <option value="Паперова книга">Паперова книга</option>
-                                                <option value="Електронна книга">Електронна книга</option>
-                                            </select>
-                                        </div>
+            <EditProductModal
+                product={editingProduct}
+                isOpen={!!editingProduct}
+                onClose={() => setEditingProduct(null)}
+                onSave={handleUpdateProduct}
+                onChange={setEditingProduct}
+            />
 
-                                        <div className="col-12">
-                                            <ImageUpload
-                                                onUploadComplete={(urls, mainIndex) => setEditingProduct({ ...editingProduct, images: urls, mainImageIndex: mainIndex })}
-                                                currentImages={editingProduct.images || [editingProduct.image_url]}
-                                                mainImageIndex={editingProduct.mainImageIndex || 0}
-                                                maxImages={5}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="d-flex gap-2 mt-4">
-                                        <button type="submit" className="btn btn-success">Зберегти зміни</button>
-                                        <button type="button" className="btn btn-secondary" onClick={() => setEditingProduct(null)}>Скасувати</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Confirm Modal */}
+            <ConfirmModal
+                id="confirm-modal"
+                title={confirmModal.title}
+                message={confirmModal.message}
+                isOpen={confirmModal.isOpen}
+                onConfirm={confirmModal.onConfirm}
+                onCancel={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                confirmText="Видалити"
+                cancelText="Скасувати"
+            />
+
+            {/* Alert Modal */}
+            <AlertModal
+                id="alert-modal"
+                title={alertModal.title}
+                message={alertModal.message}
+                type={alertModal.type}
+                isOpen={alertModal.isOpen}
+                onClose={() => setAlertModal({ ...alertModal, isOpen: false })}
+            />
 
         </div>
     );
