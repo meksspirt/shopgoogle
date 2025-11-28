@@ -75,11 +75,11 @@ a:hover {
   color: var(--link-hover);
 }
 
-/* Navbar Overrides */
+/* Navbar Overrides - Clinical Focus */
 .navbar {
-  background-color: var(--primary-color) !important;
+  background-color: #ffffff !important;
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 7, 94, 0.1);
+  border-bottom: 1px solid var(--secondary-bg);
   z-index: 1000;
 }
 
@@ -89,18 +89,19 @@ a:hover {
   letter-spacing: 2px;
   font-weight: normal;
   font-style: normal;
-  color: var(--text-light) !important;
+  color: var(--primary-color) !important;
 }
 
 .nav-link {
-  color: var(--text-light) !important;
+  color: var(--primary-color) !important;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+  transition: color 0.2s ease;
 }
 
 .nav-link:hover {
-  color: var(--link-hover) !important;
+  color: var(--accent-button) !important;
 }
 
 /* Main content padding to prevent overlap with sticky navbar */
