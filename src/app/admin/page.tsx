@@ -66,6 +66,10 @@ export default function AdminPage() {
         type: 'info'
     });
     
+    // Settings state
+    const [monobankLink, setMonobankLink] = useState('');
+    const [savingSettings, setSavingSettings] = useState(false);
+    
     const [newPromoCode, setNewPromoCode] = useState({
         code: '',
         discount_type: 'percent' as 'percent' | 'fixed',
@@ -127,10 +131,50 @@ export default function AdminPage() {
         else setPromoCodes(data || []);
     };
 
+    const fetchSettings = async () => {
+        const { data, error } = await supabase
+            .from('settings')
+            .select('*')
+            .eq('key', 'monobank_payment_link')
+            .single();
+
+        if (error) {
+            console.error('Error fetching settings:', error);
+        } else if (data) {
+            setMonobankLink(data.value || '');
+        }
+    };
+
+    const saveMonobankLink = async () => {
+        setSavingSettings(true);
+        try {
+            const { error } = await supabase
+                .from('settings')
+                .upsert({
+                    key: 'monobank_payment_link',
+                    value: monobankLink,
+                    description: 'Посилання на оплату через Monobank',
+                    updated_at: new Date().toISOString()
+                }, {
+                    onConflict: 'key'
+                });
+
+            if (error) throw error;
+
+            showAlert('Успіх', 'Посилання на Monobank збережено!', 'success');
+        } catch (error: any) {
+            console.error('Error saving settings:', error);
+            showAlert('Помилка', 'Помилка збереження налаштувань: ' + error.message, 'error');
+        } finally {
+            setSavingSettings(false);
+        }
+    };
+
     useEffect(() => {
         fetchOrders();
         fetchProducts();
         fetchPromoCodes();
+        fetchSettings();
     }, []);
 
     const handleLogout = async () => {
@@ -178,11 +222,7 @@ export default function AdminPage() {
     };
 
     const deleteOrder = async (id: string, orderNumber: string) => {
-        showConfirm(
-            'Підтвердження видалення',
-            `Ви впевнені, що хочете видалити замовлення ${orderNumber}?`,
-            async () => {
-                try {
+        try {
             console.log('Deleting order:', id);
 
             // Используем RPC функцию для удаления заказа
@@ -200,19 +240,17 @@ export default function AdminPage() {
                 throw new Error('Замовлення не знайдено або вже видалено');
             }
 
-                    // Обновляем список заказов
-                    await fetchOrders();
-                    
-                    showAlert('Успіх', 'Замовлення успішно видалено', 'success');
-                } catch (error: any) {
-                    showAlert('Помилка', 'Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'), 'error');
-                    console.error('Delete order error:', error);
-                    
-                    // Обновляем список в любом случае
-                    await fetchOrders();
-                }
-            }
-        );
+            // Обновляем список заказов
+            await fetchOrders();
+            
+            showAlert('Успіх', 'Замовлення успішно видалено', 'success');
+        } catch (error: any) {
+            showAlert('Помилка', 'Помилка видалення замовлення: ' + (error.message || 'Невідома помилка'), 'error');
+            console.error('Delete order error:', error);
+            
+            // Обновляем список в любом случае
+            await fetchOrders();
+        }
     };
 
     const handleCreateProduct = async (e: React.FormEvent) => {
@@ -1018,6 +1056,61 @@ export default function AdminPage() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+
+            {/* Settings Section */}
+            <h3 className="mb-4 fw-bold mt-5" style={{ color: '#00075e' }}>Налаштування</h3>
+            
+            <div className="card shadow-sm mb-5" style={{ 
+                backgroundColor: '#ffffff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px'
+            }}>
+                <div className="card-header py-3" style={{ 
+                    backgroundColor: '#f9fafb',
+                    borderBottom: '1px solid #e5e7eb',
+                    borderRadius: '12px 12px 0 0'
+                }}>
+                    <h5 className="mb-0 fw-bold" style={{ color: '#00075e' }}>Посилання на оплату Monobank</h5>
+                </div>
+                <div className="card-body p-4">
+                    <div className="row g-3">
+                        <div className="col-12">
+                            <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>
+                                URL посилання
+                            </label>
+                            <input
+                                type="url"
+                                className="form-control form-control-lg"
+                                style={{
+                                    backgroundColor: '#ffffff',
+                                    border: '1px solid #e5e7eb',
+                                    color: '#00075e'
+                                }}
+                                placeholder="https://send.monobank.ua/jar/..."
+                                value={monobankLink}
+                                onChange={e => setMonobankLink(e.target.value)}
+                            />
+                            <small className="text-muted d-block mt-2">
+                                Це посилання буде використовуватися на сторінці успішного оформлення замовлення
+                            </small>
+                        </div>
+                        <div className="col-12">
+                            <button 
+                                type="button"
+                                className="btn btn-primary px-5"
+                                onClick={saveMonobankLink}
+                                disabled={savingSettings}
+                                style={{
+                                    fontWeight: 600,
+                                    borderRadius: '8px'
+                                }}
+                            >
+                                {savingSettings ? 'Збереження...' : 'Зберегти налаштування'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

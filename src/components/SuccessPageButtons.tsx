@@ -1,18 +1,38 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabaseClient';
 
 interface SuccessPageButtonsProps {
     orderId: string;
 }
 
 export default function SuccessPageButtons({ orderId }: SuccessPageButtonsProps) {
+    const [monobankLink, setMonobankLink] = useState('https://send.monobank.ua/');
+
+    useEffect(() => {
+        const fetchMonobankLink = async () => {
+            const { data, error } = await supabase
+                .from('settings')
+                .select('value')
+                .eq('key', 'monobank_payment_link')
+                .single();
+
+            if (!error && data?.value) {
+                setMonobankLink(data.value);
+            }
+        };
+
+        fetchMonobankLink();
+    }, []);
+
     return (
         <>
             {/* Payment Button */}
             <div className="d-grid gap-3 mb-4">
                 <a 
-                    href="https://sitechecker.pro/ru/website-safety/" 
+                    href={monobankLink}
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="btn btn-success btn-lg py-3 fw-bold"
