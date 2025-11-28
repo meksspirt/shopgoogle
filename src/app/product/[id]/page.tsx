@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     <div className="mb-4">
                         {product.discount_percent > 0 ? (
                             <div className="d-flex align-items-baseline gap-3">
-                                <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#ff0066', fontFamily: 'var(--font-heading)' }}>
+                                <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--primary-color)', fontFamily: 'var(--font-heading)' }}>
                                     {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                 </h2>
                                 <span className="text-decoration-line-through" style={{ fontSize: '1.3rem', color: '#9ca3af' }}>
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                                 </span>
                             </div>
                         ) : (
-                            <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: '#111827', fontFamily: 'var(--font-heading)' }}>
+                            <h2 className="mb-0" style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--primary-color)', fontFamily: 'var(--font-heading)' }}>
                                 {Math.round(product.price)} грн
                             </h2>
                         )}
@@ -94,9 +94,9 @@ export default async function ProductPage({ params }: { params: { id: string } }
 
                     {/* Stock Status */}
                     {product.stock_quantity !== undefined && (
-                        <div className="mb-3 p-2 rounded" style={{ backgroundColor: 'rgba(109, 119, 250, 0.1)' }}>
+                        <div className="mb-3 p-3 rounded" style={{ backgroundColor: product.stock_quantity > 10 ? 'rgba(72, 169, 166, 0.1)' : '#FFF4E5' }}>
                             <small style={{ 
-                                color: product.stock_quantity > 10 ? '#28a745' : product.stock_quantity > 0 ? '#ffc107' : '#dc3545', 
+                                color: product.stock_quantity > 10 ? 'var(--accent-button)' : '#D97706', 
                                 fontFamily: 'var(--font-heading)', 
                                 fontWeight: '600',
                                 fontSize: '0.95rem'

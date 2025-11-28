@@ -90,8 +90,8 @@ export default function AddToCartButton({ product }: { product: any }) {
                 
                 .add-to-cart-btn:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 8px 20px rgba(52, 52, 52, 0.4);
-                    background: #00075e !important;
+                    box-shadow: 0 8px 20px rgba(72, 169, 166, 0.4);
+                    background: #3D918E !important;
                 }
                 
                 .add-to-cart-btn:active {
@@ -227,7 +227,7 @@ export default function AddToCartButton({ product }: { product: any }) {
                     </button>
                 ) : !isAdded ? (
                     <button
-                        className={`btn w-100 add-to-cart-btn ${isAnimating ? 'animating' : ''}`}
+                        className={`btn btn-primary w-100 add-to-cart-btn ${isAnimating ? 'animating' : ''}`}
                         onClick={addToCart}
                         style={{
                             height: '60px',
@@ -235,9 +235,6 @@ export default function AddToCartButton({ product }: { product: any }) {
                             fontFamily: 'var(--font-heading)',
                             fontWeight: '700',
                             fontSize: '1.2rem',
-                            background: '#343434',
-                            border: 'none',
-                            color: '#ffffff',
                             textTransform: 'uppercase',
                             letterSpacing: '1px'
                         }}

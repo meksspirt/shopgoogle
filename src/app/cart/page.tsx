@@ -282,14 +282,14 @@ export default function CartPage() {
                                             <div className="mb-3">
                                                 {item.discount_percent > 0 ? (
                                                     <>
-                                                        <h4 className="mb-0 fw-bold" style={{ color: '#ff0066' }}>
+                                                        <h4 className="mb-0 fw-bold" style={{ color: 'var(--primary-color)' }}>
                                                             {Math.round(item.price * (1 - item.discount_percent / 100))} ₴
                                                         </h4>
                                                         <div className="text-decoration-line-through small" style={{ color: '#9ca3af' }}>{Math.round(item.price)} ₴</div>
                                                         <div className="badge bg-danger small">-{item.discount_percent}%</div>
                                                     </>
                                                 ) : (
-                                                    <h4 className="mb-0 fw-bold" style={{ color: '#111827' }}>{Math.round(item.price)} ₴</h4>
+                                                    <h4 className="mb-0 fw-bold" style={{ color: 'var(--primary-color)' }}>{Math.round(item.price)} ₴</h4>
                                                 )}
                                             </div>
 
@@ -312,11 +312,8 @@ export default function CartPage() {
                         <div className="card-body p-4">
                             <Link 
                                 href="/checkout" 
-                                className="btn w-100 btn-lg mb-4 fw-bold py-3"
+                                className="btn btn-primary w-100 btn-lg mb-4 fw-bold py-3"
                                 style={{ 
-                                    backgroundColor: hasStockIssues ? '#6c757d' : '#343434',
-                                    borderColor: hasStockIssues ? '#6c757d' : '#343434',
-                                    color: '#ffffff',
                                     opacity: hasStockIssues ? 0.6 : 1,
                                     cursor: hasStockIssues ? 'not-allowed' : 'pointer'
                                 }}
@@ -349,13 +346,8 @@ export default function CartPage() {
                                             }}
                                         />
                                         <button
-                                            className="btn"
+                                            className="btn btn-primary"
                                             onClick={applyPromoCode}
-                                            style={{ 
-                                                backgroundColor: '#343434',
-                                                color: '#ffffff',
-                                                border: '1px solid #343434'
-                                            }}
                                         >
                                             Застосувати
                                         </button>
@@ -422,8 +414,8 @@ export default function CartPage() {
                                                     <span className="text-decoration-line-through small" style={{ color: '#9ca3af' }}>{(product.price * 1.2).toFixed(0)} ₴</span>
                                                 </div>
                                                 <button
-                                                    className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center"
-                                                    style={{ width: '40px', height: '40px', backgroundColor: '#343434', borderColor: '#343434', color: '#ffffff' }}
+                                                    className="btn btn-primary btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                                                    style={{ width: '40px', height: '40px' }}
                                                     onClick={() => addToCart(product)}
                                                     title="Додати в кошик"
                                                 >

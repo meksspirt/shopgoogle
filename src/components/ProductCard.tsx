@@ -87,26 +87,23 @@ export default function ProductCard({ product }: { product: Product }) {
                                         <div className="text-decoration-line-through small" style={{ color: '#9ca3af' }}>
                                             {product.price} грн
                                         </div>
-                                        <span className="fw-bold" style={{ fontSize: '1.35rem', color: '#ff0066' }}>
+                                        <span className="fw-bold" style={{ fontSize: '1.35rem', color: 'var(--primary-color)' }}>
                                             {Math.round(product.price * (1 - product.discount_percent / 100))} грн
                                         </span>
                                     </>
                                 ) : (
-                                    <span className="fw-bold" style={{ fontSize: '1.25rem', color: '#111827' }}>
+                                    <span className="fw-bold" style={{ fontSize: '1.25rem', color: 'var(--primary-color)' }}>
                                         {product.price} грн
                                     </span>
                                 )}
                             </div>
                             <button
-                                className="btn btn-sm px-3"
+                                className="btn btn-primary btn-sm px-3"
                                 onClick={addToCart}
                                 style={{
-                                    borderRadius: '20px',
+                                    borderRadius: '4px',
                                     fontFamily: 'var(--font-heading)',
-                                    fontWeight: '600',
-                                    backgroundColor: '#343434',
-                                    color: '#ffffff',
-                                    border: 'none'
+                                    fontWeight: '600'
                                 }}
                             >
                                 {product.availability === 'pre_order' ? 'Предзаказ' : 'Купити'}

@@ -42,24 +42,24 @@ export default async function Home() {
       )}
 
       {/* About the Author Section */}
-      <div className="mt-5 pt-5 border-top border-secondary">
+      <div className="mt-5 pt-5 border-top" style={{ borderColor: 'rgba(0, 7, 94, 0.1)' }}>
         <div className="row align-items-center">
           <div className="col-md-4 text-center mb-4 mb-md-0">
-            <div className="position-relative d-inline-block rounded-circle overflow-hidden border border-3 border-primary" style={{ width: '200px', height: '200px' }}>
+            <div className="position-relative d-inline-block rounded-circle overflow-hidden border border-3" style={{ width: '200px', height: '200px', borderColor: 'var(--primary-color)' }}>
               {/* Placeholder for Author Image - using a generic professional avatar */}
               <img
-                src="https://placehold.co/200x200/384a9e/ffffff?text=Author"
+                src="https://placehold.co/200x200/00075e/ffffff?text=Author"
                 alt="Author"
                 className="w-100 h-100 object-fit-cover"
               />
             </div>
           </div>
           <div className="col-md-8">
-            <h2 className="mb-4 fw-bold text-white">Про Автора</h2>
-            <p className="lead text-light mb-4">
+            <h2 className="mb-4 fw-bold" style={{ color: 'var(--primary-color)' }}>Про Автора</h2>
+            <p className="lead mb-4" style={{ color: 'var(--text-primary)' }}>
               Привіт! Я професійний психолог з багаторічним досвідом. Моя мета — допомогти вам знайти гармонію та покращити якість вашого життя через перевірені методики та знання.
             </p>
-            <p className="text-muted">
+            <p style={{ color: 'var(--text-secondary)' }}>
               Всі матеріали та книги, представлені в цьому магазині, ретельно відібрані та створені з урахуванням сучасних психологічних досліджень. Я вірю, що кожен заслуговує на щасливе та збалансоване життя.
             </p>
           </div>

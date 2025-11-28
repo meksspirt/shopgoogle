@@ -61,7 +61,7 @@ export default function Navbar() {
                     <ul className="navbar-nav ms-auto align-items-lg-center">
                         {phone && (
                             <li className="nav-item me-3">
-                                <a href={`tel:${phone}`} className="nav-link d-flex align-items-center">
+                                <a href={`tel:${phone}`} className="nav-link d-flex align-items-center" style={{ color: 'var(--accent-button)' }}>
                                     <span style={{ fontSize: '1.1rem', marginRight: '0.3rem' }}>📞</span>
                                     {phone}
                                 </a>
@@ -69,7 +69,7 @@ export default function Navbar() {
                         )}
                         {instagram && (
                             <li className="nav-item me-3">
-                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="nav-link">
+                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="nav-link" style={{ color: 'var(--accent-button)' }}>
                                     <span style={{ fontSize: '1.2rem' }}>📷</span>
                                 </a>
                             </li>

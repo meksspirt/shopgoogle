@@ -77,9 +77,9 @@ a:hover {
 
 /* Navbar Overrides - Clinical Focus */
 .navbar {
-  background-color: #ffffff !important;
+  background-color: var(--secondary-bg) !important;
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--secondary-bg);
+  border-bottom: 1px solid rgba(0, 7, 94, 0.1);
   z-index: 1000;
 }
 
@@ -147,10 +147,9 @@ main.min-vh-100 {
 }
 
 .btn-primary:hover {
-  background-color: #3a8a87;
-  border-color: #3a8a87;
+  background-color: #3D918E;
+  border-color: #3D918E;
   color: var(--text-light);
-  opacity: 0.95;
 }
 
 .btn-outline-primary {
@@ -185,6 +184,47 @@ main.min-vh-100 {
 /* Badge */
 .badge.bg-danger {
   background-color: var(--accent-badge) !important;
+}
+
+/* Secondary Button (Outline) */
+.btn-secondary, .btn-outline-secondary {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-secondary:hover, .btn-outline-secondary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+/* Danger Button (Delete) */
+.btn-danger {
+  background-color: #E05D5D;
+  border-color: #E05D5D;
+  color: var(--text-light);
+}
+
+.btn-danger:hover {
+  background-color: #d04545;
+  border-color: #d04545;
+}
+
+/* Table Headers */
+th {
+  color: var(--primary-color) !important;
+  background-color: var(--secondary-bg) !important;
+  font-weight: 600;
+}
+
+/* Stock Warning Badge */
+.stock-warning {
+  background-color: #FFF4E5 !important;
+  color: #D97706 !important;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
 }
 
 /* Form Controls */
@@ -264,7 +304,19 @@ main.min-vh-100 {
 
 /* Footer */
 footer, .bg-dark {
-  background-color: var(--accent-button) !important;
+  background-color: var(--primary-color) !important;
+  color: var(--text-light) !important;
+}
+
+footer a {
+  color: var(--text-light) !important;
+}
+
+footer a:hover {
+  color: var(--accent-button) !important;
+}
+
+footer h5, footer h6 {
   color: var(--text-light) !important;
 }
 /* Nova
@@ -310,4 +362,161 @@ footer, .bg-dark {
 
 .nova-poshta-button span {
   font-family: var(--font-quincy, serif) !important;
+}
+
+/* =========================================
+   Стилизация Модального окна Админ-панели
+   Палитра: Clinical Focus
+   ========================================= */
+
+/* --- 1. Основной контейнер и Шапка --- */
+
+/* Фон самого окна */
+.modal-content {
+  background-color: #ffffff;
+  border: none;
+  border-radius: 8px; /* Немного скруглим углы */
+  box-shadow: 0 10px 30px rgba(0, 7, 94, 0.15); /* Мягкая тень синего оттенка */
+}
+
+/* Шапка окна (где заголовок и крестик) */
+.modal-header {
+  background-color: #EAF4F4; /* Светло-мятный фон */
+  border-bottom: 1px solid #CFD8DC; /* Тонкая серая линия снизу */
+  padding: 20px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Заголовок окна ("Налаштування магазину") */
+.modal-title {
+  color: #00075e; /* Глубокий синий */
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Кнопка закрытия (Крестик) */
+.modal-header .close, 
+.modal-header .btn-close {
+  color: #00075e;
+  opacity: 0.7;
+}
+
+.modal-header .close:hover, 
+.modal-header .btn-close:hover {
+  opacity: 1;
+  color: #48A9A6; /* При наведении - мятный */
+}
+
+/* --- 2. Навигационные Табы (Вкладки) --- */
+
+/* Контейнер для табов */
+.nav-pills {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #EAF4F4;
+  padding-bottom: 10px;
+}
+
+/* Неактивная вкладка */
+.nav-pills .nav-link {
+  color: #00075e; /* Синий текст */
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  font-weight: 500;
+  margin-right: 5px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+/* При наведении на неактивную вкладку */
+.nav-pills .nav-link:hover {
+  background-color: #EAF4F4;
+  color: #48A9A6;
+}
+
+/* АКТИВНАЯ вкладка (выбранная) */
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #ffffff; /* Белый текст */
+  background-color: #48A9A6; /* Мятный фон */
+  border-color: #48A9A6;
+}
+
+/* Иконки внутри табов */
+.nav-pills .nav-link i {
+  margin-right: 8px;
+}
+
+/* --- 3. Формы и Поля ввода --- */
+
+/* Тело модального окна */
+.modal-body {
+  padding: 30px;
+  background-color: #ffffff;
+}
+
+/* Лейблы (Названия полей) - делаем их четче */
+.modal-body label {
+  color: #00075e; /* Глубокий синий */
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Поля ввода (Input, Textarea) */
+.modal-body .form-control {
+  border: 1px solid #CFD8DC; /* Светло-серая рамка по умолчанию */
+  background-color: #ffffff;
+  color: #00075e;
+  border-radius: 4px;
+  padding: 10px 12px;
+  transition: border-color 0.3s;
+}
+
+/* Поле ввода при фокусе (когда в нем курсор) */
+.modal-body .form-control:focus {
+  border-color: #48A9A6; /* Мятная рамка при фокусе */
+  box-shadow: 0 0 0 3px rgba(72, 169, 166, 0.2); /* Мятное свечение */
+  outline: none;
+}
+
+/* Текст-подсказка под полем (если есть) */
+.form-text, 
+.text-muted {
+  color: #7f8c8d !important; /* Чуть темнее, чем обычный серый */
+  font-size: 0.9em;
+}
+
+/* --- 4. Кнопки --- */
+
+/* Основная кнопка действия ("Зберегти") */
+.modal-body .btn-success,
+.modal-body button[type="submit"],
+.btn-save-modal {
+  background-color: #48A9A6 !important; /* Мятный цвет */
+  border: none !important;
+  color: #ffffff !important;
+  padding: 10px 24px;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+/* При наведении на кнопку "Зберегти" */
+.modal-body .btn-success:hover,
+.modal-body button[type="submit"]:hover {
+  background-color: #388E8B !important; /* Немного темнее мятный */
+}
+
+/* Если есть кнопка "Отмена" (Secondary) */
+.modal-footer .btn-secondary {
+  background-color: transparent;
+  color: #00075e;
+  border: 1px solid #CFD8DC;
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #EAF4F4;
+  border-color: #00075e;
 }
