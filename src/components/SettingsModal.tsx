@@ -19,7 +19,7 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose, settings, onSave }: SettingsModalProps) {
-    const [activeTab, setActiveTab] = useState<'high' | 'medium' | 'low' | 'store'>('high');
+    const [activeTab, setActiveTab] = useState<'general' | 'contacts' | 'payments' | 'seo'>('general');
     const [localSettings, setLocalSettings] = useState(settings);
     const [savingKey, setSavingKey] = useState<string | null>(null);
 
@@ -29,38 +29,42 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
         setSavingKey(null);
     };
 
-    const highPrioritySettings: Setting[] = [
-        { key: 'monobank_payment_link', label: 'Посилання на Monobank', type: 'url', placeholder: 'https://send.monobank.ua/jar/...', description: 'Використовується на сторінці успішного замовлення' },
-        { key: 'notification_email', label: 'Email для сповіщень', type: 'email', placeholder: 'admin@example.com', description: 'Email для отримання сповіщень про нові замовлення' },
-        { key: 'support_phone', label: 'Телефон підтримки', type: 'tel', placeholder: '+380XXXXXXXXX', description: 'Відображається в меню та футері' },
-        { key: 'instagram_link', label: 'Instagram магазину', type: 'url', placeholder: 'https://instagram.com/username', description: 'Посилання на ваш Instagram профіль' },
+    // Загальні налаштування магазину
+    const generalSettings: Setting[] = [
+        { key: 'store_name', label: 'Назва магазину', type: 'text', placeholder: 'CalmCraft', description: 'Відображається в меню та футері' },
+        { key: 'store_slogan', label: 'Слоган магазину', type: 'text', placeholder: 'Ваш улюблений книжковий магазин' },
+        { key: 'working_hours', label: 'Режим роботи', type: 'text', placeholder: 'Пн-Пт: 9:00-18:00', description: 'Відображається у футері' },
         { key: 'min_order_amount', label: 'Мінімальна сума замовлення (грн)', type: 'number', placeholder: '0', description: 'Мінімальна сума для оформлення замовлення' },
-    ];
-
-    const mediumPrioritySettings: Setting[] = [
-        { key: 'free_delivery_from', label: 'Безкоштовна доставка від (грн)', type: 'number', placeholder: '500' },
-        { key: 'success_message', label: 'Повідомлення про успішне замовлення', type: 'textarea', placeholder: 'Дякуємо за покупку!' },
+        { key: 'free_delivery_from', label: 'Безкоштовна доставка від (грн)', type: 'number', placeholder: '500', description: 'Сума для безкоштовної доставки' },
+        { key: 'products_per_page', label: 'Товарів на сторінці', type: 'number', placeholder: '12' },
+        { key: 'success_message', label: 'Повідомлення про успішне замовлення', type: 'textarea', placeholder: 'Дякуємо за покупку!', description: 'Відображається на сторінці успіху' },
         { key: 'delivery_terms', label: 'Умови доставки', type: 'textarea', placeholder: 'Опишіть умови доставки...' },
         { key: 'about_store', label: 'Про магазин', type: 'textarea', placeholder: 'Розкажіть про ваш магазин...' },
-        { key: 'telegram_bot_token', label: 'Telegram Bot Token', type: 'text', placeholder: '123456:ABC-DEF...' },
-        { key: 'telegram_chat_id', label: 'Telegram Chat ID', type: 'text', placeholder: '123456789' },
     ];
 
-    const lowPrioritySettings: Setting[] = [
-        { key: 'site_title', label: 'Заголовок сайту (SEO)', type: 'text', placeholder: 'CalmCraft - Книжковий магазин' },
-        { key: 'site_description', label: 'Опис сайту (SEO)', type: 'textarea', placeholder: 'Опис для пошукових систем...' },
-        { key: 'site_keywords', label: 'Ключові слова (SEO)', type: 'text', placeholder: 'книги, магазин, купити' },
-        { key: 'company_name', label: 'Назва компанії', type: 'text', placeholder: 'ТОВ "Назва"' },
+    // Контакти та соцмережі
+    const contactsSettings: Setting[] = [
+        { key: 'support_phone', label: 'Телефон підтримки', type: 'tel', placeholder: '+380XXXXXXXXX', description: 'Відображається в меню та футері' },
+        { key: 'notification_email', label: 'Email для сповіщень', type: 'email', placeholder: 'admin@example.com', description: 'Email для отримання сповіщень про нові замовлення' },
+        { key: 'instagram_link', label: 'Instagram магазину', type: 'url', placeholder: 'https://instagram.com/username', description: 'Посилання на ваш Instagram профіль' },
+        { key: 'telegram_bot_token', label: 'Telegram Bot Token', type: 'text', placeholder: '123456:ABC-DEF...', description: 'Для сповіщень у Telegram' },
+        { key: 'telegram_chat_id', label: 'Telegram Chat ID', type: 'text', placeholder: '123456789', description: 'ID чату для сповіщень' },
+        { key: 'company_name', label: 'Назва компанії', type: 'text', placeholder: 'ТОВ "Назва"', description: 'Юридична назва' },
         { key: 'company_code', label: 'ЄДРПОУ/ІПН', type: 'text', placeholder: '12345678' },
         { key: 'legal_address', label: 'Юридична адреса', type: 'text', placeholder: 'м. Київ, вул. ...' },
-        { key: 'privacy_policy', label: 'Політика конфіденційності', type: 'textarea', placeholder: 'Текст політики...' },
     ];
 
-    const storeSettings: Setting[] = [
-        { key: 'store_name', label: 'Назва магазину', type: 'text', placeholder: 'CalmCraft' },
-        { key: 'store_slogan', label: 'Слоган', type: 'text', placeholder: 'Ваш улюблений книжковий магазин' },
-        { key: 'working_hours', label: 'Режим роботи', type: 'text', placeholder: 'Пн-Пт: 9:00-18:00' },
-        { key: 'products_per_page', label: 'Товарів на сторінці', type: 'number', placeholder: '12' },
+    // Оплата
+    const paymentsSettings: Setting[] = [
+        { key: 'monobank_payment_link', label: 'Посилання на Monobank', type: 'url', placeholder: 'https://send.monobank.ua/jar/...', description: 'Використовується на сторінці успішного замовлення' },
+    ];
+
+    // SEO та контент
+    const seoSettings: Setting[] = [
+        { key: 'site_title', label: 'Заголовок сайту (SEO)', type: 'text', placeholder: 'CalmCraft - Книжковий магазин', description: 'Відображається у вкладці браузера та Google' },
+        { key: 'site_description', label: 'Опис сайту (SEO)', type: 'textarea', placeholder: 'Опис для пошукових систем...', description: 'Відображається в результатах пошуку Google' },
+        { key: 'site_keywords', label: 'Ключові слова (SEO)', type: 'text', placeholder: 'книги, магазин, купити', description: 'Через кому' },
+        { key: 'privacy_policy', label: 'Політика конфіденційності', type: 'textarea', placeholder: 'Текст політики...' },
     ];
 
     const renderSettings = (settingsList: Setting[]) => (
@@ -72,7 +76,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                         borderRadius: '8px',
                         border: '1px solid #e5e7eb'
                     }}>
-                        <label className="form-label fw-bold mb-2" style={{ color: '#00075e', fontSize: '0.9rem' }}>
+                        <label className="form-label fw-bold mb-2" style={{ color: '#1f2937', fontSize: '0.95rem' }}>
                             {setting.label}
                         </label>
                         {setting.type === 'textarea' ? (
@@ -81,9 +85,9 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                                 rows={3}
                                 style={{
                                     backgroundColor: '#ffffff',
-                                    border: '1px solid #e5e7eb',
-                                    color: '#00075e',
-                                    fontSize: '0.9rem'
+                                    border: '2px solid #e5e7eb',
+                                    color: '#1f2937',
+                                    fontSize: '0.95rem'
                                 }}
                                 placeholder={setting.placeholder}
                                 value={localSettings[setting.key] || ''}
@@ -95,9 +99,9 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                                 className="form-control mb-2"
                                 style={{
                                     backgroundColor: '#ffffff',
-                                    border: '1px solid #e5e7eb',
-                                    color: '#00075e',
-                                    fontSize: '0.9rem'
+                                    border: '2px solid #e5e7eb',
+                                    color: '#1f2937',
+                                    fontSize: '0.95rem'
                                 }}
                                 placeholder={setting.placeholder}
                                 value={localSettings[setting.key] || ''}
@@ -105,7 +109,7 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             />
                         )}
                         {setting.description && (
-                            <small className="text-muted d-block mb-2" style={{ fontSize: '0.8rem' }}>
+                            <small style={{ color: '#6b7280', fontSize: '0.85rem', display: 'block', marginBottom: '0.5rem' }}>
                                 {setting.description}
                             </small>
                         )}
@@ -145,84 +149,92 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
         >
             {/* Tabs */}
             <div className="mb-4">
-                <ul className="nav nav-pills" style={{ gap: '0.5rem' }}>
+                <ul className="nav nav-pills" style={{ gap: '0.5rem', flexWrap: 'wrap' }}>
                     <li className="nav-item">
                         <button
-                            className={`nav-link ${activeTab === 'high' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('high')}
+                            className={`nav-link ${activeTab === 'general' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('general')}
                             style={{
-                                backgroundColor: activeTab === 'high' ? '#00075e' : '#f9fafb',
-                                color: activeTab === 'high' ? '#ffffff' : '#6b7280',
+                                backgroundColor: activeTab === 'general' ? '#00075e' : '#f3f4f6',
+                                color: activeTab === 'general' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
-                                border: 'none',
+                                border: activeTab === 'general' ? 'none' : '2px solid #e5e7eb',
                                 borderRadius: '8px',
                                 fontSize: '0.9rem',
-                                padding: '0.6rem 1.2rem'
+                                padding: '0.6rem 1.2rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
                             }}
                         >
-                            🔥 Основні
+                            🏪 Загальні
                         </button>
                     </li>
                     <li className="nav-item">
                         <button
-                            className={`nav-link ${activeTab === 'medium' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('medium')}
+                            className={`nav-link ${activeTab === 'contacts' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('contacts')}
                             style={{
-                                backgroundColor: activeTab === 'medium' ? '#00075e' : '#f9fafb',
-                                color: activeTab === 'medium' ? '#ffffff' : '#6b7280',
+                                backgroundColor: activeTab === 'contacts' ? '#00075e' : '#f3f4f6',
+                                color: activeTab === 'contacts' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
-                                border: 'none',
+                                border: activeTab === 'contacts' ? 'none' : '2px solid #e5e7eb',
                                 borderRadius: '8px',
                                 fontSize: '0.9rem',
-                                padding: '0.6rem 1.2rem'
+                                padding: '0.6rem 1.2rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
                             }}
                         >
-                            📋 Додаткові
+                            📞 Контакти
                         </button>
                     </li>
                     <li className="nav-item">
                         <button
-                            className={`nav-link ${activeTab === 'low' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('low')}
+                            className={`nav-link ${activeTab === 'payments' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('payments')}
                             style={{
-                                backgroundColor: activeTab === 'low' ? '#00075e' : '#f9fafb',
-                                color: activeTab === 'low' ? '#ffffff' : '#6b7280',
+                                backgroundColor: activeTab === 'payments' ? '#00075e' : '#f3f4f6',
+                                color: activeTab === 'payments' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
-                                border: 'none',
+                                border: activeTab === 'payments' ? 'none' : '2px solid #e5e7eb',
                                 borderRadius: '8px',
                                 fontSize: '0.9rem',
-                                padding: '0.6rem 1.2rem'
+                                padding: '0.6rem 1.2rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
                             }}
                         >
-                            ⚙️ SEO та Юридичні
+                            💳 Оплата
                         </button>
                     </li>
                     <li className="nav-item">
                         <button
-                            className={`nav-link ${activeTab === 'store' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('store')}
+                            className={`nav-link ${activeTab === 'seo' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('seo')}
                             style={{
-                                backgroundColor: activeTab === 'store' ? '#00075e' : '#f9fafb',
-                                color: activeTab === 'store' ? '#ffffff' : '#6b7280',
+                                backgroundColor: activeTab === 'seo' ? '#00075e' : '#f3f4f6',
+                                color: activeTab === 'seo' ? '#ffffff' : '#374151',
                                 fontWeight: 600,
-                                border: 'none',
+                                border: activeTab === 'seo' ? 'none' : '2px solid #e5e7eb',
                                 borderRadius: '8px',
                                 fontSize: '0.9rem',
-                                padding: '0.6rem 1.2rem'
+                                padding: '0.6rem 1.2rem',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
                             }}
                         >
-                            🏪 Магазин
+                            🔍 SEO
                         </button>
                     </li>
                 </ul>
             </div>
 
             {/* Tab Content */}
-            <div className="tab-content" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-                {activeTab === 'high' && renderSettings(highPrioritySettings)}
-                {activeTab === 'medium' && renderSettings(mediumPrioritySettings)}
-                {activeTab === 'low' && renderSettings(lowPrioritySettings)}
-                {activeTab === 'store' && renderSettings(storeSettings)}
+            <div className="tab-content" style={{ maxHeight: '60vh', overflowY: 'auto', paddingRight: '0.5rem' }}>
+                {activeTab === 'general' && renderSettings(generalSettings)}
+                {activeTab === 'contacts' && renderSettings(contactsSettings)}
+                {activeTab === 'payments' && renderSettings(paymentsSettings)}
+                {activeTab === 'seo' && renderSettings(seoSettings)}
             </div>
         </Modal>
     );
