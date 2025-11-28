@@ -520,3 +520,98 @@ footer h5, footer h6 {
   background-color: #EAF4F4;
   border-color: #00075e;
 }
+
+/* =========================================
+   Всплывающие уведомления (Toast)
+   ========================================= */
+
+/* Всплывающее уведомление успеха */
+.toast-success,
+.toast-container .toast {
+  background-color: #48A9A6 !important; /* Мятный фон */
+  color: #ffffff !important; /* Белый текст */
+  border-radius: 8px; /* Мягкие углы */
+  box-shadow: 0 4px 12px rgba(72, 169, 166, 0.3); /* Легкая тень в цвет кнопки */
+}
+
+/* Иконка галочки внутри уведомления */
+.toast-success i, 
+.toast-icon {
+  background-color: rgba(255, 255, 255, 0.2); /* Полупрозрачный круг */
+  color: #ffffff;
+}
+
+/* Кнопка закрытия (крестик) */
+.toast-close, 
+.toast .close {
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+/* =========================================
+   Страница товара (Product Page)
+   ========================================= */
+
+/* --- Большая кнопка покупки --- */
+.product-actions .btn-primary, 
+.btn-checkout,
+.btn-go-to-cart {
+  background-color: #48A9A6 !important; /* Мятный */
+  border-color: #48A9A6 !important;
+  color: #ffffff !important;
+  font-weight: 600;
+  text-transform: uppercase; /* Заглавные буквы */
+  border-radius: 6px;
+  padding: 15px 30px; /* Массивная кнопка */
+}
+
+.product-actions .btn-primary:hover,
+.btn-go-to-cart:hover {
+  background-color: #388E8B !important; /* Темнеет при наведении */
+}
+
+/* --- Информационная плашка ("Товар розроблений...") --- */
+.product-info-badge, 
+.trust-badge {
+  background-color: #EAF4F4; /* Светло-мятный как хедер */
+  color: #00075e; /* Синий текст */
+  border: 1px solid #d0e2e2; /* Едва заметная рамка */
+  border-radius: 6px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Галочка внутри плашки */
+.product-info-badge i {
+  color: #48A9A6; /* Мятная галочка */
+  margin-right: 10px;
+}
+
+/* --- Селектор количества (+ 1 -) --- */
+.quantity-selector button {
+  border: 1px solid #00075e; /* Синяя рамка */
+  color: #00075e;
+  background: transparent;
+}
+
+.quantity-selector input {
+  border-top: 1px solid #00075e;
+  border-bottom: 1px solid #00075e;
+  border-left: none;
+  border-right: none;
+  color: #00075e;
+  font-weight: bold;
+}
+
+.quantity-selector button:hover {
+  background-color: #EAF4F4; /* Подсветка при наведении */
+}
+
+/* --- Бейдж "Предзаказ" (Желтый) --- */
+.badge-preorder, 
+.label-warning {
+  background-color: #FFC107; /* Желтый */
+  color: #00075e !important; /* Синий текст */
+  font-weight: bold;
+}

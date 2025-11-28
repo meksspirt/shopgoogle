@@ -38,7 +38,6 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
     const generalSettings: Setting[] = [
         { key: 'store_name', label: 'Назва магазину', type: 'text', placeholder: 'CalmCraft', description: 'Відображається в меню та футері' },
         { key: 'store_slogan', label: 'Слоган магазину', type: 'text', placeholder: 'Ваш улюблений книжковий магазин' },
-        { key: 'working_hours', label: 'Режим роботи', type: 'text', placeholder: 'Пн-Пт: 9:00-18:00', description: 'Відображається у футері' },
         { key: 'min_order_amount', label: 'Мінімальна сума замовлення (грн)', type: 'number', placeholder: '0', description: 'Мінімальна сума для оформлення замовлення' },
         { key: 'free_delivery_from', label: 'Безкоштовна доставка від (грн)', type: 'number', placeholder: '500', description: 'Сума для безкоштовної доставки' },
         { key: 'products_per_page', label: 'Товарів на сторінці', type: 'number', placeholder: '12' },
@@ -49,7 +48,6 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
 
     // Контакти та соцмережі
     const contactsSettings: Setting[] = [
-        { key: 'support_phone', label: 'Телефон підтримки', type: 'tel', placeholder: '+380XXXXXXXXX', description: 'Відображається в меню та футері' },
         { key: 'notification_email', label: 'Email для сповіщень', type: 'email', placeholder: 'admin@example.com', description: 'Email для отримання сповіщень про нові замовлення' },
         { key: 'instagram_link', label: 'Instagram магазину', type: 'url', placeholder: 'https://instagram.com/username', description: 'Посилання на ваш Instagram профіль' },
         { key: 'telegram_bot_token', label: 'Telegram Bot Token', type: 'text', placeholder: '123456:ABC-DEF...', description: 'Для сповіщень у Telegram' },

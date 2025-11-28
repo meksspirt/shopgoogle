@@ -12,7 +12,7 @@ export default function Footer() {
             const { data } = await supabase
                 .from('settings')
                 .select('*')
-                .in('key', ['company_name', 'support_phone', 'instagram_link', 'working_hours']);
+                .in('key', ['company_name', 'instagram_link']);
 
             if (data) {
                 const settingsObj: { [key: string]: string } = {};
@@ -27,9 +27,7 @@ export default function Footer() {
     }, []);
 
     const companyName = settings.company_name || 'CalmCraft';
-    const phone = settings.support_phone;
     const instagram = settings.instagram_link;
-    const workingHours = settings.working_hours;
 
     return (
         <footer className="bg-dark text-white py-4 mt-auto">
@@ -37,23 +35,9 @@ export default function Footer() {
                 <div className="row">
                     <div className="col-md-4 mb-3 mb-md-0">
                         <h5 className="fw-bold mb-3">{companyName}</h5>
-                        {workingHours && (
-                            <p className="small opacity-75 mb-2">
-                                <span className="me-2">🕐</span>
-                                {workingHours}
-                            </p>
-                        )}
                     </div>
                     <div className="col-md-4 mb-3 mb-md-0">
                         <h6 className="fw-bold mb-3">Контакти</h6>
-                        {phone && (
-                            <p className="small mb-2">
-                                <a href={`tel:${phone}`} className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
-                                    <span className="me-2" style={{ color: 'var(--accent-button)' }}>📞</span>
-                                    {phone}
-                                </a>
-                            </p>
-                        )}
                         {instagram && (
                             <p className="small mb-2">
                                 <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
