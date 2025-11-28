@@ -48,21 +48,21 @@ ON CONFLICT (key) DO NOTHING;
 -- Enable RLS
 ALTER TABLE public.settings ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Allow public read access to settings" ON public.settings;
+DROP POLICY IF EXISTS "Allow authenticated users to update settings" ON public.settings;
+DROP POLICY IF EXISTS "Allow authenticated users to insert settings" ON public.settings;
+DROP POLICY IF EXISTS "Allow all operations on settings" ON public.settings;
+
 -- Create policy for public read access
 CREATE POLICY "Allow public read access to settings"
 ON public.settings FOR SELECT
 TO public
 USING (true);
 
--- Create policy for authenticated users to update settings
-CREATE POLICY "Allow authenticated users to update settings"
-ON public.settings FOR UPDATE
+-- Create policy for all authenticated operations (simpler approach)
+CREATE POLICY "Allow all operations on settings"
+ON public.settings FOR ALL
 TO authenticated
 USING (true)
-WITH CHECK (true);
-
--- Create policy for authenticated users to insert settings
-CREATE POLICY "Allow authenticated users to insert settings"
-ON public.settings FOR INSERT
-TO authenticated
 WITH CHECK (true);

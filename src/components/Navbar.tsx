@@ -8,6 +8,7 @@ export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
     const [phone, setPhone] = useState('');
     const [instagram, setInstagram] = useState('');
+    const [storeName, setStoreName] = useState('CalmCraft');
 
     useEffect(() => {
         // Initial check for cart items
@@ -30,11 +31,12 @@ export default function Navbar() {
             const { data } = await supabase
                 .from('settings')
                 .select('*')
-                .in('key', ['support_phone', 'instagram_link']);
+                .in('key', ['support_phone', 'instagram_link', 'store_name']);
 
             data?.forEach(setting => {
                 if (setting.key === 'support_phone') setPhone(setting.value || '');
                 if (setting.key === 'instagram_link') setInstagram(setting.value || '');
+                if (setting.key === 'store_name') setStoreName(setting.value || 'CalmCraft');
             });
         };
 
@@ -45,7 +47,7 @@ export default function Navbar() {
         <nav className="navbar navbar-expand-lg sticky-top">
             <div className="container">
                 <Link href="/" className="navbar-brand fw-bold text-white" style={{ fontFamily: 'var(--font-carelia, serif)', fontSize: '1.8rem', letterSpacing: '2px' }}>
-                    CalmCraft
+                    {storeName}
                 </Link>
                 <button
                     className="navbar-toggler"

@@ -3,6 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import localFont from "next/font/local";
+import { getSettings } from "@/lib/getSettings";
+import type { Metadata } from 'next';
 
 // Настройка кастомного шрифта Quincy CF
 const quincy = localFont({
@@ -31,10 +33,27 @@ const carelia = localFont({
   fallback: ['serif'],
 });
 
-export const metadata = {
-  title: "CalmCraft",
-  description: "Ваш улюблений книжковий магазин",
-};
+// Динамические meta теги из настроек
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings(['site_title', 'site_description', 'site_keywords']);
+
+  return {
+    title: settings.site_title || 'CalmCraft - Книжковий магазин',
+    description: settings.site_description || 'Ваш улюблений книжковий магазин',
+    keywords: settings.site_keywords || 'книги, книжковий магазин, купити книги',
+    openGraph: {
+      title: settings.site_title || 'CalmCraft',
+      description: settings.site_description || 'Ваш улюблений книжковий магазин',
+      type: 'website',
+      locale: 'uk_UA',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: settings.site_title || 'CalmCraft',
+      description: settings.site_description || 'Ваш улюблений книжковий магазин',
+    },
+  };
+}
 
 export default function RootLayout({
   children,
