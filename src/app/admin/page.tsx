@@ -161,8 +161,6 @@ export default function AdminPage() {
                 });
 
             if (error) throw error;
-
-            showAlert('Успіх', 'Налаштування збережено!', 'success');
             
             // Update local state
             setSettings(prev => ({ ...prev, [key]: value }));
