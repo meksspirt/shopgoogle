@@ -39,6 +39,15 @@ export default function ProfilePage() {
     const [orderItems, setOrderItems] = useState<{ [key: string]: OrderItem[] }>({});
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'orders' | 'settings'>('orders');
+    
+    // Password change states
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordLoading, setPasswordLoading] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
+    const [passwordSuccess, setPasswordSuccess] = useState('');
+    const [isGoogleUser, setIsGoogleUser] = useState(false);
 
     useEffect(() => {
         checkAuth();
@@ -54,6 +63,11 @@ export default function ProfilePage() {
             }
 
             setUser(session.user);
+            
+            // Check if user signed in with Google
+            const provider = session.user.app_metadata?.provider;
+            setIsGoogleUser(provider === 'google');
+            
             await fetchOrders(session.user.email!);
         } catch (error) {
             console.error('Помилка аутентифікації:', error);
@@ -111,6 +125,59 @@ export default function ProfilePage() {
             router.push('/');
         } catch (error) {
             console.error('Помилка виходу:', error);
+        }
+    };
+
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setPasswordError('');
+        setPasswordSuccess('');
+
+        // Validation
+        if (newPassword.length < 6) {
+            setPasswordError('Новий пароль повинен містити мінімум 6 символів');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setPasswordError('Паролі не співпадають');
+            return;
+        }
+
+        setPasswordLoading(true);
+
+        try {
+            // First, verify current password by trying to sign in
+            const { error: signInError } = await supabase.auth.signInWithPassword({
+                email: user.email,
+                password: currentPassword,
+            });
+
+            if (signInError) {
+                throw new Error('Поточний пароль невірний');
+            }
+
+            // Update password
+            const { error: updateError } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (updateError) throw updateError;
+
+            setPasswordSuccess('Пароль успішно змінено!');
+            setCurrentPassword('');
+            setNewPassword('');
+            setConfirmPassword('');
+
+            // Clear success message after 5 seconds
+            setTimeout(() => {
+                setPasswordSuccess('');
+            }, 5000);
+        } catch (error: any) {
+            console.error('Помилка зміни пароля:', error);
+            setPasswordError(error.message || 'Помилка зміни пароля');
+        } finally {
+            setPasswordLoading(false);
         }
     };
 
@@ -415,9 +482,120 @@ export default function ProfilePage() {
                                     />
                                 </div>
 
-                                <div className="alert alert-info" style={{ borderRadius: '8px' }}>
-                                    <strong>Примітка:</strong> Для зміни особистих даних зверніться до служби підтримки
-                                </div>
+                                {/* Password Change Section */}
+                                {!isGoogleUser && (
+                                    <>
+                                        <hr className="my-4" />
+                                        
+                                        <h5 className="fw-bold mb-4" style={{ color: '#00075e' }}>Зміна пароля</h5>
+
+                                        {passwordError && (
+                                            <div className="alert alert-danger" style={{ borderRadius: '8px' }}>
+                                                {passwordError}
+                                            </div>
+                                        )}
+
+                                        {passwordSuccess && (
+                                            <div className="alert alert-success" style={{ borderRadius: '8px' }}>
+                                                {passwordSuccess}
+                                            </div>
+                                        )}
+
+                                        <form onSubmit={handlePasswordChange}>
+                                            <div className="mb-3">
+                                                <label className="form-label fw-semibold" style={{ color: '#00075e' }}>
+                                                    Поточний пароль
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    className="form-control"
+                                                    value={currentPassword}
+                                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                                    required
+                                                    placeholder="••••••••"
+                                                    style={{
+                                                        border: '2px solid #e5e7eb',
+                                                        borderRadius: '8px',
+                                                        padding: '0.75rem'
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <label className="form-label fw-semibold" style={{ color: '#00075e' }}>
+                                                    Новий пароль
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    className="form-control"
+                                                    value={newPassword}
+                                                    onChange={(e) => setNewPassword(e.target.value)}
+                                                    required
+                                                    placeholder="••••••••"
+                                                    minLength={6}
+                                                    style={{
+                                                        border: '2px solid #e5e7eb',
+                                                        borderRadius: '8px',
+                                                        padding: '0.75rem'
+                                                    }}
+                                                />
+                                                <small className="text-muted">Мінімум 6 символів</small>
+                                            </div>
+
+                                            <div className="mb-4">
+                                                <label className="form-label fw-semibold" style={{ color: '#00075e' }}>
+                                                    Підтвердіть новий пароль
+                                                </label>
+                                                <input
+                                                    type="password"
+                                                    className="form-control"
+                                                    value={confirmPassword}
+                                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                                    required
+                                                    placeholder="••••••••"
+                                                    minLength={6}
+                                                    style={{
+                                                        border: '2px solid #e5e7eb',
+                                                        borderRadius: '8px',
+                                                        padding: '0.75rem'
+                                                    }}
+                                                />
+                                            </div>
+
+                                            <button
+                                                type="submit"
+                                                className="btn"
+                                                disabled={passwordLoading}
+                                                style={{
+                                                    backgroundColor: '#00075e',
+                                                    color: '#ffffff',
+                                                    fontWeight: 600,
+                                                    borderRadius: '8px',
+                                                    padding: '0.75rem 2rem',
+                                                    border: 'none'
+                                                }}
+                                            >
+                                                {passwordLoading ? (
+                                                    <>
+                                                        <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                        Збереження...
+                                                    </>
+                                                ) : (
+                                                    'Змінити пароль'
+                                                )}
+                                            </button>
+                                        </form>
+                                    </>
+                                )}
+
+                                {isGoogleUser && (
+                                    <>
+                                        <hr className="my-4" />
+                                        <div className="alert alert-info" style={{ borderRadius: '8px' }}>
+                                            <strong>Вхід через Google:</strong> Ви увійшли через Google, тому зміна пароля недоступна. Керуйте паролем через ваш Google акаунт.
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

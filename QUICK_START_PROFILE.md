@@ -18,6 +18,16 @@
 3. Для тестування: **вимкніть** "Confirm email"
 4. Для продакшену: **увімкніть** "Confirm email"
 
+### (Опціонально) Налаштувати вхід через Google
+
+Детальна інструкція: `GOOGLE_AUTH_SETUP.md`
+
+Коротко:
+1. Створіть OAuth додаток в [Google Cloud Console](https://console.cloud.google.com/)
+2. Отримайте Client ID та Client Secret
+3. Додайте їх в Supabase Dashboard → Authentication → Providers → Google
+4. Готово! Кнопка "Продовжити з Google" вже додана на сторінку входу
+
 ## Крок 3: Перевірити роботу
 
 ### Тест 1: Реєстрація
