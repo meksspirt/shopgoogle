@@ -42,12 +42,12 @@ export default function ThemeToggle() {
       onClick={toggleTheme}
       className="theme-toggle-btn"
       aria-label="Переключить дизайн"
-      title={isAcademicTheme ? 'Переключить на Clinical дизайн' : 'Переключить на Academic дизайн'}
+      title={isAcademicTheme ? 'Переключить на Clinical дизайн' : 'Переключить на Dark Academia дизайн'}
     >
       {isAcademicTheme ? (
         <span>🎨 Clinical</span>
       ) : (
-        <span>📚 Academic</span>
+        <span>🕯️ Dark Academia</span>
       )}
     </button>
   );

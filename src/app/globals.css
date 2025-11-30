@@ -650,248 +650,346 @@ footer h5, footer h6 {
 }
 
 /* =========================================
-   ACADEMIC PAPER THEME
-   Новый дизайн: Premium Academic / Old Money
+   DARK ACADEMIA THEME
+   Стиль: Старинные библиотеки, кабинеты профессоров
+   Атмосфера: Интеллект, глубина, тайна, премиальность
    ========================================= */
 
 body.academic-theme,
 html.academic-theme body {
-  --bg-color: #F4F2F0;
-  /* Светлый серо-кофейный фон */
+  --bg-color: #16181D;
+  /* Глубокий Графит с синим подтоном */
   
-  --primary-color: #00075e;
-  /* Глубокий темно-синий остается */
+  --primary-color: #EAEAEA;
+  /* Почти белый для заголовков */
   
-  --accent-button: #00075e;
-  /* Кнопки теперь синие, не бирюзовые */
+  --accent-button: #D4AF37;
+  /* Античное Золото - цвет роскоши */
   
-  --secondary-bg: #ffffff;
-  /* Вторичный фон - чистый белый для карточек */
+  --secondary-bg: #222630;
+  /* Светлый Графит для карточек */
   
-  --link-color: #00075e;
-  /* Ссылки синие */
-  --link-hover: #000545;
-  /* Hover еще темнее */
+  --link-color: #D4AF37;
+  /* Золотые ссылки */
+  --link-hover: #C19B25;
+  /* Темнее золото при hover */
   
-  --card-bg: #ffffff;
-  /* Карточки белые на сером фоне */
+  --card-bg: #222630;
+  /* Карточки светлее фона */
   
-  --discount-price: #00075e;
-  /* Цена со скидкой - синий */
-  --accent-badge: #00075e;
-  /* Бейджи - синий */
+  --discount-price: #D4AF37;
+  /* Цена со скидкой - золото */
+  --accent-badge: #D4AF37;
+  /* Бейджи - золото */
   
-  --text-secondary: #8C92AC;
-  /* Холодный серый с синим подтоном */
+  --text-primary: #C5C6C7;
+  /* Приглушенный Серебряный */
+  --text-secondary: #8B8D8F;
+  /* Темнее серебряный */
   
-  background-color: #F4F2F0;
+  background-color: #16181D;
+  color: #C5C6C7;
 }
 
-/* Navbar в Academic теме */
+/* Navbar в Dark Academia теме */
 body.academic-theme .navbar,
 html.academic-theme .navbar {
-  background-color: #F4F2F0 !important;
-  border-bottom: 1px solid #dcdbd9;
+  background-color: #16181D !important;
+  border-bottom: 1px solid #2C303A;
 }
 
 body.academic-theme .navbar-brand {
-  color: #00075e !important;
+  color: #EAEAEA !important;
+  letter-spacing: 1px;
 }
 
 body.academic-theme .nav-link {
-  color: #00075e !important;
-  font-weight: 600;
+  color: #EAEAEA !important;
+  font-weight: 500;
 }
 
 body.academic-theme .nav-link:hover {
-  color: #000545 !important;
+  color: #D4AF37 !important;
 }
 
-/* Карточки в Academic теме */
+/* Карточки в Dark Academia теме */
 body.academic-theme .card {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  box-shadow: 0 4px 15px rgba(0, 7, 94, 0.05);
+  background-color: #222630 !important;
+  border: 1px solid #2C303A;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 body.academic-theme .card:hover {
-  box-shadow: 0 8px 25px rgba(0, 7, 94, 0.1);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.15);
+  border-color: #3A3F4D;
 }
 
-/* Кнопки в Academic теме */
+body.academic-theme .card-title {
+  color: #D4AF37 !important;
+}
+
+body.academic-theme .card-text {
+  color: #C5C6C7 !important;
+}
+
+/* Кнопки в Dark Academia теме */
 body.academic-theme .btn-primary {
-  background-color: #00075e !important;
+  background-color: #D4AF37 !important;
   border: none !important;
-  color: #ffffff !important;
+  color: #16181D !important;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.2);
 }
 
 body.academic-theme .btn-primary:hover {
-  background-color: #000545 !important;
-  box-shadow: 0 5px 15px rgba(0, 7, 94, 0.3);
+  background-color: #C19B25 !important;
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
 }
 
-/* Вторичные кнопки - только рамка */
+/* Вторичные кнопки - золотая рамка */
 body.academic-theme .btn-secondary,
 body.academic-theme .btn-outline-primary,
 body.academic-theme .btn-outline-secondary {
   background-color: transparent !important;
-  border: 1px solid #00075e !important;
-  color: #00075e !important;
+  border: 1px solid #D4AF37 !important;
+  color: #D4AF37 !important;
 }
 
 body.academic-theme .btn-secondary:hover,
 body.academic-theme .btn-outline-primary:hover,
 body.academic-theme .btn-outline-secondary:hover {
-  background-color: #00075e !important;
-  color: #ffffff !important;
+  background-color: #D4AF37 !important;
+  color: #16181D !important;
 }
 
-/* Кнопка удаления - серая вместо красной */
+/* Кнопка удаления */
 body.academic-theme .btn-danger {
-  background-color: #E0E0E0 !important;
-  border-color: #E0E0E0 !important;
-  color: #00075e !important;
+  background-color: #3A2F2F !important;
+  border-color: #3A2F2F !important;
+  color: #C5C6C7 !important;
 }
 
 body.academic-theme .btn-danger:hover {
-  background-color: #d6d6d6 !important;
-  border-color: #d6d6d6 !important;
+  background-color: #4A3838 !important;
+  border-color: #4A3838 !important;
 }
 
-/* Бейджи в Academic теме */
+/* Бейджи в Dark Academia теме */
 body.academic-theme .badge,
 body.academic-theme .label {
-  background-color: #ffffff;
-  color: #00075e;
-  border: 1px solid #00075e;
+  background-color: #2C303A;
+  color: #D4AF37;
+  border: 1px solid #D4AF37;
 }
 
 body.academic-theme .badge.bg-danger {
-  background-color: #ffffff !important;
-  color: #00075e !important;
-  border: 1px solid #00075e;
+  background-color: #2C303A !important;
+  color: #D4AF37 !important;
+  border: 1px solid #D4AF37;
 }
 
-/* Toast уведомления в Academic теме */
+/* Toast уведомления в Dark Academia теме */
 body.academic-theme .toast-success,
 body.academic-theme .toast-container .toast {
-  background-color: #00075e !important;
-  color: #ffffff !important;
+  background-color: #D4AF37 !important;
+  color: #16181D !important;
+  font-weight: 600;
 }
 
-/* Модальные окна в Academic теме */
+/* Модальные окна в Dark Academia теме */
+body.academic-theme .modal-content {
+  background-color: #222630 !important;
+  border: 1px solid #2C303A;
+}
+
 body.academic-theme .modal-header {
-  background-color: #F4F2F0;
-  border-bottom: 1px solid #dcdbd9;
+  background-color: #1C1F26;
+  border-bottom: 1px solid #2C303A;
 }
 
 body.academic-theme .modal-title {
-  color: #00075e;
+  color: #EAEAEA;
+}
+
+body.academic-theme .modal-body {
+  background-color: #222630;
+  color: #C5C6C7;
 }
 
 body.academic-theme .modal-body .btn-success,
 body.academic-theme .modal-body button[type="submit"] {
-  background-color: #00075e !important;
+  background-color: #D4AF37 !important;
   border: none !important;
+  color: #16181D !important;
 }
 
 body.academic-theme .modal-body .btn-success:hover,
 body.academic-theme .modal-body button[type="submit"]:hover {
-  background-color: #000545 !important;
+  background-color: #C19B25 !important;
 }
 
-/* Табы в Academic теме */
+/* Табы в Dark Academia теме */
 body.academic-theme .nav-pills .nav-link {
-  color: #00075e;
-  background-color: #ffffff;
+  color: #C5C6C7;
+  background-color: #1C1F26;
 }
 
 body.academic-theme .nav-pills .nav-link:hover {
-  background-color: #F4F2F0;
+  background-color: #2C303A;
+  color: #D4AF37;
 }
 
 body.academic-theme .nav-pills .nav-link.active {
-  background-color: #00075e;
-  color: #ffffff;
-  border-color: #00075e;
+  background-color: #D4AF37;
+  color: #16181D;
+  border-color: #D4AF37;
 }
 
-/* Формы в Academic теме */
-body.academic-theme .form-control {
-  background-color: #ffffff;
-  border: 1px solid #dcdbd9;
+/* Формы в Dark Academia теме */
+body.academic-theme .form-control,
+body.academic-theme input,
+body.academic-theme textarea,
+body.academic-theme select {
+  background-color: #1C1F26 !important;
+  border: 1px solid #2C303A !important;
+  color: #EAEAEA !important;
 }
 
-body.academic-theme .form-control:focus {
-  border-color: #00075e;
-  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
+body.academic-theme .form-control:focus,
+body.academic-theme input:focus,
+body.academic-theme textarea:focus,
+body.academic-theme select:focus {
+  border-color: #D4AF37 !important;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1) !important;
+  background-color: #1C1F26 !important;
 }
 
-/* Таблицы в Academic теме */
+body.academic-theme .form-control::placeholder,
+body.academic-theme input::placeholder,
+body.academic-theme textarea::placeholder {
+  color: #6B6D6F !important;
+}
+
+body.academic-theme .form-label,
+body.academic-theme label {
+  color: #EAEAEA !important;
+}
+
+/* Таблицы в Dark Academia теме */
+body.academic-theme .table {
+  color: #C5C6C7 !important;
+}
+
 body.academic-theme th {
-  background-color: #F4F2F0 !important;
-  color: #00075e !important;
+  background-color: #1C1F26 !important;
+  color: #D4AF37 !important;
+  border-color: #2C303A !important;
+}
+
+body.academic-theme td {
+  border-color: #2C303A !important;
+  color: #C5C6C7 !important;
 }
 
 body.academic-theme .table-hover tbody tr:hover {
-  background-color: #F4F2F0;
+  background-color: #1C1F26;
 }
 
-/* Футер в Academic теме */
+/* Футер в Dark Academia теме */
 body.academic-theme footer,
 body.academic-theme .bg-dark {
-  background-color: #00075e !important;
+  background-color: #0D0F12 !important;
+  border-top: 1px solid #2C303A;
 }
 
-/* Кнопка переключения в Academic теме */
+body.academic-theme footer a {
+  color: #D4AF37 !important;
+}
+
+body.academic-theme footer a:hover {
+  color: #C19B25 !important;
+}
+
+body.academic-theme footer h5,
+body.academic-theme footer h6 {
+  color: #EAEAEA !important;
+}
+
+/* Кнопка переключения в Dark Academia теме */
 body.academic-theme .theme-toggle-btn {
-  background-color: #00075e;
+  background-color: #D4AF37;
+  color: #16181D;
 }
 
 body.academic-theme .theme-toggle-btn:hover {
-  background-color: #000545;
+  background-color: #C19B25;
 }
 
-/* Цены со скидкой в Academic теме */
+/* Цены со скидкой в Dark Academia теме */
 body.academic-theme .text-danger,
 body.academic-theme .discount-price {
-  color: #00075e !important;
+  color: #D4AF37 !important;
 }
 
-/* Страница товара в Academic теме */
+body.academic-theme .text-muted {
+  color: #8B8D8F !important;
+}
+
+/* Страница товара в Dark Academia теме */
 body.academic-theme .product-actions .btn-primary,
 body.academic-theme .btn-checkout,
 body.academic-theme .btn-go-to-cart {
-  background-color: #00075e !important;
-  border-color: #00075e !important;
+  background-color: #D4AF37 !important;
+  border-color: #D4AF37 !important;
+  color: #16181D !important;
 }
 
 body.academic-theme .product-info-badge,
 body.academic-theme .trust-badge {
-  background-color: #F4F2F0;
-  border: 1px solid #dcdbd9;
+  background-color: #1C1F26;
+  border: 1px solid #2C303A;
+  color: #C5C6C7;
 }
 
 body.academic-theme .product-info-badge i {
-  color: #00075e;
+  color: #D4AF37;
 }
 
 body.academic-theme .quantity-selector button {
-  border-color: #00075e;
-  color: #00075e;
+  border-color: #D4AF37;
+  color: #D4AF37;
+  background-color: transparent;
 }
 
 body.academic-theme .quantity-selector input {
-  border-color: #00075e;
-  color: #00075e;
+  border-color: #D4AF37;
+  color: #EAEAEA;
+  background-color: #1C1F26;
 }
 
 body.academic-theme .quantity-selector button:hover {
-  background-color: #F4F2F0;
+  background-color: #2C303A;
+}
+
+/* Breadcrumb в Dark Academia */
+body.academic-theme .breadcrumb {
+  background-color: transparent;
+}
+
+body.academic-theme .breadcrumb-item,
+body.academic-theme .breadcrumb-item a {
+  color: #8B8D8F !important;
+}
+
+body.academic-theme .breadcrumb-item.active {
+  color: #D4AF37 !important;
+}
+
+body.academic-theme .breadcrumb-item + .breadcrumb-item::before {
+  color: #8B8D8F;
 }
 
 
@@ -1113,21 +1211,62 @@ body.academic-theme .quantity-selector button:hover {
   color: #6c757d;
 }
 
-/* Academic theme */
+/* Dark Academia theme для редактора */
 body.academic-theme .novel-editor-wrapper,
 html.academic-theme .novel-editor-wrapper {
-  border-color: #dcdbd9;
-  background-color: #ffffff;
+  border-color: #2C303A;
+  background-color: #222630;
+}
+
+body.academic-theme .novel-toolbar {
+  background-color: #1C1F26;
+  border-bottom-color: #2C303A;
+}
+
+body.academic-theme .novel-toolbar button {
+  background-color: #222630;
+  border-color: #2C303A;
+  color: #C5C6C7;
+}
+
+body.academic-theme .novel-toolbar button:hover {
+  background-color: #2C303A;
+  border-color: #D4AF37;
+  color: #D4AF37;
+}
+
+body.academic-theme .novel-toolbar button.is-active {
+  background-color: #D4AF37;
+  color: #16181D;
+  border-color: #D4AF37;
+}
+
+body.academic-theme .novel-toolbar .separator {
+  background-color: #2C303A;
+}
+
+body.academic-theme .novel-editor-wrapper .ProseMirror {
+  color: #C5C6C7;
+}
+
+body.academic-theme .novel-editor-wrapper .ProseMirror h1,
+body.academic-theme .novel-editor-wrapper .ProseMirror h2,
+body.academic-theme .novel-editor-wrapper .ProseMirror h3 {
+  color: #EAEAEA;
+}
+
+body.academic-theme .novel-editor-wrapper .ProseMirror a {
+  color: #D4AF37;
 }
 
 body.academic-theme .novel-editor-wrapper .ProseMirror blockquote,
 html.academic-theme .novel-editor-wrapper .ProseMirror blockquote {
-  border-left-color: #00075e;
+  border-left-color: #D4AF37;
+  color: #8B8D8F;
 }
 
-body.academic-theme .bubble-menu,
-html.academic-theme .bubble-menu {
-  background-color: #00075e;
+body.academic-theme .novel-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6B6D6F;
 }
 
 
