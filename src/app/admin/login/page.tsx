@@ -18,7 +18,8 @@ export default function AdminLoginPage() {
         const checkUser = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                router.push('/admin');
+                console.log('✅ Вже є активна сесія, редірект на /admin');
+                window.location.href = '/admin';
             }
         };
         checkUser();
