@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseAdminClient';
 import ImageUpload from '@/components/ImageUpload';
 import EditProductModal from '@/components/EditProductModal';
 import ConfirmModal from '@/components/ConfirmModal';
@@ -43,6 +43,7 @@ export default function AdminPage() {
     const [creatingProduct, setCreatingProduct] = useState(false);
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [trackingNumbers, setTrackingNumbers] = useState<{ [key: string]: string }>({});
+    const [checkingDelivery, setCheckingDelivery] = useState<{ [key: string]: boolean }>({});
     
     // Modal states
     const [confirmModal, setConfirmModal] = useState<{
@@ -104,7 +105,7 @@ export default function AdminPage() {
 
     const fetchOrders = async () => {
         setLoading(true);
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('orders')
             .select('*')
             .order('created_at', { ascending: false });
@@ -115,7 +116,7 @@ export default function AdminPage() {
     };
 
     const fetchProducts = async () => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('products')
             .select('*')
             .order('created_at', { ascending: false });
@@ -125,7 +126,7 @@ export default function AdminPage() {
     };
 
     const fetchPromoCodes = async () => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('promo_codes')
             .select('*')
             .order('created_at', { ascending: false });
@@ -135,7 +136,7 @@ export default function AdminPage() {
     };
 
     const fetchSettings = async () => {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('settings')
             .select('*');
 
@@ -152,7 +153,7 @@ export default function AdminPage() {
 
     const saveSetting = async (key: string, value: string) => {
         try {
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from('settings')
                 .upsert({
                     key: key,
@@ -176,7 +177,7 @@ export default function AdminPage() {
         const checkAuth = async () => {
             try {
                 console.log('🔍 Перевірка аутентифікації...');
-                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                const { data: { session }, error: sessionError } = await supabaseAdmin.auth.getSession();
                 
                 console.log('📋 Сесія:', { session: !!session, error: sessionError });
                 
@@ -190,7 +191,7 @@ export default function AdminPage() {
                 console.log('👤 User ID:', session.user.id);
 
                 // Проверяем, является ли пользователь администратором
-                const { data: profile, error } = await supabase
+                const { data: profile, error } = await supabaseAdmin
                     .from('profiles')
                     .select('is_admin')
                     .eq('id', session.user.id)
@@ -200,14 +201,14 @@ export default function AdminPage() {
 
                 if (error) {
                     console.error('❌ Помилка отримання профілю:', error);
-                    await supabase.auth.signOut();
+                    await supabaseAdmin.auth.signOut();
                     window.location.href = '/admin/login';
                     return;
                 }
 
                 if (!profile?.is_admin) {
                     console.warn('⚠️ Користувач не є адміністратором');
-                    await supabase.auth.signOut();
+                    await supabaseAdmin.auth.signOut();
                     window.location.href = '/admin/login';
                     return;
                 }
@@ -241,7 +242,7 @@ export default function AdminPage() {
             setPromoCodes([]);
             
             // Выходим через Supabase клиент
-            const { error } = await supabase.auth.signOut();
+            const { error } = await supabaseAdmin.auth.signOut();
             
             if (error) {
                 console.error('❌ Помилка виходу:', error);
@@ -267,7 +268,7 @@ export default function AdminPage() {
     };
 
     const updateStatus = async (id: string, newStatus: string) => {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('orders')
             .update({ status: newStatus })
             .eq('id', id);
@@ -281,16 +282,20 @@ export default function AdminPage() {
     };
 
     const updateTrackingNumber = async (id: string, trackingNumber: string) => {
-        const { error } = await supabase
+        // Update tracking number and automatically set status to 'shipped'
+        const { error } = await supabaseAdmin
             .from('orders')
-            .update({ tracking_number: trackingNumber })
+            .update({ 
+                tracking_number: trackingNumber,
+                status: 'shipped' // Automatically change status to shipped
+            })
             .eq('id', id);
 
         if (error) {
             showAlert('Помилка', 'Помилка оновлення ТТН', 'error');
             console.error(error);
         } else {
-            showAlert('Успіх', 'ТТН успішно збережено!', 'success');
+            showAlert('Успіх', 'ТТН збережено! Статус змінено на "Відправлено"', 'success');
             // Clear the tracking number from state
             setTrackingNumbers(prev => {
                 const newState = { ...prev };
@@ -301,12 +306,79 @@ export default function AdminPage() {
         }
     };
 
+    const checkDeliveryStatus = async (orderId: string, trackingNumber: string) => {
+        setCheckingDelivery(prev => ({ ...prev, [orderId]: true }));
+
+        try {
+            const response = await fetch('/api/check-delivery-status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    trackingNumber,
+                    orderId
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                if (data.isDelivered) {
+                    showAlert('Доставлено!', `Замовлення отримано клієнтом. Статус оновлено на "Доставлено"`, 'success');
+                    fetchOrders();
+                } else {
+                    showAlert('В дорозі', `Статус: ${data.statusText}`, 'info');
+                }
+            } else {
+                showAlert('Помилка', data.error || 'Не вдалося перевірити статус', 'error');
+            }
+        } catch (error: any) {
+            console.error('Error checking delivery:', error);
+            showAlert('Помилка', 'Помилка перевірки статусу доставки', 'error');
+        } finally {
+            setCheckingDelivery(prev => ({ ...prev, [orderId]: false }));
+        }
+    };
+
+    const checkAllDeliveries = async () => {
+        setLoading(true);
+        
+        try {
+            const response = await fetch('/api/update-delivery-statuses', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET || 'your-secret-key'}`
+                }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert(
+                    'Перевірка завершена', 
+                    `Перевірено: ${data.checked} замовлень. Оновлено: ${data.updated} до статусу "Доставлено"`, 
+                    'success'
+                );
+                fetchOrders();
+            } else {
+                showAlert('Помилка', data.error || 'Не вдалося перевірити статуси', 'error');
+            }
+        } catch (error: any) {
+            console.error('Error checking all deliveries:', error);
+            showAlert('Помилка', 'Помилка перевірки статусів доставки', 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const deleteOrder = async (id: string, orderNumber: string) => {
         try {
             console.log('Deleting order:', id);
 
             // Используем RPC функцию для удаления заказа
-            const { data, error } = await supabase
+            const { data, error } = await supabaseAdmin
                 .rpc('delete_order_with_items', { order_id_param: id });
 
             console.log('Delete result:', data);
@@ -344,7 +416,7 @@ export default function AdminPage() {
         setCreatingProduct(true);
 
         try {
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from('products')
                 .insert([{
                     title: newProduct.title,
@@ -405,7 +477,7 @@ export default function AdminPage() {
         if (!editingProduct) return;
 
         try {
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from('products')
                 .update({
                     title: editingProduct.title,
@@ -445,7 +517,7 @@ export default function AdminPage() {
             'Підтвердження видалення',
             `Ви впевнені, що хочете видалити товар "${title}"?`,
             async () => {
-                const { error } = await supabase
+                const { error } = await supabaseAdmin
                     .from('products')
                     .delete()
                     .eq('id', id);
@@ -465,7 +537,7 @@ export default function AdminPage() {
         e.preventDefault();
 
         try {
-            const { error } = await supabase
+            const { error } = await supabaseAdmin
                 .from('promo_codes')
                 .insert([{
                     code: newPromoCode.code.toUpperCase(),
@@ -492,7 +564,7 @@ export default function AdminPage() {
             'Підтвердження видалення',
             `Ви впевнені, що хочете видалити промокод "${code}"?`,
             async () => {
-                const { error } = await supabase
+                const { error } = await supabaseAdmin
                     .from('promo_codes')
                     .delete()
                     .eq('id', id);
@@ -509,7 +581,7 @@ export default function AdminPage() {
     };
 
     const togglePromoCodeStatus = async (id: number, currentStatus: boolean) => {
-        const { error } = await supabase
+        const { error } = await supabaseAdmin
             .from('promo_codes')
             .update({ is_active: !currentStatus })
             .eq('id', id);
@@ -554,6 +626,32 @@ export default function AdminPage() {
                         title="Налаштування"
                     >
                         ⚙️
+                    </button>
+                    <button 
+                        className="btn" 
+                        onClick={checkAllDeliveries}
+                        disabled={loading}
+                        style={{
+                            backgroundColor: '#ffffff',
+                            border: '2px solid #17a2b8',
+                            color: '#17a2b8',
+                            fontWeight: 600,
+                            borderRadius: '8px',
+                            padding: '0.5rem 1.5rem'
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!loading) {
+                                e.currentTarget.style.backgroundColor = '#17a2b8';
+                                e.currentTarget.style.color = '#ffffff';
+                            }
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = '#17a2b8';
+                        }}
+                        title="Перевірити всі відправлені замовлення"
+                    >
+                        {loading ? '⏳' : '📦'} Перевірити доставки
                     </button>
                     <button 
                         className="btn" 
@@ -706,6 +804,16 @@ export default function AdminPage() {
                                                     >
                                                         💾
                                                     </button>
+                                                    {order.tracking_number && order.status === 'shipped' && (
+                                                        <button
+                                                            className="btn btn-info btn-sm px-2"
+                                                            onClick={() => checkDeliveryStatus(order.id, order.tracking_number)}
+                                                            disabled={checkingDelivery[order.id]}
+                                                            title="Перевірити статус доставки"
+                                                        >
+                                                            {checkingDelivery[order.id] ? '⏳' : '🔍'}
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
                                         </td>
@@ -896,6 +1004,7 @@ export default function AdminPage() {
                                     currentImages={newProduct.images}
                                     mainImageIndex={newProduct.mainImageIndex}
                                     maxImages={5}
+                                    useAdminClient={true}
                                 />
                             </div>
                         </div>
@@ -1208,3 +1317,4 @@ export default function AdminPage() {
         </div>
     );
 }
+

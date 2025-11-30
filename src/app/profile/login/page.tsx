@@ -17,7 +17,7 @@ export default function ProfileLoginPage() {
     const [resetEmail, setResetEmail] = useState('');
 
     useEffect(() => {
-        // Проверяем, авторизован ли пользователь
+        // Проверяем, авторизован ли пользователь (только для профиля покупателя)
         checkAuth();
     }, []);
 

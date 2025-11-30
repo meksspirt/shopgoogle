@@ -7,13 +7,13 @@ if (!supabaseUrl || !supabaseAnonKey) {
     throw new Error('Missing Supabase environment variables')
 }
 
-// Client for customer profile with separate storage key
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Separate client for admin with different storage key
+export const supabaseAdmin = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
         persistSession: true,
         autoRefreshToken: true,
         detectSessionInUrl: true,
-        storageKey: 'supabase-customer-auth', // Different storage key for customers
+        storageKey: 'supabase-admin-auth', // Different storage key for admin
         storage: typeof window !== 'undefined' ? window.localStorage : undefined
     }
 })

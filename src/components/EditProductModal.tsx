@@ -290,6 +290,7 @@ export default function EditProductModal({
                             currentImages={product.images || [product.image_url]}
                             mainImageIndex={product.mainImageIndex || 0}
                             maxImages={5}
+                            useAdminClient={true}
                         />
                     </div>
                 </div>

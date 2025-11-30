@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseAdminClient';
 import Image from 'next/image';
 
 interface ImageUploadProps {
@@ -9,14 +10,18 @@ interface ImageUploadProps {
     currentImages?: string[];
     mainImageIndex?: number;
     maxImages?: number;
+    useAdminClient?: boolean; // Flag to use admin client
 }
 
 export default function ImageUpload({
     onUploadComplete,
     currentImages = [],
     mainImageIndex = 0,
-    maxImages = 5
+    maxImages = 5,
+    useAdminClient = false
 }: ImageUploadProps) {
+    // Select the appropriate Supabase client
+    const supabaseClient = useAdminClient ? supabaseAdmin : supabase;
     const [isDragging, setIsDragging] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [imageUrls, setImageUrls] = useState<string[]>(currentImages);
@@ -83,14 +88,14 @@ export default function ImageUpload({
                 const filePath = `${fileName}`;
 
                 // Upload to Supabase Storage
-                const { data, error: uploadError } = await supabase.storage
+                const { data, error: uploadError } = await supabaseClient.storage
                     .from('product-images')
                     .upload(filePath, file);
 
                 if (uploadError) throw uploadError;
 
                 // Get public URL
-                const { data: { publicUrl } } = supabase.storage
+                const { data: { publicUrl } } = supabaseClient.storage
                     .from('product-images')
                     .getPublicUrl(filePath);
 

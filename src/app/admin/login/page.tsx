@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Container, Form, Button, Alert, Card, Tabs, Tab } from 'react-bootstrap';
-import { supabase } from '@/lib/supabaseClient';
+import { supabaseAdmin } from '@/lib/supabaseAdminClient';
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState('');
@@ -30,13 +30,13 @@ export default function AdminLoginPage() {
             // Ждем 300ms, чтобы дать время на выход из системы
             await new Promise(resolve => setTimeout(resolve, 300));
             
-            const { data: { session } } = await supabase.auth.getSession();
+            const { data: { session } } = await supabaseAdmin.auth.getSession();
             
             if (session) {
                 console.log('✅ Вже є активна сесія');
                 
                 // Проверяем, что пользователь действительно администратор
-                const { data: profile } = await supabase
+                const { data: profile } = await supabaseAdmin
                     .from('profiles')
                     .select('is_admin')
                     .eq('id', session.user.id)
@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
                     window.location.href = '/admin';
                 } else {
                     console.log('⚠️ Користувач не є адміністратором, виходимо');
-                    await supabase.auth.signOut();
+                    await supabaseAdmin.auth.signOut();
                 }
             } else {
                 console.log('ℹ️ Немає активної сесії, залишаємось на сторінці логіну');
@@ -64,8 +64,8 @@ export default function AdminLoginPage() {
         console.log('🔐 Спроба входу...', { email });
 
         try {
-            // Сначала пробуем войти напрямую через Supabase
-            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+            // Сначала пробуем войти напрямую через Supabase Admin Client
+            const { data: authData, error: authError } = await supabaseAdmin.auth.signInWithPassword({
                 email,
                 password,
             });
@@ -98,7 +98,7 @@ export default function AdminLoginPage() {
             } else {
                 console.error('❌ Помилка перевірки прав:', data.error);
                 // Выходим, если не администратор
-                await supabase.auth.signOut();
+                await supabaseAdmin.auth.signOut();
                 setError(data.error || 'Помилка входу');
             }
         } catch (err: any) {
@@ -115,7 +115,7 @@ export default function AdminLoginPage() {
         setLoading(true);
 
         try {
-            const { data, error } = await supabase.auth.signUp({
+            const { data, error } = await supabaseAdmin.auth.signUp({
                 email,
                 password,
             });

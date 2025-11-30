@@ -68,6 +68,7 @@ export default function ProfilePage() {
             const provider = session.user.app_metadata?.provider;
             setIsGoogleUser(provider === 'google');
             
+            // Fetch orders for customer profile (no admin check needed)
             await fetchOrders(session.user.email!);
         } catch (error) {
             console.error('Помилка аутентифікації:', error);
@@ -121,6 +122,7 @@ export default function ProfilePage() {
 
     const handleLogout = async () => {
         try {
+            // Logout only from customer profile, don't clear all sessions
             await supabase.auth.signOut();
             router.push('/');
         } catch (error) {
