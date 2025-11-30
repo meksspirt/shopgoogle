@@ -119,6 +119,10 @@ export default function CheckoutPage() {
             // Generate unique order ID
             const orderId = await generateOrderId();
 
+            // Get current user if logged in
+            const { data: { session } } = await supabase.auth.getSession();
+            const userId = session?.user?.id || null;
+
             // Create Order
             const { data: order, error: orderError } = await supabase
                 .from('orders')
@@ -134,7 +138,8 @@ export default function CheckoutPage() {
                     instagram_nick: formData.instagram,
                     visited_psychologist: formData.psychologist,
                     total_amount: total,
-                    status: 'pending'
+                    status: 'pending',
+                    user_id: userId
                 })
                 .select()
                 .single();

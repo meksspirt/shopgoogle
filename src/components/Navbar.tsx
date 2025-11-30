@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabaseClient';
 export default function Navbar() {
     const [cartCount, setCartCount] = useState(0);
     const [storeName, setStoreName] = useState('CalmCraft');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         // Initial check for cart items
@@ -37,6 +38,21 @@ export default function Navbar() {
         };
 
         fetchSettings();
+
+        // Check auth status
+        const checkAuth = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            setIsLoggedIn(!!session);
+        };
+
+        checkAuth();
+
+        // Listen for auth changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            setIsLoggedIn(!!session);
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
     return (
@@ -63,6 +79,11 @@ export default function Navbar() {
                         <li className="nav-item">
                             <Link href="/track" className="nav-link">
                                 Відстежити замовлення
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link href={isLoggedIn ? "/profile" : "/profile/login"} className="nav-link">
+                                {isLoggedIn ? "👤 Профіль" : "Увійти"}
                             </Link>
                         </li>
                         <li className="nav-item position-relative">
