@@ -1,8 +1,12 @@
 'use client';
 
-import { EditorRoot, EditorContent } from 'novel';
-import { useState, useEffect } from 'react';
-import { useEditor } from 'novel';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Placeholder from '@tiptap/extension-placeholder';
+import { useEffect, useState } from 'react';
 
 interface NovelEditorProps {
   content: string;
@@ -11,30 +15,57 @@ interface NovelEditorProps {
 }
 
 export default function NovelEditor({ content, onChange, placeholder }: NovelEditorProps) {
-  const [mounted, setMounted] = useState(false);
-  const [initialContent, setInitialContent] = useState<any>(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+      Underline,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'text-primary',
+        },
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Placeholder.configure({
+        placeholder: placeholder || 'Почніть писати...',
+      }),
+    ],
+    content: content,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    onSelectionUpdate: ({ editor }) => {
+      const { from, to } = editor.state.selection;
+      if (from !== to) {
+        setShowMenu(true);
+        // Позиционирование меню будет через CSS
+      } else {
+        setShowMenu(false);
+      }
+    },
+    editorProps: {
+      attributes: {
+        class: 'novel-editor-content',
+      },
+    },
+  });
 
   useEffect(() => {
-    setMounted(true);
-    // Преобразуем HTML в JSON для Novel
-    try {
-      if (content) {
-        setInitialContent({
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: content ? [{ type: 'text', text: content }] : [],
-            },
-          ],
-        });
-      }
-    } catch (e) {
-      console.error('Error parsing content:', e);
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content);
     }
-  }, [content]);
+  }, [content, editor]);
 
-  if (!mounted) {
+  if (!editor) {
     return (
       <div className="novel-editor-loading">
         <div className="spinner-border spinner-border-sm" role="status">
@@ -46,21 +77,97 @@ export default function NovelEditor({ content, onChange, placeholder }: NovelEdi
 
   return (
     <div className="novel-editor-wrapper">
-      <EditorRoot>
-        <EditorContent
-          initialContent={initialContent}
-          onUpdate={({ editor }) => {
-            const html = editor?.getHTML() || '';
-            onChange(html);
+      {/* Toolbar */}
+      <div className="novel-toolbar">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={editor.isActive('bold') ? 'is-active' : ''}
+          title="Жирний (Ctrl+B)"
+        >
+          <strong>B</strong>
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={editor.isActive('italic') ? 'is-active' : ''}
+          title="Курсив (Ctrl+I)"
+        >
+          <em>I</em>
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={editor.isActive('underline') ? 'is-active' : ''}
+          title="Підкреслений"
+        >
+          <u>U</u>
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={editor.isActive('strike') ? 'is-active' : ''}
+          title="Закреслений"
+        >
+          <s>S</s>
+        </button>
+        
+        <div className="separator"></div>
+        
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+          title="Заголовок"
+        >
+          H2
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+          title="Підзаголовок"
+        >
+          H3
+        </button>
+        
+        <div className="separator"></div>
+        
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive('bulletList') ? 'is-active' : ''}
+          title="Маркований список"
+        >
+          •
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive('orderedList') ? 'is-active' : ''}
+          title="Нумерований список"
+        >
+          1.
+        </button>
+        
+        <div className="separator"></div>
+        
+        <button
+          type="button"
+          onClick={() => {
+            const url = window.prompt('URL:');
+            if (url) {
+              editor.chain().focus().setLink({ href: url }).run();
+            }
           }}
-          className="novel-editor"
-          editorProps={{
-            attributes: {
-              class: 'novel-editor-content',
-            },
-          }}
-        />
-      </EditorRoot>
+          className={editor.isActive('link') ? 'is-active' : ''}
+          title="Додати посилання"
+        >
+          🔗
+        </button>
+      </div>
+      
+      <EditorContent editor={editor} />
     </div>
   );
 }

@@ -896,7 +896,7 @@ body.academic-theme .quantity-selector button:hover {
 
 
 /* =========================================
-   NOVEL EDITOR STYLES
+   NOVEL EDITOR STYLES (Tiptap with Bubble Menu)
    ========================================= */
 
 .novel-editor-wrapper {
@@ -915,10 +915,6 @@ body.academic-theme .quantity-selector button:hover {
   border-radius: 8px;
 }
 
-.novel-editor {
-  font-family: var(--font-quincy, serif) !important;
-}
-
 .novel-editor-content {
   min-height: 200px;
   padding: 16px;
@@ -926,22 +922,32 @@ body.academic-theme .quantity-selector button:hover {
   font-family: var(--font-quincy, serif) !important;
 }
 
-/* Novel editor ProseMirror styles */
-.novel-editor .ProseMirror {
+/* ProseMirror editor styles */
+.novel-editor-wrapper .ProseMirror {
   font-family: var(--font-quincy, serif) !important;
   color: #00075e;
+  min-height: 200px;
+  padding: 16px;
 }
 
-.novel-editor .ProseMirror:focus {
+.novel-editor-wrapper .ProseMirror:focus {
   outline: none;
 }
 
-.novel-editor .ProseMirror p {
+.novel-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #adb5bd;
+  pointer-events: none;
+  height: 0;
+}
+
+.novel-editor-wrapper .ProseMirror p {
   margin-bottom: 0.75rem;
   line-height: 1.6;
 }
 
-.novel-editor .ProseMirror h1 {
+.novel-editor-wrapper .ProseMirror h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-top: 1.5rem;
@@ -949,7 +955,7 @@ body.academic-theme .quantity-selector button:hover {
   color: #00075e;
 }
 
-.novel-editor .ProseMirror h2 {
+.novel-editor-wrapper .ProseMirror h2 {
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 1.25rem;
@@ -957,7 +963,7 @@ body.academic-theme .quantity-selector button:hover {
   color: #00075e;
 }
 
-.novel-editor .ProseMirror h3 {
+.novel-editor-wrapper .ProseMirror h3 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1rem;
@@ -965,34 +971,34 @@ body.academic-theme .quantity-selector button:hover {
   color: #00075e;
 }
 
-.novel-editor .ProseMirror ul,
-.novel-editor .ProseMirror ol {
+.novel-editor-wrapper .ProseMirror ul,
+.novel-editor-wrapper .ProseMirror ol {
   padding-left: 1.5rem;
   margin-bottom: 0.75rem;
 }
 
-.novel-editor .ProseMirror li {
+.novel-editor-wrapper .ProseMirror li {
   margin-bottom: 0.25rem;
 }
 
-.novel-editor .ProseMirror a {
+.novel-editor-wrapper .ProseMirror a {
   color: var(--link-color);
   text-decoration: underline;
 }
 
-.novel-editor .ProseMirror a:hover {
+.novel-editor-wrapper .ProseMirror a:hover {
   color: var(--link-hover);
 }
 
-.novel-editor .ProseMirror strong {
+.novel-editor-wrapper .ProseMirror strong {
   font-weight: 700;
 }
 
-.novel-editor .ProseMirror em {
+.novel-editor-wrapper .ProseMirror em {
   font-style: italic;
 }
 
-.novel-editor .ProseMirror code {
+.novel-editor-wrapper .ProseMirror code {
   background-color: #f3f4f6;
   padding: 2px 6px;
   border-radius: 4px;
@@ -1000,7 +1006,7 @@ body.academic-theme .quantity-selector button:hover {
   font-size: 0.9em;
 }
 
-.novel-editor .ProseMirror blockquote {
+.novel-editor-wrapper .ProseMirror blockquote {
   border-left: 3px solid var(--accent-button);
   padding-left: 1rem;
   margin-left: 0;
@@ -1008,9 +1014,43 @@ body.academic-theme .quantity-selector button:hover {
   color: #6b7280;
 }
 
-/* Novel bubble menu customization */
-.novel-editor [data-radix-popper-content-wrapper] {
-  z-index: 1000 !important;
+/* Toolbar Styles */
+.novel-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dcdbd9;
+}
+
+.novel-toolbar button {
+  padding: 6px 10px;
+  border: 1px solid #dcdbd9;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #00075e;
+  font-family: var(--font-quincy, serif);
+}
+
+.novel-toolbar button:hover {
+  background-color: #e9ecef;
+  border-color: #00075e;
+}
+
+.novel-toolbar button.is-active {
+  background-color: #00075e;
+  color: #ffffff;
+  border-color: #00075e;
+}
+
+.novel-toolbar .separator {
+  width: 1px;
+  background-color: #dcdbd9;
+  margin: 0 4px;
 }
 
 /* Dark theme для админки */
@@ -1025,27 +1065,52 @@ body.academic-theme .quantity-selector button:hover {
   color: #ffffff;
 }
 
-.bg-dark .novel-editor-content {
+.bg-dark .novel-toolbar {
+  background-color: #343a40;
+  border-bottom-color: #495057;
+}
+
+.bg-dark .novel-toolbar button {
+  background-color: #212529;
+  border-color: #495057;
   color: #ffffff;
 }
 
-.bg-dark .novel-editor .ProseMirror {
+.bg-dark .novel-toolbar button:hover {
+  background-color: #495057;
+  border-color: #6c757d;
+}
+
+.bg-dark .novel-toolbar button.is-active {
+  background-color: var(--accent-button);
+  border-color: var(--accent-button);
+}
+
+.bg-dark .novel-toolbar .separator {
+  background-color: #495057;
+}
+
+.bg-dark .novel-editor-wrapper .ProseMirror {
   color: #ffffff;
 }
 
-.bg-dark .novel-editor .ProseMirror h1,
-.bg-dark .novel-editor .ProseMirror h2,
-.bg-dark .novel-editor .ProseMirror h3 {
+.bg-dark .novel-editor-wrapper .ProseMirror h1,
+.bg-dark .novel-editor-wrapper .ProseMirror h2,
+.bg-dark .novel-editor-wrapper .ProseMirror h3 {
   color: #ffffff;
 }
 
-.bg-dark .novel-editor .ProseMirror code {
+.bg-dark .novel-editor-wrapper .ProseMirror code {
   background-color: #343a40;
   color: #ffffff;
 }
 
-.bg-dark .novel-editor .ProseMirror blockquote {
+.bg-dark .novel-editor-wrapper .ProseMirror blockquote {
   color: #adb5bd;
+}
+
+.bg-dark .novel-editor-wrapper .ProseMirror p.is-editor-empty:first-child::before {
+  color: #6c757d;
 }
 
 /* Academic theme */
@@ -1055,9 +1120,14 @@ html.academic-theme .novel-editor-wrapper {
   background-color: #ffffff;
 }
 
-body.academic-theme .novel-editor .ProseMirror blockquote,
-html.academic-theme .novel-editor .ProseMirror blockquote {
+body.academic-theme .novel-editor-wrapper .ProseMirror blockquote,
+html.academic-theme .novel-editor-wrapper .ProseMirror blockquote {
   border-left-color: #00075e;
+}
+
+body.academic-theme .bubble-menu,
+html.academic-theme .bubble-menu {
+  background-color: #00075e;
 }
 
 
