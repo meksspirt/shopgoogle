@@ -16,7 +16,22 @@ export default function AdminLoginPage() {
     useEffect(() => {
         // Проверяем, залогинен ли уже пользователь
         const checkUser = async () => {
+            // Проверяем, есть ли параметр logout в URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const isLogout = urlParams.get('logout') === 'true';
+            
+            if (isLogout) {
+                console.log('🚪 Користувач вийшов, не перевіряємо сесію');
+                // Очищаем параметр из URL
+                window.history.replaceState({}, '', '/admin/login');
+                return;
+            }
+            
+            // Ждем 300ms, чтобы дать время на выход из системы
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
             const { data: { session } } = await supabase.auth.getSession();
+            
             if (session) {
                 console.log('✅ Вже є активна сесія');
                 
@@ -34,6 +49,8 @@ export default function AdminLoginPage() {
                     console.log('⚠️ Користувач не є адміністратором, виходимо');
                     await supabase.auth.signOut();
                 }
+            } else {
+                console.log('ℹ️ Немає активної сесії, залишаємось на сторінці логіну');
             }
         };
         checkUser();

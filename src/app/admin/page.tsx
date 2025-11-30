@@ -234,28 +234,35 @@ export default function AdminPage() {
         try {
             console.log('🚪 Вихід з системи...');
             
-            // Выходим через Supabase клиент
-            const { error } = await supabase.auth.signOut();
-            
-            if (error) {
-                console.error('❌ Помилка виходу:', error);
-                throw error;
-            }
-            
-            console.log('✅ Вихід успішний, редірект на логін');
-            
-            // Очищаем локальное состояние
+            // Очищаем локальное состояние сразу
             setIsAdmin(false);
             setOrders([]);
             setProducts([]);
             setPromoCodes([]);
             
-            // Редирект на страницу логина
-            window.location.href = '/admin/login';
+            // Выходим через Supabase клиент
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) {
+                console.error('❌ Помилка виходу:', error);
+            } else {
+                console.log('✅ Вихід успішний');
+            }
+            
+            // Очищаем localStorage и sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            console.log('🔄 Редірект на логін...');
+            
+            // Редирект на страницу логина с параметром, чтобы предотвратить автологин
+            window.location.href = '/admin/login?logout=true';
         } catch (error) {
             console.error('💥 Помилка виходу:', error);
             // Все равно редиректим на логин
-            window.location.href = '/admin/login';
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '/admin/login?logout=true';
         }
     };
 
