@@ -66,6 +66,21 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <head>
+        {/* Предотвращение мигания темы */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme');
+                  if (theme === 'academic') {
+                    document.documentElement.classList.add('academic-theme');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         {/* Google tag (gtag.js) */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-RTC49E8P33"></script>
         <script

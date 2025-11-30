@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react';
 
 export default function ThemeToggle() {
   const [isAcademicTheme, setIsAcademicTheme] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     // Проверяем сохраненную тему при загрузке
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'academic') {
       setIsAcademicTheme(true);
+      document.documentElement.classList.add('academic-theme');
       document.body.classList.add('academic-theme');
     }
   }, []);
@@ -19,13 +22,20 @@ export default function ThemeToggle() {
     setIsAcademicTheme(newTheme);
 
     if (newTheme) {
+      document.documentElement.classList.add('academic-theme');
       document.body.classList.add('academic-theme');
       localStorage.setItem('theme', 'academic');
     } else {
+      document.documentElement.classList.remove('academic-theme');
       document.body.classList.remove('academic-theme');
       localStorage.setItem('theme', 'clinical');
     }
   };
+
+  // Не рендерим кнопку до монтирования на клиенте
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <button

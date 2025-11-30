@@ -634,8 +634,9 @@ footer h5, footer h6 {
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
-  z-index: 999;
+  z-index: 9999;
   font-family: var(--font-quincy, serif) !important;
+  display: block;
 }
 
 .theme-toggle-btn:hover {
@@ -653,7 +654,8 @@ footer h5, footer h6 {
    Новый дизайн: Premium Academic / Old Money
    ========================================= */
 
-body.academic-theme {
+body.academic-theme,
+html.academic-theme body {
   --bg-color: #F4F2F0;
   /* Светлый серо-кофейный фон */
   
@@ -686,7 +688,8 @@ body.academic-theme {
 }
 
 /* Navbar в Academic теме */
-body.academic-theme .navbar {
+body.academic-theme .navbar,
+html.academic-theme .navbar {
   background-color: #F4F2F0 !important;
   border-bottom: 1px solid #dcdbd9;
 }
