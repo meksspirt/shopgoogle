@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import localFont from "next/font/local";
 import { getSettings } from "@/lib/getSettings";
 import type { Metadata } from 'next';
+import { Analytics } from "@vercel/analytics/next";
 
 // Настройка кастомного шрифта Quincy CF
 const quincy = localFont({
@@ -83,6 +84,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );

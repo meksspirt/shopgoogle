@@ -16,16 +16,11 @@ CREATE POLICY "Users can view own profile"
     FOR SELECT
     USING (auth.uid() = id);
 
--- Политика: только администраторы могут видеть все профили
-CREATE POLICY "Admins can view all profiles"
+-- Политика: пользователи могут обновлять только свой профиль
+CREATE POLICY "Users can update own profile"
     ON public.profiles
-    FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    FOR UPDATE
+    USING (auth.uid() = id);
 
 -- Функция для автоматического создания профиля при регистрации
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -44,61 +39,47 @@ CREATE TRIGGER on_auth_user_created
     FOR EACH ROW
     EXECUTE FUNCTION public.handle_new_user();
 
+-- Создаем функцию для проверки прав администратора (избегаем рекурсии)
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM public.profiles
+        WHERE id = auth.uid() AND is_admin = TRUE
+    );
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- Добавляем RLS политики для таблицы orders
 -- Только администраторы могут видеть все заказы
 CREATE POLICY "Admins can view all orders"
     ON public.orders
     FOR SELECT
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    USING (public.is_admin());
 
 -- Только администраторы могут обновлять заказы
 CREATE POLICY "Admins can update orders"
     ON public.orders
     FOR UPDATE
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    USING (public.is_admin());
 
 -- Только администраторы могут удалять заказы
 CREATE POLICY "Admins can delete orders"
     ON public.orders
     FOR DELETE
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    USING (public.is_admin());
 
 -- Аналогично для products
 CREATE POLICY "Admins can manage products"
     ON public.products
     FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    USING (public.is_admin());
 
 -- Аналогично для promo_codes
 CREATE POLICY "Admins can manage promo codes"
     ON public.promo_codes
     FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE id = auth.uid() AND is_admin = TRUE
-        )
-    );
+    USING (public.is_admin());
 
 -- ВАЖНО: После выполнения этого скрипта, вручную создайте администратора:
 -- 1. Зарегистрируйтесь через форму логина с вашим email

@@ -43,6 +43,30 @@ USING (auth.uid() = user_id);
 
 ## Проблемы и решения
 
+### "infinite recursion detected in policy for relation profiles"
+
+**Причина:** RLS политика для таблицы `profiles` проверяет саму себя, создавая бесконечную рекурсию.
+
+**Решение:**
+
+1. Откройте Supabase SQL Editor
+2. Выполните скрипт `supabase/fix_rls_recursion.sql`
+3. Этот скрипт:
+   - Удалит проблемные политики
+   - Создаст функцию `is_admin()` с `SECURITY DEFINER`
+   - Создаст новые политики без рекурсии
+
+**Проверка:**
+```sql
+-- Убедитесь, что функция создана
+SELECT proname FROM pg_proc WHERE proname = 'is_admin';
+
+-- Проверьте политики
+SELECT tablename, policyname 
+FROM pg_policies 
+WHERE tablename IN ('orders', 'products', 'promo_codes', 'profiles');
+```
+
 ### "Доступ заборонено. Тільки для адміністраторів"
 
 **Причина:** Пользователь зарегистрирован, но не имеет прав администратора.
