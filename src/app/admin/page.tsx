@@ -175,12 +175,19 @@ export default function AdminPage() {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                const { data: { session } } = await supabase.auth.getSession();
+                console.log('🔍 Перевірка аутентифікації...');
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                
+                console.log('📋 Сесія:', { session: !!session, error: sessionError });
                 
                 if (!session) {
-                    router.push('/admin/login');
+                    console.log('❌ Немає сесії, редірект на логін');
+                    window.location.href = '/admin/login';
                     return;
                 }
+
+                console.log('✅ Сесія знайдена, перевірка прав адміністратора...');
+                console.log('👤 User ID:', session.user.id);
 
                 // Проверяем, является ли пользователь администратором
                 const { data: profile, error } = await supabase
@@ -189,12 +196,23 @@ export default function AdminPage() {
                     .eq('id', session.user.id)
                     .single();
 
-                if (error || !profile?.is_admin) {
+                console.log('📊 Профіль:', { profile, error });
+
+                if (error) {
+                    console.error('❌ Помилка отримання профілю:', error);
                     await supabase.auth.signOut();
-                    router.push('/admin/login');
+                    window.location.href = '/admin/login';
                     return;
                 }
 
+                if (!profile?.is_admin) {
+                    console.warn('⚠️ Користувач не є адміністратором');
+                    await supabase.auth.signOut();
+                    window.location.href = '/admin/login';
+                    return;
+                }
+
+                console.log('✅ Адміністратор підтверджено, завантаження даних...');
                 setIsAdmin(true);
                 setCheckingAuth(false);
                 
@@ -204,8 +222,8 @@ export default function AdminPage() {
                 fetchPromoCodes();
                 fetchSettings();
             } catch (error) {
-                console.error('Auth check error:', error);
-                router.push('/admin/login');
+                console.error('💥 Помилка перевірки аутентифікації:', error);
+                window.location.href = '/admin/login';
             }
         };
 

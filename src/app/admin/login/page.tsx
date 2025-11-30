@@ -61,11 +61,8 @@ export default function AdminLoginPage() {
 
             if (res.ok && data.success) {
                 console.log('✅ Успішний вхід, редірект на /admin');
-                // Даем время на установку сессии
-                setTimeout(() => {
-                    router.push('/admin');
-                    router.refresh();
-                }, 100);
+                // Используем window.location для надежного редиректа
+                window.location.href = '/admin';
             } else {
                 console.error('❌ Помилка перевірки прав:', data.error);
                 // Выходим, если не администратор
