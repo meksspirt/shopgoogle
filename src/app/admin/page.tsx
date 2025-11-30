@@ -17,6 +17,8 @@ export default function AdminPage() {
     const [products, setProducts] = useState<any[]>([]);
     const [promoCodes, setPromoCodes] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [checkingAuth, setCheckingAuth] = useState(true);
     const [newProduct, setNewProduct] = useState({
         title: '',
         description: '',
@@ -171,11 +173,44 @@ export default function AdminPage() {
     };
 
     useEffect(() => {
-        fetchOrders();
-        fetchProducts();
-        fetchPromoCodes();
-        fetchSettings();
-    }, []);
+        const checkAuth = async () => {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    router.push('/admin/login');
+                    return;
+                }
+
+                // Проверяем, является ли пользователь администратором
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('is_admin')
+                    .eq('id', session.user.id)
+                    .single();
+
+                if (error || !profile?.is_admin) {
+                    await supabase.auth.signOut();
+                    router.push('/admin/login');
+                    return;
+                }
+
+                setIsAdmin(true);
+                setCheckingAuth(false);
+                
+                // Загружаем данные только если пользователь - администратор
+                fetchOrders();
+                fetchProducts();
+                fetchPromoCodes();
+                fetchSettings();
+            } catch (error) {
+                console.error('Auth check error:', error);
+                router.push('/admin/login');
+            }
+        };
+
+        checkAuth();
+    }, [router]);
 
     const handleLogout = async () => {
         try {
@@ -442,7 +477,9 @@ export default function AdminPage() {
         }
     };
 
-    if (loading) return <div className="container py-5">Завантаження...</div>;
+    if (checkingAuth || loading) return <div className="container py-5">Завантаження...</div>;
+    
+    if (!isAdmin) return null;
 
     return (
         <div className="container py-5">

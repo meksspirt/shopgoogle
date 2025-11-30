@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { verifySession } from '@/lib/auth';
+import { createClient } from '@supabase/supabase-js';
 
 export async function middleware(request: NextRequest) {
     // Перевірка доступу до адмін-панелі
@@ -10,11 +10,39 @@ export async function middleware(request: NextRequest) {
             return NextResponse.next();
         }
 
-        // Перевірити сесію для всіх інших адмін-сторінок
-        const session = await verifySession();
+        // Получаем токен из cookies
+        const token = request.cookies.get('sb-uugsiyattuabotlmegfe-auth-token');
+        
+        if (!token) {
+            return NextResponse.redirect(new URL('/admin/login', request.url));
+        }
 
-        if (!session) {
-            // Якщо немає сесії - редірект на логін
+        try {
+            // Создаем Supabase клиент для проверки сессии
+            const supabase = createClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            );
+
+            // Проверяем сессию
+            const { data: { session }, error } = await supabase.auth.getSession();
+
+            if (error || !session) {
+                return NextResponse.redirect(new URL('/admin/login', request.url));
+            }
+
+            // Проверяем права администратора
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('is_admin')
+                .eq('id', session.user.id)
+                .single();
+
+            if (!profile?.is_admin) {
+                return NextResponse.redirect(new URL('/admin/login', request.url));
+            }
+        } catch (error) {
+            console.error('Middleware auth error:', error);
             return NextResponse.redirect(new URL('/admin/login', request.url));
         }
     }

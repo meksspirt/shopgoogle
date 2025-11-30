@@ -1,17 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Container, Form, Button, Alert, Card } from 'react-bootstrap';
+import { Container, Form, Button, Alert, Card, Tabs, Tab } from 'react-bootstrap';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function AdminLoginPage() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
     const router = useRouter();
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    useEffect(() => {
+        // Проверяем, залогинен ли уже пользователь
+        const checkUser = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session) {
+                router.push('/admin');
+            }
+        };
+        checkUser();
+    }, [router]);
+
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
         setLoading(true);
@@ -20,55 +33,154 @@ export default function AdminLoginPage() {
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
+
+            const data = await res.json();
 
             if (res.ok) {
                 router.push('/admin');
             } else {
-                const data = await res.json();
-                setError(data.error || 'Login failed');
+                setError(data.error || 'Помилка входу');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            setError('Сталася помилка. Спробуйте ще раз.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password,
+            });
+
+            if (error) throw error;
+
+            if (data.user) {
+                setError('');
+                alert('Реєстрація успішна! Зверніться до адміністратора для надання прав доступу.');
+                setActiveTab('login');
+            }
+        } catch (err: any) {
+            setError(err.message || 'Помилка реєстрації');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
-            <Card style={{ width: '100%', maxWidth: '400px' }} className="shadow-sm">
+        <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
+            <Card style={{ width: '100%', maxWidth: '450px', borderRadius: '12px' }} className="shadow">
                 <Card.Body className="p-4">
-                    <h2 className="text-center mb-4">Admin Login</h2>
+                    <h2 className="text-center mb-4 fw-bold" style={{ color: '#00075e', fontFamily: 'var(--font-heading)' }}>
+                        Панель адміністратора
+                    </h2>
+                    
                     {error && <Alert variant="danger">{error}</Alert>}
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3" controlId="username">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+                    
+                    <Tabs
+                        activeKey={activeTab}
+                        onSelect={(k) => setActiveTab(k as 'login' | 'register')}
+                        className="mb-3"
+                        justify
+                    >
+                        <Tab eventKey="login" title="Вхід">
+                            <Form onSubmit={handleLogin}>
+                                <Form.Group className="mb-3" controlId="loginEmail">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Введіть email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Group>
 
-                        <Form.Group className="mb-4" controlId="password">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control
-                                type="password"
-                                placeholder="Password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </Form.Group>
+                                <Form.Group className="mb-4" controlId="loginPassword">
+                                    <Form.Label>Пароль</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Введіть пароль"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Group>
 
-                        <Button variant="primary" type="submit" className="w-100" disabled={loading}>
-                            {loading ? 'Logging in...' : 'Login'}
-                        </Button>
-                    </Form>
+                                <Button 
+                                    type="submit" 
+                                    className="w-100" 
+                                    disabled={loading}
+                                    style={{
+                                        backgroundColor: '#00075e',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        padding: '0.75rem',
+                                        fontWeight: 600
+                                    }}
+                                >
+                                    {loading ? 'Вхід...' : 'Увійти'}
+                                </Button>
+                            </Form>
+                        </Tab>
+                        
+                        <Tab eventKey="register" title="Реєстрація">
+                            <Form onSubmit={handleRegister}>
+                                <Form.Group className="mb-3" controlId="registerEmail">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control
+                                        type="email"
+                                        placeholder="Введіть email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-4" controlId="registerPassword">
+                                    <Form.Label>Пароль</Form.Label>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Мінімум 6 символів"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        minLength={6}
+                                        style={{ borderRadius: '8px' }}
+                                    />
+                                    <Form.Text className="text-muted">
+                                        Після реєстрації зверніться до адміністратора для надання прав доступу
+                                    </Form.Text>
+                                </Form.Group>
+
+                                <Button 
+                                    type="submit" 
+                                    className="w-100" 
+                                    disabled={loading}
+                                    style={{
+                                        backgroundColor: '#00075e',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        padding: '0.75rem',
+                                        fontWeight: 600
+                                    }}
+                                >
+                                    {loading ? 'Реєстрація...' : 'Зареєструватися'}
+                                </Button>
+                            </Form>
+                        </Tab>
+                    </Tabs>
                 </Card.Body>
             </Card>
         </Container>

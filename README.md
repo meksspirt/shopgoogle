@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 🔐 Безопасная аутентификация
+
+Проект использует **Supabase Auth** для защиты админ-панели:
+
+- ✅ Автоматическое хэширование паролей (bcrypt)
+- ✅ Row Level Security (RLS) для защиты данных
+- ✅ JWT токены с автоматическим обновлением
+- ✅ Middleware защита на уровне Next.js
+
+**Быстрый старт:** См. [QUICK_START_AUTH.md](./QUICK_START_AUTH.md)  
+**Полная документация:** См. [SUPABASE_AUTH_SETUP.md](./SUPABASE_AUTH_SETUP.md)
+
 ## Getting Started
 
 First, run the development server:
