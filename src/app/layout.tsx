@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import ThemeToggle from "@/components/ThemeToggle";
 import localFont from "next/font/local";
 import { getSettings } from "@/lib/getSettings";
 import type { Metadata } from 'next';
@@ -85,6 +86,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <ThemeToggle />
         <Analytics />
         <SpeedInsights />
       </body>

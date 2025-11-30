@@ -615,3 +615,278 @@ footer h5, footer h6 {
   color: #00075e !important; /* Синий текст */
   font-weight: bold;
 }
+
+
+/* =========================================
+   КНОПКА ПЕРЕКЛЮЧЕНИЯ ДИЗАЙНА
+   ========================================= */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--accent-button);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 999;
+  font-family: var(--font-quincy, serif) !important;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #3D918E;
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   ACADEMIC PAPER THEME
+   Новый дизайн: Premium Academic / Old Money
+   ========================================= */
+
+body.academic-theme {
+  --bg-color: #F4F2F0;
+  /* Светлый серо-кофейный фон */
+  
+  --primary-color: #00075e;
+  /* Глубокий темно-синий остается */
+  
+  --accent-button: #00075e;
+  /* Кнопки теперь синие, не бирюзовые */
+  
+  --secondary-bg: #ffffff;
+  /* Вторичный фон - чистый белый для карточек */
+  
+  --link-color: #00075e;
+  /* Ссылки синие */
+  --link-hover: #000545;
+  /* Hover еще темнее */
+  
+  --card-bg: #ffffff;
+  /* Карточки белые на сером фоне */
+  
+  --discount-price: #00075e;
+  /* Цена со скидкой - синий */
+  --accent-badge: #00075e;
+  /* Бейджи - синий */
+  
+  --text-secondary: #8C92AC;
+  /* Холодный серый с синим подтоном */
+  
+  background-color: #F4F2F0;
+}
+
+/* Navbar в Academic теме */
+body.academic-theme .navbar {
+  background-color: #F4F2F0 !important;
+  border-bottom: 1px solid #dcdbd9;
+}
+
+body.academic-theme .navbar-brand {
+  color: #00075e !important;
+}
+
+body.academic-theme .nav-link {
+  color: #00075e !important;
+  font-weight: 600;
+}
+
+body.academic-theme .nav-link:hover {
+  color: #000545 !important;
+}
+
+/* Карточки в Academic теме */
+body.academic-theme .card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 15px rgba(0, 7, 94, 0.05);
+}
+
+body.academic-theme .card:hover {
+  box-shadow: 0 8px 25px rgba(0, 7, 94, 0.1);
+}
+
+/* Кнопки в Academic теме */
+body.academic-theme .btn-primary {
+  background-color: #00075e !important;
+  border: none !important;
+  color: #ffffff !important;
+  border-radius: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+body.academic-theme .btn-primary:hover {
+  background-color: #000545 !important;
+  box-shadow: 0 5px 15px rgba(0, 7, 94, 0.3);
+}
+
+/* Вторичные кнопки - только рамка */
+body.academic-theme .btn-secondary,
+body.academic-theme .btn-outline-primary,
+body.academic-theme .btn-outline-secondary {
+  background-color: transparent !important;
+  border: 1px solid #00075e !important;
+  color: #00075e !important;
+}
+
+body.academic-theme .btn-secondary:hover,
+body.academic-theme .btn-outline-primary:hover,
+body.academic-theme .btn-outline-secondary:hover {
+  background-color: #00075e !important;
+  color: #ffffff !important;
+}
+
+/* Кнопка удаления - серая вместо красной */
+body.academic-theme .btn-danger {
+  background-color: #E0E0E0 !important;
+  border-color: #E0E0E0 !important;
+  color: #00075e !important;
+}
+
+body.academic-theme .btn-danger:hover {
+  background-color: #d6d6d6 !important;
+  border-color: #d6d6d6 !important;
+}
+
+/* Бейджи в Academic теме */
+body.academic-theme .badge,
+body.academic-theme .label {
+  background-color: #ffffff;
+  color: #00075e;
+  border: 1px solid #00075e;
+}
+
+body.academic-theme .badge.bg-danger {
+  background-color: #ffffff !important;
+  color: #00075e !important;
+  border: 1px solid #00075e;
+}
+
+/* Toast уведомления в Academic теме */
+body.academic-theme .toast-success,
+body.academic-theme .toast-container .toast {
+  background-color: #00075e !important;
+  color: #ffffff !important;
+}
+
+/* Модальные окна в Academic теме */
+body.academic-theme .modal-header {
+  background-color: #F4F2F0;
+  border-bottom: 1px solid #dcdbd9;
+}
+
+body.academic-theme .modal-title {
+  color: #00075e;
+}
+
+body.academic-theme .modal-body .btn-success,
+body.academic-theme .modal-body button[type="submit"] {
+  background-color: #00075e !important;
+  border: none !important;
+}
+
+body.academic-theme .modal-body .btn-success:hover,
+body.academic-theme .modal-body button[type="submit"]:hover {
+  background-color: #000545 !important;
+}
+
+/* Табы в Academic теме */
+body.academic-theme .nav-pills .nav-link {
+  color: #00075e;
+  background-color: #ffffff;
+}
+
+body.academic-theme .nav-pills .nav-link:hover {
+  background-color: #F4F2F0;
+}
+
+body.academic-theme .nav-pills .nav-link.active {
+  background-color: #00075e;
+  color: #ffffff;
+  border-color: #00075e;
+}
+
+/* Формы в Academic теме */
+body.academic-theme .form-control {
+  background-color: #ffffff;
+  border: 1px solid #dcdbd9;
+}
+
+body.academic-theme .form-control:focus {
+  border-color: #00075e;
+  box-shadow: 0 0 0 3px rgba(0, 7, 94, 0.1);
+}
+
+/* Таблицы в Academic теме */
+body.academic-theme th {
+  background-color: #F4F2F0 !important;
+  color: #00075e !important;
+}
+
+body.academic-theme .table-hover tbody tr:hover {
+  background-color: #F4F2F0;
+}
+
+/* Футер в Academic теме */
+body.academic-theme footer,
+body.academic-theme .bg-dark {
+  background-color: #00075e !important;
+}
+
+/* Кнопка переключения в Academic теме */
+body.academic-theme .theme-toggle-btn {
+  background-color: #00075e;
+}
+
+body.academic-theme .theme-toggle-btn:hover {
+  background-color: #000545;
+}
+
+/* Цены со скидкой в Academic теме */
+body.academic-theme .text-danger,
+body.academic-theme .discount-price {
+  color: #00075e !important;
+}
+
+/* Страница товара в Academic теме */
+body.academic-theme .product-actions .btn-primary,
+body.academic-theme .btn-checkout,
+body.academic-theme .btn-go-to-cart {
+  background-color: #00075e !important;
+  border-color: #00075e !important;
+}
+
+body.academic-theme .product-info-badge,
+body.academic-theme .trust-badge {
+  background-color: #F4F2F0;
+  border: 1px solid #dcdbd9;
+}
+
+body.academic-theme .product-info-badge i {
+  color: #00075e;
+}
+
+body.academic-theme .quantity-selector button {
+  border-color: #00075e;
+  color: #00075e;
+}
+
+body.academic-theme .quantity-selector input {
+  border-color: #00075e;
+  color: #00075e;
+}
+
+body.academic-theme .quantity-selector button:hover {
+  background-color: #F4F2F0;
+}
