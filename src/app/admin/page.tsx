@@ -7,6 +7,7 @@ import EditProductModal from '@/components/EditProductModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import AlertModal from '@/components/AlertModal';
 import SettingsModal from '@/components/SettingsModal';
+import TiptapEditor from '@/components/TiptapEditor';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -910,14 +911,11 @@ export default function AdminPage() {
                             </div>
                             <div className="col-12">
                                 <label className="form-label small text-muted text-uppercase fw-bold">Опис</label>
-                                <textarea
-                                    className="form-control form-control-lg bg-dark text-white border-secondary"
-                                    rows={3}
-                                    required
+                                <TiptapEditor
+                                    content={newProduct.description}
+                                    onChange={(html) => setNewProduct({ ...newProduct, description: html })}
                                     placeholder="Введіть опис книги"
-                                    value={newProduct.description}
-                                    onChange={e => setNewProduct({ ...newProduct, description: e.target.value })}
-                                ></textarea>
+                                />
                             </div>
                             <div className="col-md-6">
                                 <label className="form-label small text-muted text-uppercase fw-bold">Наявність</label>

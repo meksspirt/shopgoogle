@@ -2,6 +2,7 @@
 
 import Modal from './Modal';
 import ImageUpload from './ImageUpload';
+import TiptapEditor from './TiptapEditor';
 
 interface EditProductModalProps {
     product: any;
@@ -64,18 +65,11 @@ export default function EditProductModal({
                         <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>
                             Опис
                         </label>
-                        <textarea
-                            className="form-control"
-                            style={{
-                                backgroundColor: '#ffffff',
-                                border: '1px solid #e5e7eb',
-                                color: '#00075e'
-                            }}
-                            rows={3}
-                            required
-                            value={product.description}
-                            onChange={e => onChange({ ...product, description: e.target.value })}
-                        ></textarea>
+                        <TiptapEditor
+                            content={product.description}
+                            onChange={(html) => onChange({ ...product, description: html })}
+                            placeholder="Введіть опис книги"
+                        />
                     </div>
                     <div className="col-md-6">
                         <label className="form-label small fw-bold" style={{ color: '#00075e', textTransform: 'uppercase' }}>

@@ -126,9 +126,11 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     {/* Description */}
                     <div className="mt-4">
                         <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#00075e', fontSize: '1.2rem' }}>Опис</h5>
-                        <p style={{ lineHeight: '1.8', color: '#374151', fontSize: '0.95rem' }}>
-                            {product.description}
-                        </p>
+                        <div 
+                            className="product-description"
+                            style={{ lineHeight: '1.8', color: '#374151', fontSize: '0.95rem' }}
+                            dangerouslySetInnerHTML={{ __html: product.description }}
+                        />
                     </div>
 
                     {/* Book Characteristics */}

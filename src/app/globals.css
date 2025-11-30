@@ -893,3 +893,249 @@ body.academic-theme .quantity-selector input {
 body.academic-theme .quantity-selector button:hover {
   background-color: #F4F2F0;
 }
+
+
+/* =========================================
+   TIPTAP EDITOR STYLES
+   ========================================= */
+
+.tiptap-editor {
+  border: 1px solid #dcdbd9;
+  border-radius: 4px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dcdbd9;
+}
+
+.tiptap-toolbar button {
+  padding: 6px 10px;
+  border: 1px solid #dcdbd9;
+  background-color: #ffffff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  color: #00075e;
+  font-family: var(--font-quincy, serif);
+}
+
+.tiptap-toolbar button:hover {
+  background-color: #e9ecef;
+  border-color: #00075e;
+}
+
+.tiptap-toolbar button.active {
+  background-color: #00075e;
+  color: #ffffff;
+  border-color: #00075e;
+}
+
+.tiptap-toolbar button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tiptap-toolbar .separator {
+  width: 1px;
+  background-color: #dcdbd9;
+  margin: 0 4px;
+}
+
+.tiptap-content {
+  background-color: #ffffff;
+}
+
+.tiptap-content .ProseMirror {
+  min-height: 150px;
+  padding: 12px;
+  color: #00075e;
+  font-family: var(--font-quincy, serif);
+}
+
+.tiptap-content .ProseMirror:focus {
+  outline: none;
+}
+
+.tiptap-content .ProseMirror p {
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-content .ProseMirror h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #00075e;
+}
+
+.tiptap-content .ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+  color: #00075e;
+}
+
+.tiptap-content .ProseMirror ul,
+.tiptap-content .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tiptap-content .ProseMirror li {
+  margin-bottom: 0.25rem;
+}
+
+.tiptap-content .ProseMirror a {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+.tiptap-content .ProseMirror a:hover {
+  color: var(--link-hover);
+}
+
+.tiptap-content .ProseMirror strong {
+  font-weight: 700;
+}
+
+.tiptap-content .ProseMirror em {
+  font-style: italic;
+}
+
+.tiptap-content .ProseMirror u {
+  text-decoration: underline;
+}
+
+.tiptap-content .ProseMirror s {
+  text-decoration: line-through;
+}
+
+/* Dark theme для админки */
+.bg-dark .tiptap-editor {
+  border-color: #495057;
+  background-color: #212529;
+}
+
+.bg-dark .tiptap-toolbar {
+  background-color: #343a40;
+  border-bottom-color: #495057;
+}
+
+.bg-dark .tiptap-toolbar button {
+  background-color: #212529;
+  border-color: #495057;
+  color: #ffffff;
+}
+
+.bg-dark .tiptap-toolbar button:hover {
+  background-color: #495057;
+  border-color: #6c757d;
+}
+
+.bg-dark .tiptap-toolbar button.active {
+  background-color: var(--accent-button);
+  border-color: var(--accent-button);
+}
+
+.bg-dark .tiptap-toolbar .separator {
+  background-color: #495057;
+}
+
+.bg-dark .tiptap-content {
+  background-color: #212529;
+}
+
+.bg-dark .tiptap-content .ProseMirror {
+  color: #ffffff;
+}
+
+.bg-dark .tiptap-content .ProseMirror h2,
+.bg-dark .tiptap-content .ProseMirror h3 {
+  color: #ffffff;
+}
+
+/* Academic theme */
+body.academic-theme .tiptap-editor,
+html.academic-theme .tiptap-editor {
+  border-color: #dcdbd9;
+}
+
+body.academic-theme .tiptap-toolbar,
+html.academic-theme .tiptap-toolbar {
+  background-color: #F4F2F0;
+}
+
+body.academic-theme .tiptap-toolbar button.active,
+html.academic-theme .tiptap-toolbar button.active {
+  background-color: #00075e;
+  border-color: #00075e;
+}
+
+
+/* =========================================
+   PRODUCT DESCRIPTION STYLES
+   ========================================= */
+
+.product-description h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #00075e;
+}
+
+.product-description h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #00075e;
+}
+
+.product-description p {
+  margin-bottom: 1rem;
+}
+
+.product-description ul,
+.product-description ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-description li {
+  margin-bottom: 0.5rem;
+}
+
+.product-description a {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+.product-description a:hover {
+  color: var(--link-hover);
+}
+
+.product-description strong {
+  font-weight: 700;
+}
+
+.product-description em {
+  font-style: italic;
+}
+
+.product-description u {
+  text-decoration: underline;
+}
+
+.product-description s {
+  text-decoration: line-through;
+}
