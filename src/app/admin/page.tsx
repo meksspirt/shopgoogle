@@ -7,7 +7,7 @@ import EditProductModal from '@/components/EditProductModal';
 import ConfirmModal from '@/components/ConfirmModal';
 import AlertModal from '@/components/AlertModal';
 import SettingsModal from '@/components/SettingsModal';
-import TiptapEditor from '@/components/TiptapEditor';
+import NovelEditor from '@/components/NovelEditor';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -911,7 +911,7 @@ export default function AdminPage() {
                             </div>
                             <div className="col-12">
                                 <label className="form-label small text-muted text-uppercase fw-bold">Опис</label>
-                                <TiptapEditor
+                                <NovelEditor
                                     content={newProduct.description}
                                     onChange={(html) => setNewProduct({ ...newProduct, description: html })}
                                     placeholder="Введіть опис книги"

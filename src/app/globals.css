@@ -896,188 +896,168 @@ body.academic-theme .quantity-selector button:hover {
 
 
 /* =========================================
-   TIPTAP EDITOR STYLES
+   NOVEL EDITOR STYLES
    ========================================= */
 
-.tiptap-editor {
+.novel-editor-wrapper {
   border: 1px solid #dcdbd9;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: #ffffff;
   overflow: hidden;
+  min-height: 200px;
 }
 
-.tiptap-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 8px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #dcdbd9;
-}
-
-.tiptap-toolbar button {
-  padding: 6px 10px;
+.novel-editor-loading {
+  padding: 40px;
+  text-align: center;
+  background-color: #ffffff;
   border: 1px solid #dcdbd9;
-  background-color: #ffffff;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.novel-editor {
+  font-family: var(--font-quincy, serif) !important;
+}
+
+.novel-editor-content {
+  min-height: 200px;
+  padding: 16px;
   color: #00075e;
-  font-family: var(--font-quincy, serif);
+  font-family: var(--font-quincy, serif) !important;
 }
 
-.tiptap-toolbar button:hover {
-  background-color: #e9ecef;
-  border-color: #00075e;
-}
-
-.tiptap-toolbar button.active {
-  background-color: #00075e;
-  color: #ffffff;
-  border-color: #00075e;
-}
-
-.tiptap-toolbar button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.tiptap-toolbar .separator {
-  width: 1px;
-  background-color: #dcdbd9;
-  margin: 0 4px;
-}
-
-.tiptap-content {
-  background-color: #ffffff;
-}
-
-.tiptap-content .ProseMirror {
-  min-height: 150px;
-  padding: 12px;
+/* Novel editor ProseMirror styles */
+.novel-editor .ProseMirror {
+  font-family: var(--font-quincy, serif) !important;
   color: #00075e;
-  font-family: var(--font-quincy, serif);
 }
 
-.tiptap-content .ProseMirror:focus {
+.novel-editor .ProseMirror:focus {
   outline: none;
 }
 
-.tiptap-content .ProseMirror p {
-  margin-bottom: 0.5rem;
+.novel-editor .ProseMirror p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
 }
 
-.tiptap-content .ProseMirror h2 {
+.novel-editor .ProseMirror h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #00075e;
+}
+
+.novel-editor .ProseMirror h2 {
   font-size: 1.5rem;
   font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #00075e;
+}
+
+.novel-editor .ProseMirror h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   color: #00075e;
 }
 
-.tiptap-content .ProseMirror h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 0.75rem;
-  margin-bottom: 0.5rem;
-  color: #00075e;
-}
-
-.tiptap-content .ProseMirror ul,
-.tiptap-content .ProseMirror ol {
+.novel-editor .ProseMirror ul,
+.novel-editor .ProseMirror ol {
   padding-left: 1.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.tiptap-content .ProseMirror li {
+.novel-editor .ProseMirror li {
   margin-bottom: 0.25rem;
 }
 
-.tiptap-content .ProseMirror a {
+.novel-editor .ProseMirror a {
   color: var(--link-color);
   text-decoration: underline;
 }
 
-.tiptap-content .ProseMirror a:hover {
+.novel-editor .ProseMirror a:hover {
   color: var(--link-hover);
 }
 
-.tiptap-content .ProseMirror strong {
+.novel-editor .ProseMirror strong {
   font-weight: 700;
 }
 
-.tiptap-content .ProseMirror em {
+.novel-editor .ProseMirror em {
   font-style: italic;
 }
 
-.tiptap-content .ProseMirror u {
-  text-decoration: underline;
+.novel-editor .ProseMirror code {
+  background-color: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
 }
 
-.tiptap-content .ProseMirror s {
-  text-decoration: line-through;
+.novel-editor .ProseMirror blockquote {
+  border-left: 3px solid var(--accent-button);
+  padding-left: 1rem;
+  margin-left: 0;
+  font-style: italic;
+  color: #6b7280;
+}
+
+/* Novel bubble menu customization */
+.novel-editor [data-radix-popper-content-wrapper] {
+  z-index: 1000 !important;
 }
 
 /* Dark theme для админки */
-.bg-dark .tiptap-editor {
+.bg-dark .novel-editor-wrapper {
   border-color: #495057;
   background-color: #212529;
 }
 
-.bg-dark .tiptap-toolbar {
+.bg-dark .novel-editor-loading {
+  background-color: #212529;
+  border-color: #495057;
+  color: #ffffff;
+}
+
+.bg-dark .novel-editor-content {
+  color: #ffffff;
+}
+
+.bg-dark .novel-editor .ProseMirror {
+  color: #ffffff;
+}
+
+.bg-dark .novel-editor .ProseMirror h1,
+.bg-dark .novel-editor .ProseMirror h2,
+.bg-dark .novel-editor .ProseMirror h3 {
+  color: #ffffff;
+}
+
+.bg-dark .novel-editor .ProseMirror code {
   background-color: #343a40;
-  border-bottom-color: #495057;
-}
-
-.bg-dark .tiptap-toolbar button {
-  background-color: #212529;
-  border-color: #495057;
   color: #ffffff;
 }
 
-.bg-dark .tiptap-toolbar button:hover {
-  background-color: #495057;
-  border-color: #6c757d;
-}
-
-.bg-dark .tiptap-toolbar button.active {
-  background-color: var(--accent-button);
-  border-color: var(--accent-button);
-}
-
-.bg-dark .tiptap-toolbar .separator {
-  background-color: #495057;
-}
-
-.bg-dark .tiptap-content {
-  background-color: #212529;
-}
-
-.bg-dark .tiptap-content .ProseMirror {
-  color: #ffffff;
-}
-
-.bg-dark .tiptap-content .ProseMirror h2,
-.bg-dark .tiptap-content .ProseMirror h3 {
-  color: #ffffff;
+.bg-dark .novel-editor .ProseMirror blockquote {
+  color: #adb5bd;
 }
 
 /* Academic theme */
-body.academic-theme .tiptap-editor,
-html.academic-theme .tiptap-editor {
+body.academic-theme .novel-editor-wrapper,
+html.academic-theme .novel-editor-wrapper {
   border-color: #dcdbd9;
+  background-color: #ffffff;
 }
 
-body.academic-theme .tiptap-toolbar,
-html.academic-theme .tiptap-toolbar {
-  background-color: #F4F2F0;
-}
-
-body.academic-theme .tiptap-toolbar button.active,
-html.academic-theme .tiptap-toolbar button.active {
-  background-color: #00075e;
-  border-color: #00075e;
+body.academic-theme .novel-editor .ProseMirror blockquote,
+html.academic-theme .novel-editor .ProseMirror blockquote {
+  border-left-color: #00075e;
 }
 
 
