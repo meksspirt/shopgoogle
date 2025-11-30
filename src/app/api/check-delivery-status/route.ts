@@ -24,10 +24,26 @@ export async function POST(request: NextRequest) {
         if (!novaPoshtaApiKey) {
             console.error('Nova Poshta API key not configured');
             return NextResponse.json(
-                { error: 'Nova Poshta API not configured' },
+                { 
+                    error: 'Nova Poshta API not configured',
+                    hint: 'Add NOVA_POSHTA_API_KEY to your .env.local file and restart the server'
+                },
                 { status: 500 }
             );
         }
+
+        if (novaPoshtaApiKey === 'your_nova_poshta_api_key_here') {
+            return NextResponse.json(
+                { 
+                    error: 'Nova Poshta API key is not set',
+                    hint: 'Replace placeholder with your actual API key from https://my.novaposhta.ua/settings/index#apikeys'
+                },
+                { status: 500 }
+            );
+        }
+
+        console.log('Checking tracking number:', trackingNumber);
+        console.log('API Key preview:', `${novaPoshtaApiKey.substring(0, 8)}...`);
 
         const novaPoshtaResponse = await fetch('https://api.novaposhta.ua/v2.0/json/', {
             method: 'POST',
@@ -51,11 +67,14 @@ export async function POST(request: NextRequest) {
 
         const novaPoshtaData = await novaPoshtaResponse.json();
 
+        console.log('Nova Poshta API Response:', JSON.stringify(novaPoshtaData, null, 2));
+
         if (!novaPoshtaData.success || !novaPoshtaData.data || novaPoshtaData.data.length === 0) {
             return NextResponse.json(
                 { 
                     error: 'Failed to get tracking info',
-                    details: novaPoshtaData.errors || 'No data returned'
+                    details: novaPoshtaData.errors || novaPoshtaData.errorCodes || 'No data returned',
+                    fullResponse: novaPoshtaData
                 },
                 { status: 400 }
             );

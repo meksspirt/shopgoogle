@@ -323,6 +323,8 @@ export default function AdminPage() {
 
             const data = await response.json();
 
+            console.log('Delivery check response:', data);
+
             if (data.success) {
                 if (data.isDelivered) {
                     showAlert('Доставлено!', `Замовлення отримано клієнтом. Статус оновлено на "Доставлено"`, 'success');
@@ -331,7 +333,12 @@ export default function AdminPage() {
                     showAlert('В дорозі', `Статус: ${data.statusText}`, 'info');
                 }
             } else {
-                showAlert('Помилка', data.error || 'Не вдалося перевірити статус', 'error');
+                const errorDetails = data.details ? JSON.stringify(data.details) : '';
+                showAlert(
+                    'Помилка перевірки', 
+                    `${data.error}\n\nДеталі: ${errorDetails}\n\nПеревірте:\n- ТТН введено правильно\n- API ключ Нової Пошти налаштовано\n- ТТН активовано в системі НП`, 
+                    'error'
+                );
             }
         } catch (error: any) {
             console.error('Error checking delivery:', error);
