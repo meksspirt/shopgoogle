@@ -77,13 +77,8 @@ export default function Navbar() {
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link href="/track" className="nav-link">
-                                Відстежити замовлення
-                            </Link>
-                        </li>
-                        <li className="nav-item">
                             <Link href={isLoggedIn ? "/profile" : "/profile/login"} className="nav-link">
-                                {isLoggedIn ? "👤 Профіль" : "Увійти"}
+                                {isLoggedIn ? "Профіль" : "Увійти"}
                             </Link>
                         </li>
                         <li className="nav-item position-relative">
