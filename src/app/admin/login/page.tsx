@@ -29,22 +29,52 @@ export default function AdminLoginPage() {
         setError('');
         setLoading(true);
 
+        console.log('🔐 Спроба входу...', { email });
+
         try {
+            // Сначала пробуем войти напрямую через Supabase
+            const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (authError) {
+                console.error('❌ Supabase auth error:', authError);
+                setError('Невірний email або пароль: ' + authError.message);
+                setLoading(false);
+                return;
+            }
+
+            console.log('✅ Supabase auth успішна:', authData.user.id);
+
+            // Теперь проверяем права администратора через API
             const res = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await res.json();
+            console.log('📡 Відповідь API:', res.status);
 
-            if (res.ok) {
-                router.push('/admin');
+            const data = await res.json();
+            console.log('📦 Дані API:', data);
+
+            if (res.ok && data.success) {
+                console.log('✅ Успішний вхід, редірект на /admin');
+                // Даем время на установку сессии
+                setTimeout(() => {
+                    router.push('/admin');
+                    router.refresh();
+                }, 100);
             } else {
+                console.error('❌ Помилка перевірки прав:', data.error);
+                // Выходим, если не администратор
+                await supabase.auth.signOut();
                 setError(data.error || 'Помилка входу');
             }
-        } catch (err) {
-            setError('Сталася помилка. Спробуйте ще раз.');
+        } catch (err: any) {
+            console.error('💥 Виняток:', err);
+            setError('Сталася помилка. Спробуйте ще раз: ' + err.message);
         } finally {
             setLoading(false);
         }
