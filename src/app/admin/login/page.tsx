@@ -18,8 +18,22 @@ export default function AdminLoginPage() {
         const checkUser = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session) {
-                console.log('✅ Вже є активна сесія, редірект на /admin');
-                window.location.href = '/admin';
+                console.log('✅ Вже є активна сесія');
+                
+                // Проверяем, что пользователь действительно администратор
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('is_admin')
+                    .eq('id', session.user.id)
+                    .single();
+                
+                if (profile?.is_admin) {
+                    console.log('✅ Адміністратор підтверджено, редірект на /admin');
+                    window.location.href = '/admin';
+                } else {
+                    console.log('⚠️ Користувач не є адміністратором, виходимо');
+                    await supabase.auth.signOut();
+                }
             }
         };
         checkUser();

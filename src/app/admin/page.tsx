@@ -232,10 +232,30 @@ export default function AdminPage() {
 
     const handleLogout = async () => {
         try {
-            await fetch('/api/auth/logout', { method: 'POST' });
-            router.push('/admin/login');
+            console.log('🚪 Вихід з системи...');
+            
+            // Выходим через Supabase клиент
+            const { error } = await supabase.auth.signOut();
+            
+            if (error) {
+                console.error('❌ Помилка виходу:', error);
+                throw error;
+            }
+            
+            console.log('✅ Вихід успішний, редірект на логін');
+            
+            // Очищаем локальное состояние
+            setIsAdmin(false);
+            setOrders([]);
+            setProducts([]);
+            setPromoCodes([]);
+            
+            // Редирект на страницу логина
+            window.location.href = '/admin/login';
         } catch (error) {
-            console.error('Logout failed:', error);
+            console.error('💥 Помилка виходу:', error);
+            // Все равно редиректим на логин
+            window.location.href = '/admin/login';
         }
     };
 
