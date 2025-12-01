@@ -45,6 +45,7 @@ export default function AdminPage() {
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [trackingNumbers, setTrackingNumbers] = useState<{ [key: string]: string }>({});
     const [checkingDelivery, setCheckingDelivery] = useState<{ [key: string]: boolean }>({});
+    const [creatingWaybill, setCreatingWaybill] = useState<{ [key: string]: boolean }>({});
     
     // Modal states
     const [confirmModal, setConfirmModal] = useState<{
@@ -304,6 +305,42 @@ export default function AdminPage() {
                 return newState;
             });
             fetchOrders();
+        }
+    };
+
+    const createWaybill = async (orderId: string) => {
+        setCreatingWaybill(prev => ({ ...prev, [orderId]: true }));
+
+        try {
+            const response = await fetch('/api/create-waybill', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                showAlert(
+                    'Накладна створена!', 
+                    `ТТН: ${data.trackingNumber}\n\nСтатус замовлення змінено на "Відправлено"`, 
+                    'success'
+                );
+                fetchOrders();
+            } else {
+                showAlert(
+                    'Помилка створення накладної', 
+                    data.error || 'Не вдалося створити накладну',
+                    'error'
+                );
+            }
+        } catch (error: any) {
+            console.error('Error creating waybill:', error);
+            showAlert('Помилка', 'Помилка створення накладної', 'error');
+        } finally {
+            setCreatingWaybill(prev => ({ ...prev, [orderId]: false }));
         }
     };
 
@@ -791,6 +828,16 @@ export default function AdminPage() {
                                                      order.status === 'delivered' ? 'Доставлено' :
                                                      order.status === 'cancelled' ? 'Скасовано' : order.status}
                                                 </span>
+                                                {!order.tracking_number && order.status === 'pending' && order.nova_poshta_warehouse_id && (
+                                                    <button
+                                                        className="btn btn-primary btn-sm w-100"
+                                                        onClick={() => createWaybill(order.id)}
+                                                        disabled={creatingWaybill[order.id]}
+                                                        title="Створити накладну НП автоматично"
+                                                    >
+                                                        {creatingWaybill[order.id] ? '⏳ Створення...' : '📦 Створити ТТН'}
+                                                    </button>
+                                                )}
                                                 <div className="d-flex gap-1">
                                                     <input
                                                         type="text"
