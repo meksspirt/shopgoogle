@@ -19,7 +19,7 @@ interface SettingsModalProps {
 }
 
 export default function SettingsModal({ isOpen, onClose, settings, onSave }: SettingsModalProps) {
-    const [activeTab, setActiveTab] = useState<'general' | 'contacts' | 'payments' | 'seo' | 'novaposhta'>('general');
+    const [activeTab, setActiveTab] = useState<'general' | 'contacts' | 'payments' | 'seo'>('general');
     const [localSettings, setLocalSettings] = useState(settings);
     const [savingKey, setSavingKey] = useState<string | null>(null);
 
@@ -68,15 +68,6 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
         { key: 'site_description', label: 'Опис сайту (SEO)', type: 'textarea', placeholder: 'Опис для пошукових систем...', description: 'Відображається в результатах пошуку Google' },
         { key: 'site_keywords', label: 'Ключові слова (SEO)', type: 'text', placeholder: 'книги, магазин, купити', description: 'Через кому' },
         { key: 'privacy_policy', label: 'Політика конфіденційності', type: 'textarea', placeholder: 'Текст політики...' },
-    ];
-
-    // Нова Пошта API
-    const novaPoshtaSettings: Setting[] = [
-        { key: 'nova_poshta_api_key', label: 'API ключ Нової Пошти (опціонально)', type: 'text', placeholder: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', description: 'Отримайте на https://my.novaposhta.ua/settings/index#apikeys. Якщо є змінна NOVA_POSHTA_API_KEY в Vercel - можна не заповнювати' },
-        { key: 'nova_poshta_sender_city_ref', label: 'Ref міста відправника', type: 'text', placeholder: 'db5c88f0-391c-11dd-90d9-001a92567626', description: 'Ref міста з API НП (наприклад, Київ)' },
-        { key: 'nova_poshta_sender_warehouse_ref', label: 'Ref відділення відправника', type: 'text', placeholder: '1ec09d88-e1c2-11e3-8c4a-0050568002cf', description: 'Ref відділення з якого відправляєте' },
-        { key: 'nova_poshta_sender_contact_ref', label: 'Ref контакту відправника', type: 'text', placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx', description: 'Ref вашого контакту в системі НП' },
-        { key: 'nova_poshta_sender_phone', label: 'Телефон відправника', type: 'tel', placeholder: '+380XXXXXXXXX', description: 'Телефон у форматі +380XXXXXXXXX' },
     ];
 
     const renderSettings = (settingsList: Setting[]) => (
@@ -238,25 +229,6 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                             🔍 SEO
                         </button>
                     </li>
-                    <li className="nav-item">
-                        <button
-                            className={`nav-link ${activeTab === 'novaposhta' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('novaposhta')}
-                            style={{
-                                backgroundColor: activeTab === 'novaposhta' ? '#48A9A6' : '#f3f4f6',
-                                color: activeTab === 'novaposhta' ? '#ffffff' : '#374151',
-                                fontWeight: 600,
-                                border: activeTab === 'novaposhta' ? 'none' : '2px solid #e5e7eb',
-                                borderRadius: '8px',
-                                fontSize: '0.9rem',
-                                padding: '0.6rem 1.2rem',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s'
-                            }}
-                        >
-                            📦 Нова Пошта
-                        </button>
-                    </li>
                 </ul>
             </div>
 
@@ -266,21 +238,6 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
                 {activeTab === 'contacts' && renderSettings(contactsSettings)}
                 {activeTab === 'payments' && renderSettings(paymentsSettings)}
                 {activeTab === 'seo' && renderSettings(seoSettings)}
-                {activeTab === 'novaposhta' && (
-                    <>
-                        {renderSettings(novaPoshtaSettings)}
-                        <div className="alert alert-info mt-3" style={{ fontSize: '0.9rem' }}>
-                            <strong>📖 Інструкція:</strong>
-                            <ol className="mb-0 mt-2" style={{ paddingLeft: '1.2rem' }}>
-                                <li>Отримайте API ключ на <a href="https://my.novaposhta.ua/settings/index#apikeys" target="_blank" rel="noopener noreferrer">my.novaposhta.ua</a></li>
-                                <li>Знайдіть Ref вашого міста через API методи НП</li>
-                                <li>Знайдіть Ref відділення з якого відправляєте</li>
-                                <li>Створіть контакт відправника в особистому кабінеті НП та отримайте його Ref</li>
-                                <li>Після налаштування ви зможете створювати накладні автоматично!</li>
-                            </ol>
-                        </div>
-                    </>
-                )}
             </div>
 
             <style jsx global>{`
