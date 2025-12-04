@@ -104,6 +104,24 @@ export default function RootLayout({
         <ThemeToggle />
         <Analytics />
         <SpeedInsights />
+        {/* Monolytics tracking code */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function (windowArg, documentArg, scriptSrc, argA, argB) {
+                windowArg.monolytics = windowArg.monolytics || function () {
+                  (windowArg.monolytics.q = windowArg.monolytics.q || []).push(arguments)
+                };
+                windowArg._monolyticsSettings = {domainCode: 'BRaENFgVV4'};
+                argA = documentArg.getElementsByTagName('head')[0];
+                argB = documentArg.createElement('script');
+                argB.async = 1;
+                argB.src = scriptSrc;
+                argA.appendChild(argB);
+              })(window, document, 'https://cloud.monolytics.app/tracker.js');
+            `,
+          }}
+        />
       </body>
     </html>
   );
