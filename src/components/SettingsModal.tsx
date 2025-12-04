@@ -32,6 +32,9 @@ export default function SettingsModal({ isOpen, onClose, settings, onSave }: Set
         setSavingKey(key);
         await onSave(key, localSettings[key] || '');
         setSavingKey(null);
+        
+        // Відправляємо подію про оновлення налаштувань
+        window.dispatchEvent(new Event('settingsUpdated'));
     };
 
     // Загальні налаштування магазину

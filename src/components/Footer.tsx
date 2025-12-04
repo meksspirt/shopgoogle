@@ -24,6 +24,17 @@ export default function Footer() {
         };
 
         fetchSettings();
+
+        // Слухаємо події оновлення налаштувань
+        const handleSettingsUpdate = () => {
+            fetchSettings();
+        };
+
+        window.addEventListener('settingsUpdated', handleSettingsUpdate);
+
+        return () => {
+            window.removeEventListener('settingsUpdated', handleSettingsUpdate);
+        };
     }, []);
 
     const companyName = settings.company_name || 'CalmCraft';
