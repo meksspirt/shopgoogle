@@ -61,6 +61,7 @@ export default async function JsonLd() {
             url: siteUrl,
             priceCurrency: 'UAH',
             price: settings.book_price || '',
+            priceValidUntil: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0], // Цена действительна 1 год
             availability: 'https://schema.org/InStock',
             seller: {
                 '@type': 'Organization',
