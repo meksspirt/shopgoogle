@@ -49,9 +49,9 @@ export async function generateMetadata(): Promise<Metadata> {
   ]);
 
   const siteUrl = settings.site_url || 'https://www.calmcraft.shop';
-  const siteName = settings.site_title || 'CalmCraft - Психологічний посібник';
-  const siteDescription = settings.site_description || 'Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя';
-  const siteKeywords = settings.site_keywords || 'психологія, психологічний посібник, саморозвиток, емоційне здоров\'я, особистісне зростання, психолог, психологічна допомога';
+  const siteName = settings.site_title || 'Breathe Self Space';
+  const siteDescription = settings.site_description || 'Інструкція з експлуатації себе. Ваш персональний воркбук з інструментами КПТ та техніками самодопомоги.';
+  const siteKeywords = settings.site_keywords || 'психологія, воркбук, саморозвиток, КПТ, ментальне здоров\'я, Анна Клим';
 
   // Формируем абсолютный URL для изображения
   let ogImage = settings.og_image || '/og-image.png';
