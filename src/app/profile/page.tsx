@@ -335,6 +335,7 @@ export default function ProfilePage() {
                                 {orders.map((order) => (
                                     <div
                                         key={order.id}
+                                        id={`order-${order.id}`}
                                         className="card shadow-sm"
                                         style={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}
                                     >

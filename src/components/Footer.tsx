@@ -68,7 +68,7 @@ export default function Footer() {
                             </Link>
                         </p>
                         <p className="small mb-2">
-                            <Link href="/track" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
+                            <Link href="/profile" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
                                 Відстежити замовлення
                             </Link>
                         </p>
