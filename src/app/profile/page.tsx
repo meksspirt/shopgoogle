@@ -39,7 +39,7 @@ export default function ProfilePage() {
     const [orderItems, setOrderItems] = useState<{ [key: string]: OrderItem[] }>({});
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState<'orders' | 'settings'>('orders');
-    
+
     // Password change states
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -56,18 +56,18 @@ export default function ProfilePage() {
     const checkAuth = async () => {
         try {
             const { data: { session }, error } = await supabase.auth.getSession();
-            
+
             if (!session || error) {
                 router.push('/profile/login');
                 return;
             }
 
             setUser(session.user);
-            
+
             // Check if user signed in with Google
             const provider = session.user.app_metadata?.provider;
             setIsGoogleUser(provider === 'google');
-            
+
             // Fetch orders for customer profile (no admin check needed)
             await fetchOrders(session.user.email!);
         } catch (error) {
@@ -194,9 +194,9 @@ export default function ProfilePage() {
         const statusInfo = statusMap[status] || { text: status, color: '#6b7280' };
 
         return (
-            <span 
+            <span
                 className="badge px-3 py-2"
-                style={{ 
+                style={{
                     backgroundColor: statusInfo.color,
                     color: '#ffffff',
                     fontSize: '0.875rem',
@@ -233,7 +233,7 @@ export default function ProfilePage() {
                             <p className="text-muted mb-0">{user?.email}</p>
                         </div>
                         <div className="d-flex gap-2">
-                            <Link 
+                            <Link
                                 href="/"
                                 className="btn"
                                 style={{
@@ -247,7 +247,7 @@ export default function ProfilePage() {
                             >
                                 На головну
                             </Link>
-                            <button 
+                            <button
                                 className="btn"
                                 onClick={handleLogout}
                                 style={{
@@ -314,7 +314,7 @@ export default function ProfilePage() {
                             <div className="card shadow-sm" style={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                                 <div className="card-body text-center py-5">
                                     <p className="text-muted mb-3">У вас поки немає замовлень</p>
-                                    <Link 
+                                    <Link
                                         href="/"
                                         className="btn"
                                         style={{
@@ -333,7 +333,7 @@ export default function ProfilePage() {
                         ) : (
                             <div className="d-flex flex-column gap-3">
                                 {orders.map((order) => (
-                                    <div 
+                                    <div
                                         key={order.id}
                                         className="card shadow-sm"
                                         style={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}
@@ -362,13 +362,13 @@ export default function ProfilePage() {
                                             {orderItems[order.id] && orderItems[order.id].length > 0 && (
                                                 <div className="mb-3">
                                                     {orderItems[order.id].map((item) => (
-                                                        <div 
+                                                        <div
                                                             key={item.id}
                                                             className="d-flex gap-3 mb-2 pb-2"
                                                             style={{ borderBottom: '1px solid #f3f4f6' }}
                                                         >
                                                             {item.product?.image_url && (
-                                                                <img 
+                                                                <img
                                                                     src={item.product.image_url}
                                                                     alt={item.product.title}
                                                                     style={{
@@ -384,7 +384,7 @@ export default function ProfilePage() {
                                                                     {item.product?.title || 'Товар'}
                                                                 </p>
                                                                 <p className="mb-0 text-muted" style={{ fontSize: '0.875rem' }}>
-                                                                    Кількість: {item.quantity} × {item.price} грн
+                                                                    Кількість: {item.quantity} × {Math.round(item.price)} грн
                                                                 </p>
                                                             </div>
                                                         </div>
@@ -420,15 +420,15 @@ export default function ProfilePage() {
 
                                             {/* Tracking Number */}
                                             {order.tracking_number && (
-                                                <a 
+                                                <a
                                                     href={`https://novaposhta.ua/tracking/${order.tracking_number}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="text-decoration-none"
                                                 >
-                                                    <div 
-                                                        className="p-4 rounded mb-3" 
-                                                        style={{ 
+                                                    <div
+                                                        className="p-4 rounded mb-3"
+                                                        style={{
                                                             background: '#343434',
                                                             cursor: 'pointer',
                                                             transition: 'transform 0.2s, box-shadow 0.2s'
@@ -449,14 +449,14 @@ export default function ProfilePage() {
                                                                 ТТН Нова Пошта:
                                                             </span>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="white" viewBox="0 0 16 16">
-                                                                <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
-                                                                <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                                                                <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
+                                                                <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
                                                             </svg>
                                                         </div>
-                                                        <div className="fw-bold mb-2" style={{ 
-                                                            fontFamily: 'var(--font-heading)', 
-                                                            color: '#ffffff', 
-                                                            fontSize: '1.5rem', 
+                                                        <div className="fw-bold mb-2" style={{
+                                                            fontFamily: 'var(--font-heading)',
+                                                            color: '#ffffff',
+                                                            fontSize: '1.5rem',
                                                             letterSpacing: '2px',
                                                             wordBreak: 'break-all'
                                                         }}>
@@ -464,7 +464,7 @@ export default function ProfilePage() {
                                                         </div>
                                                         <div className="d-flex align-items-center gap-2" style={{ color: '#ffffff', fontSize: '0.9rem' }}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/>
+                                                                <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z" />
                                                             </svg>
                                                             <span style={{ fontFamily: 'var(--font-heading)' }}>
                                                                 Натисніть для відстеження на сайті Нової Пошти
@@ -480,7 +480,7 @@ export default function ProfilePage() {
                                                     Всього:
                                                 </span>
                                                 <span className="fw-bold" style={{ color: '#f59e0b', fontSize: '1.5rem' }}>
-                                                    {order.total_amount} грн
+                                                    {Math.round(order.total_amount)} грн
                                                 </span>
                                             </div>
                                         </div>
@@ -498,10 +498,10 @@ export default function ProfilePage() {
                         <div className="card shadow-sm" style={{ borderRadius: '12px', border: '1px solid #e5e7eb' }}>
                             <div className="card-body p-4">
                                 <h5 className="fw-bold mb-4" style={{ color: '#00075e' }}>Налаштування профілю</h5>
-                                
+
                                 <div className="mb-4">
                                     <label className="form-label fw-semibold" style={{ color: '#00075e' }}>Email</label>
-                                    <input 
+                                    <input
                                         type="email"
                                         className="form-control"
                                         value={user?.email || ''}
@@ -518,7 +518,7 @@ export default function ProfilePage() {
 
                                 <div className="mb-4">
                                     <label className="form-label fw-semibold" style={{ color: '#00075e' }}>ID користувача</label>
-                                    <input 
+                                    <input
                                         type="text"
                                         className="form-control"
                                         value={user?.id || ''}
@@ -537,7 +537,7 @@ export default function ProfilePage() {
                                 {!isGoogleUser && (
                                     <>
                                         <hr className="my-4" />
-                                        
+
                                         <h5 className="fw-bold mb-4" style={{ color: '#00075e' }}>Зміна пароля</h5>
 
                                         {passwordError && (
