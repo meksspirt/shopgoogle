@@ -81,23 +81,25 @@ export default function Navbar() {
                                 {isLoggedIn ? "Профіль" : "Увійти"}
                             </Link>
                         </li>
-                        <li className="nav-item position-relative">
+                        <li className="nav-item">
                             <Link href="/cart" className="nav-link">
-                                Кошик
-                                {cartCount > 0 && (
-                                    <span 
-                                        className="position-absolute badge rounded-pill bg-danger" 
-                                        style={{ 
-                                            top: '0', 
-                                            right: '-10px',
-                                            fontSize: '0.7rem',
-                                            padding: '0.25em 0.5em',
-                                            minWidth: '1.5em'
-                                        }}
-                                    >
-                                        {cartCount}
-                                    </span>
-                                )}
+                                <span className="position-relative">
+                                    Кошик
+                                    {cartCount > 0 && (
+                                        <span
+                                            className="position-absolute badge rounded-pill bg-danger"
+                                            style={{
+                                                top: '-5px',
+                                                right: '-20px',
+                                                fontSize: '0.7rem',
+                                                padding: '0.25em 0.5em',
+                                                minWidth: '1.5em'
+                                            }}
+                                        >
+                                            {cartCount}
+                                        </span>
+                                    )}
+                                </span>
                             </Link>
                         </li>
                     </ul>

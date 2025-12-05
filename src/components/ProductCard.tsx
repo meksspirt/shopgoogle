@@ -70,14 +70,16 @@ export default function ProductCard({ product }: { product: Product }) {
                         }}>
                             {product.title}
                         </h5>
-                        <div className="card-text small mb-3 flex-grow-1" style={{
+                        <p className="card-text small mb-3 flex-grow-1" style={{
                             lineHeight: '1.5',
                             display: '-webkit-box',
                             WebkitLineClamp: 2,
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                             color: '#374151'
-                        }} dangerouslySetInnerHTML={{ __html: product.description }} />
+                        }}>
+                            {product.description.replace(/<[^>]*>?/gm, '')}
+                        </p>
                         <div className="d-flex justify-content-between align-items-center mt-auto">
                             <div>
                                 {product.discount_percent && product.discount_percent > 0 ? (
