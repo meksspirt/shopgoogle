@@ -1,3 +1,5 @@
+"use client";
+
 export default function PrivacyPolicyPage() {
     return (
         <div className="privacy-policy-container">

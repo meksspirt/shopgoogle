@@ -1,3 +1,5 @@
+"use client";
+
 export default function PublicOfferPage() {
     return (
         <div className="public-offer-container">
