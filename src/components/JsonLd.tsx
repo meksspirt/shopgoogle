@@ -67,6 +67,39 @@ export default async function JsonLd() {
                 '@type': 'Organization',
                 name: siteName,
             },
+            hasMerchantReturnPolicy: {
+                '@type': 'MerchantReturnPolicy',
+                applicableCountry: 'UA',
+                returnPolicyCategory: 'https://schema.org/MerchantReturnNotPermitted',
+                name: 'Друковані видання належної якості не підлягають поверненню згідно з Постановою КМУ №172'
+            },
+            shippingDetails: {
+                '@type': 'OfferShippingDetails',
+                shippingRate: {
+                    '@type': 'MonetaryAmount',
+                    value: 0,
+                    currency: 'UAH'
+                },
+                shippingDestination: {
+                    '@type': 'DefinedRegion',
+                    addressCountry: 'UA'
+                },
+                deliveryTime: {
+                    '@type': 'ShippingDeliveryTime',
+                    handlingTime: {
+                        '@type': 'QuantitativeValue',
+                        minValue: 0,
+                        maxValue: 2,
+                        unitCode: 'DAY'
+                    },
+                    transitTime: {
+                        '@type': 'QuantitativeValue',
+                        minValue: 1,
+                        maxValue: 3,
+                        unitCode: 'DAY'
+                    }
+                }
+            }
         },
         category: 'Психологія, Саморозвиток',
     };

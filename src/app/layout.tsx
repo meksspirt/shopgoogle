@@ -45,7 +45,8 @@ export async function generateMetadata(): Promise<Metadata> {
     'site_keywords',
     'site_url',
     'site_author',
-    'og_image'
+    'og_image',
+    'fb_app_id'
   ]);
 
   const siteUrl = settings.site_url || 'https://www.calmcraft.shop';
@@ -131,6 +132,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
     // Manifest для PWA
     manifest: '/manifest.json',
+
+    // Facebook App ID for monetization tools
+    facebook: settings.fb_app_id ? {
+      appId: settings.fb_app_id,
+    } : undefined,
   };
 }
 

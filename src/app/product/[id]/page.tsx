@@ -2,8 +2,64 @@ import { supabase } from '@/lib/supabaseClient';
 import ProductGallery from '@/components/ProductGallery';
 import Link from 'next/link';
 import AddToCartButton from '@/components/AddToCartButton';
+import { Metadata } from 'next';
+import { getSettings } from '@/lib/getSettings';
 
 export const revalidate = 0;
+
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+    const { id } = await params;
+
+    // Fetch product
+    const { data: product } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    // Fetch site settings
+    const settings = await getSettings(['site_url', 'site_title']);
+    const siteUrl = settings.site_url || 'https://www.calmcraft.shop';
+
+    if (!product) {
+        return {
+            title: 'Товар не знайдено',
+        };
+    }
+
+    const productUrl = `${siteUrl}/product/${id}`;
+    // Handle relative or absolute image URLs
+    const imageUrl = product.image_url?.startsWith('http')
+        ? product.image_url
+        : `${siteUrl}${product.image_url || '/og-image.png'}`;
+
+    const description = product.description
+        ? product.description.replace(/<[^>]*>?/gm, '').substring(0, 160)
+        : `Купити ${product.title} в магазині ${settings.site_title || 'CalmCraft'}`;
+
+    return {
+        title: product.title,
+        description: description,
+        openGraph: {
+            title: product.title,
+            description: description,
+            url: productUrl,
+            siteName: settings.site_title || 'CalmCraft',
+            images: [
+                {
+                    url: imageUrl,
+                    width: 800,
+                    height: 600,
+                    alt: product.title,
+                }
+            ],
+            type: 'website',
+        },
+        alternates: {
+            canonical: productUrl,
+        }
+    };
+}
 
 export default async function ProductPage({ params }: { params: { id: string } }) {
     const { id } = await params;
@@ -36,7 +92,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 <div className="col-lg-5 col-md-6">
                     <div style={{ position: 'sticky', top: '90px', zIndex: 1 }}>
                         <ProductGallery images={product.images || [product.image_url]} />
-                        
+
                         {/* Sticky button under gallery - shown when main button scrolls out */}
                         <div id="sticky-cart-button" className="mt-3 d-none">
                             <AddToCartButton product={product} />
@@ -95,15 +151,15 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     {/* Stock Status */}
                     {product.stock_quantity !== undefined && (
                         <div className="mb-3 p-3 rounded" style={{ backgroundColor: product.stock_quantity > 10 ? 'rgba(72, 169, 166, 0.1)' : '#FFF4E5' }}>
-                            <small style={{ 
-                                color: product.stock_quantity > 10 ? 'var(--accent-button)' : '#D97706', 
-                                fontFamily: 'var(--font-heading)', 
+                            <small style={{
+                                color: product.stock_quantity > 10 ? 'var(--accent-button)' : '#D97706',
+                                fontFamily: 'var(--font-heading)',
                                 fontWeight: '600',
                                 fontSize: '0.95rem'
                             }}>
                                 {product.stock_quantity > 10 ? `✓ В наявності` :
-                                 product.stock_quantity > 0 ? `⚠ Залишилось ${product.stock_quantity} од.` :
-                                 '✗ Немає в наявності'}
+                                    product.stock_quantity > 0 ? `⚠ Залишилось ${product.stock_quantity} од.` :
+                                        '✗ Немає в наявності'}
                             </small>
                         </div>
                     )}
@@ -126,7 +182,7 @@ export default async function ProductPage({ params }: { params: { id: string } }
                     {/* Description */}
                     <div className="mt-4">
                         <h5 className="fw-bold mb-3" style={{ fontFamily: 'var(--font-heading)', color: '#00075e', fontSize: '1.2rem' }}>Опис</h5>
-                        <div 
+                        <div
                             className="product-description"
                             style={{ lineHeight: '1.8', color: '#374151', fontSize: '0.95rem' }}
                             dangerouslySetInnerHTML={{ __html: product.description }}
@@ -141,68 +197,68 @@ export default async function ProductPage({ params }: { params: { id: string } }
                                 <div className="card-body p-4">
                                     <table className="table table-sm mb-0" style={{ fontSize: '1rem', backgroundColor: 'transparent' }}>
                                         <tbody style={{ backgroundColor: 'transparent' }}>
-                                        {product.author && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ width: '40%', color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Автор</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.author}</td>
-                                            </tr>
-                                        )}
-                                        {product.publisher && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Видавництво</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.publisher}</td>
-                                            </tr>
-                                        )}
-                                        {product.translator && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Перекладач</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.translator}</td>
-                                            </tr>
-                                        )}
-                                        {product.year && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Рік видання</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.year}</td>
-                                            </tr>
-                                        )}
-                                        {product.language && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Мова</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.language}</td>
-                                            </tr>
-                                        )}
-                                        {product.pages > 0 && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Кількість сторінок</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.pages}</td>
-                                            </tr>
-                                        )}
-                                        {product.cover_type && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Обкладинка</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.cover_type}</td>
-                                            </tr>
-                                        )}
-                                        {product.isbn && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>ISBN</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.isbn}</td>
-                                            </tr>
-                                        )}
-                                        {product.format && (
-                                            <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Формат</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.format}</td>
-                                            </tr>
-                                        )}
-                                        {product.book_type && (
-                                            <tr style={{ backgroundColor: 'transparent' }}>
-                                                <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Тип</td>
-                                                <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.book_type}</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                            {product.author && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ width: '40%', color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Автор</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.author}</td>
+                                                </tr>
+                                            )}
+                                            {product.publisher && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Видавництво</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.publisher}</td>
+                                                </tr>
+                                            )}
+                                            {product.translator && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Перекладач</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.translator}</td>
+                                                </tr>
+                                            )}
+                                            {product.year && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Рік видання</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.year}</td>
+                                                </tr>
+                                            )}
+                                            {product.language && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Мова</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.language}</td>
+                                                </tr>
+                                            )}
+                                            {product.pages > 0 && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Кількість сторінок</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.pages}</td>
+                                                </tr>
+                                            )}
+                                            {product.cover_type && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Обкладинка</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.cover_type}</td>
+                                                </tr>
+                                            )}
+                                            {product.isbn && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>ISBN</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.isbn}</td>
+                                                </tr>
+                                            )}
+                                            {product.format && (
+                                                <tr style={{ borderBottom: '1px solid #e5e7eb', backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Формат</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.format}</td>
+                                                </tr>
+                                            )}
+                                            {product.book_type && (
+                                                <tr style={{ backgroundColor: 'transparent' }}>
+                                                    <td className="py-3 px-0" style={{ color: '#374151', border: 'none', fontWeight: '500', backgroundColor: 'transparent' }}>Тип</td>
+                                                    <td className="py-3 px-0" style={{ color: '#111827', border: 'none', fontWeight: '600', backgroundColor: 'transparent' }}>{product.book_type}</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
