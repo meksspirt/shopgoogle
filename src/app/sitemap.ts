@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://calmcraft.com.ua';
+    const baseUrl = 'https://www.calmcraft.shop';
 
     return [
         {

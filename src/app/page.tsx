@@ -7,7 +7,7 @@ export const revalidate = 0; // Disable static caching for now
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings(['site_title', 'site_description', 'og_image', 'site_url']);
-  const siteUrl = settings.site_url || 'https://calmcraft.com.ua';
+  const siteUrl = settings.site_url || 'https://www.calmcraft.shop';
 
   let ogImage = settings.og_image || '/og-image.png';
   if (ogImage.startsWith('/')) {

@@ -60,7 +60,7 @@ Copy-Item "C:\Users\Mlyub\.gemini\antigravity\brain\a0e28d8c-91ee-435c-b5c8-d7b6
 - `book_price` - ціна в гривнях
 
 ### Контакти:
-- `site_url` - ваш реальний домен
+- `site_url` - https://www.calmcraft.shop
 - `site_phone` - телефон для зв'язку
 - `site_email` - email для зв'язку
 

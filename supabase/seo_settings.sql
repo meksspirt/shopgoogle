@@ -7,7 +7,7 @@ VALUES
   ('site_title', 'CalmCraft - Психологічний посібник'),
   ('site_description', 'Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя'),
   ('site_keywords', 'психологія, психологічний посібник, саморозвиток, емоційне здоров''я, особистісне зростання, психолог, психологічна допомога'),
-  ('site_url', 'https://calmcraft.com.ua'),
+  ('site_url', 'https://www.calmcraft.shop'),
   ('site_author', 'CalmCraft'),
   ('og_image', '/og-image.png')
 ON CONFLICT (key) DO UPDATE 

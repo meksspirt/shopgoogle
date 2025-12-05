@@ -48,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
     'og_image'
   ]);
 
-  const siteUrl = settings.site_url || 'https://calmcraft.com.ua';
+  const siteUrl = settings.site_url || 'https://www.calmcraft.shop';
   const siteName = settings.site_title || 'CalmCraft - Психологічний посібник';
   const siteDescription = settings.site_description || 'Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя';
   const siteKeywords = settings.site_keywords || 'психологія, психологічний посібник, саморозвиток, емоційне здоров\'я, особистісне зростання, психолог, психологічна допомога';
