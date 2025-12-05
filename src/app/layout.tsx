@@ -52,7 +52,12 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteName = settings.site_title || 'CalmCraft - Психологічний посібник';
   const siteDescription = settings.site_description || 'Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя';
   const siteKeywords = settings.site_keywords || 'психологія, психологічний посібник, саморозвиток, емоційне здоров\'я, особистісне зростання, психолог, психологічна допомога';
-  const ogImage = settings.og_image || '/og-image.png';
+
+  // Формируем абсолютный URL для изображения
+  let ogImage = settings.og_image || '/og-image.png';
+  if (ogImage.startsWith('/')) {
+    ogImage = `${siteUrl}${ogImage}`;
+  }
 
   return {
     metadataBase: new URL(siteUrl),
