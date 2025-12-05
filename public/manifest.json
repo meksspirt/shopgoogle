@@ -1,0 +1,24 @@
+{
+    "name": "CalmCraft - Психологічний посібник",
+    "short_name": "CalmCraft",
+    "description": "Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#F5F1E8",
+    "theme_color": "#9B7EBD",
+    "orientation": "portrait-primary",
+    "categories": [
+        "health",
+        "lifestyle",
+        "education"
+    ],
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "any",
+            "type": "image/x-icon"
+        }
+    ],
+    "lang": "uk-UA",
+    "dir": "ltr"
+}

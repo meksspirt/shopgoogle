@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
+import JsonLd from "@/components/JsonLd";
 import localFont from "next/font/local";
 import { getSettings } from "@/lib/getSettings";
 import type { Metadata } from 'next';
@@ -38,23 +39,93 @@ const carelia = localFont({
 
 // Динамические meta теги из настроек
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSettings(['site_title', 'site_description', 'site_keywords']);
+  const settings = await getSettings([
+    'site_title',
+    'site_description',
+    'site_keywords',
+    'site_url',
+    'site_author',
+    'og_image'
+  ]);
+
+  const siteUrl = settings.site_url || 'https://calmcraft.com.ua';
+  const siteName = settings.site_title || 'CalmCraft - Психологічний посібник';
+  const siteDescription = settings.site_description || 'Психологічний посібник від практикуючого психолога. Інструменти для особистісного зростання та емоційного благополуччя';
+  const siteKeywords = settings.site_keywords || 'психологія, психологічний посібник, саморозвиток, емоційне здоров\'я, особистісне зростання, психолог, психологічна допомога';
+  const ogImage = settings.og_image || '/og-image.png';
 
   return {
-    title: settings.site_title || 'CalmCraft - Книжковий магазин',
-    description: settings.site_description || 'Ваш улюблений книжковий магазин',
-    keywords: settings.site_keywords || 'книги, книжковий магазин, купити книги',
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: siteName,
+      template: `%s | ${siteName}`,
+    },
+    description: siteDescription,
+    keywords: siteKeywords,
+    authors: [{ name: settings.site_author || 'CalmCraft' }],
+    creator: settings.site_author || 'CalmCraft',
+    publisher: settings.site_author || 'CalmCraft',
+
+    // Robots meta
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+
+    // Open Graph
     openGraph: {
-      title: settings.site_title || 'CalmCraft',
-      description: settings.site_description || 'Ваш улюблений книжковий магазин',
       type: 'website',
       locale: 'uk_UA',
+      url: siteUrl,
+      siteName: siteName,
+      title: siteName,
+      description: siteDescription,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: siteName,
+          type: 'image/png',
+        },
+      ],
     },
+
+    // Twitter Card
     twitter: {
       card: 'summary_large_image',
-      title: settings.site_title || 'CalmCraft',
-      description: settings.site_description || 'Ваш улюблений книжковий магазин',
+      title: siteName,
+      description: siteDescription,
+      creator: '@CalmCraft',
+      images: [ogImage],
     },
+
+    // Verification tags (можно добавить свои)
+    verification: {
+      google: settings.google_verification || '',
+      yandex: settings.yandex_verification || '',
+    },
+
+    // Alternate languages
+    alternates: {
+      canonical: siteUrl,
+      languages: {
+        'uk-UA': siteUrl,
+      },
+    },
+
+    // App links (для мобильных приложений, если они есть)
+    // applicationName: siteName,
+
+    // Manifest для PWA
+    manifest: '/manifest.json',
   };
 }
 
@@ -66,6 +137,13 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <head>
+        {/* SEO Meta Tags */}
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="format-detection" content="telephone=no" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+
         {/* Предотвращение мигания темы */}
         <script
           dangerouslySetInnerHTML={{
@@ -96,6 +174,7 @@ export default function RootLayout({
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" async></script>
       </head>
       <body className={`${quincy.variable} ${carelia.variable}`}>
+        <JsonLd />
         <Navbar />
         <main className="min-vh-100">
           {children}
