@@ -44,21 +44,23 @@ export default function Footer() {
         <footer className="bg-dark text-white py-4 mt-auto">
             <div className="container">
                 <div className="row">
-                    <div className="col-md-4 mb-3 mb-md-0">
+                    <div className="col-md-3 mb-3 mb-md-0">
                         <h5 className="fw-bold mb-3">{companyName}</h5>
                     </div>
-                    <div className="col-md-4 mb-3 mb-md-0">
-                        <h6 className="fw-bold mb-3">Контакти</h6>
-                        {instagram && (
-                            <p className="small mb-2">
-                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none d-flex align-items-center" style={{ opacity: 0.9 }}>
-                                    <span className="me-2" style={{ color: 'var(--accent-button)', fontSize: '1.2rem', lineHeight: 1 }}>📷</span>
-                                    <span>Instagram</span>
-                                </a>
-                            </p>
-                        )}
+                    <div className="col-md-3 mb-3 mb-md-0">
+                        <h6 className="fw-bold mb-3">Юридична інформація</h6>
+                        <p className="small mb-2">
+                            <Link href="/privacy-policy" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
+                                Політика конфіденційності
+                            </Link>
+                        </p>
+                        <p className="small mb-2">
+                            <Link href="/public-offer" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
+                                Публічна оферта
+                            </Link>
+                        </p>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3 mb-3 mb-md-0">
                         <h6 className="fw-bold mb-3">Навігація</h6>
                         <p className="small mb-2">
                             <Link href="/" className="text-white text-decoration-none" style={{ opacity: 0.9 }}>
@@ -75,6 +77,17 @@ export default function Footer() {
                                 Кошик
                             </Link>
                         </p>
+                    </div>
+                    <div className="col-md-3">
+                        <h6 className="fw-bold mb-3">Контакти</h6>
+                        {instagram && (
+                            <p className="small mb-2">
+                                <a href={instagram} target="_blank" rel="noopener noreferrer" className="text-white text-decoration-none d-flex align-items-center" style={{ opacity: 0.9 }}>
+                                    <span className="me-2" style={{ color: 'var(--accent-button)', fontSize: '1.2rem', lineHeight: 1 }}>📷</span>
+                                    <span>Instagram</span>
+                                </a>
+                            </p>
+                        )}
                     </div>
                 </div>
                 <hr className="my-3 opacity-25" />
