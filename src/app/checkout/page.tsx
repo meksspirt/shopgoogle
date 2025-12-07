@@ -30,6 +30,20 @@ export default function CheckoutPage() {
             router.push('/cart');
         }
         setCart(savedCart);
+
+        // Facebook Pixel - InitiateCheckout event
+        if (savedCart.length > 0 && typeof window !== 'undefined' && (window as any).fbq) {
+            const total = savedCart.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+            const contentIds = savedCart.map((item: any) => item.id);
+            
+            (window as any).fbq('track', 'InitiateCheckout', {
+                content_ids: contentIds,
+                content_type: 'product',
+                value: total,
+                currency: 'UAH',
+                num_items: savedCart.reduce((sum: number, item: any) => sum + item.quantity, 0)
+            });
+        }
     }, [router]);
 
     useEffect(() => {

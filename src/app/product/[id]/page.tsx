@@ -2,6 +2,7 @@ import { supabase } from '@/lib/supabaseClient';
 import ProductGallery from '@/components/ProductGallery';
 import Link from 'next/link';
 import AddToCartButton from '@/components/AddToCartButton';
+import FacebookPixelViewContent from '@/components/FacebookPixelViewContent';
 import { Metadata } from 'next';
 import { getSettings } from '@/lib/getSettings';
 
@@ -79,8 +80,10 @@ export default async function ProductPage({ params }: { params: { id: string } }
     }
 
     return (
-        <div className="container py-5">
-            <nav aria-label="breadcrumb" className="mb-4">
+        <>
+            <FacebookPixelViewContent product={product} />
+            <div className="container py-5">
+                <nav aria-label="breadcrumb" className="mb-4">
                 <ol className="breadcrumb">
                     <li className="breadcrumb-item"><Link href="/" style={{ color: 'var(--accent-color)' }}>Головна</Link></li>
                     <li className="breadcrumb-item active" aria-current="page" style={{ color: 'var(--text-secondary)' }}>{product.title}</li>
@@ -293,5 +296,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
                 `
             }} />
         </div>
+        </>
     );
 }

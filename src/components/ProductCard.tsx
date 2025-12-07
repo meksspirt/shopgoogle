@@ -32,6 +32,21 @@ export default function ProductCard({ product }: { product: Product }) {
         localStorage.setItem('cart', JSON.stringify(cart));
         window.dispatchEvent(new Event('cartUpdated'));
         setShowToast(true);
+
+        // Facebook Pixel - AddToCart event
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+            const finalPrice = product.discount_percent 
+                ? Math.round(product.price * (1 - product.discount_percent / 100))
+                : product.price;
+            
+            (window as any).fbq('track', 'AddToCart', {
+                content_name: product.title,
+                content_ids: [product.id],
+                content_type: 'product',
+                value: finalPrice,
+                currency: 'UAH'
+            });
+        }
     };
 
     return (

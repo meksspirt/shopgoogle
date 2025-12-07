@@ -10,7 +10,7 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
     try {
         const { data, error } = await supabase
             .from('orders')
-            .select('customer_email, customer_phone, customer_name, customer_city')
+            .select('customer_email, customer_phone, customer_name, customer_city, total_amount, order_items')
             .eq('id', orderId)
             .single();
         
@@ -79,23 +79,42 @@ export default async function SuccessPage({ searchParams }: { searchParams: { or
         <>
             {/* Enhanced Conversion Tracking Script */}
             {orderData && (
-                <Script
-                    id="gtag-enhanced-conversion"
-                    strategy="afterInteractive"
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                            gtag('set', 'user_data', {
-                                "email": ${JSON.stringify(orderData.customer_email || '')},
-                                "phone_number": ${JSON.stringify(formattedPhone)},
-                                "address": {
-                                    "first_name": ${JSON.stringify(firstName)},
-                                    "last_name": ${JSON.stringify(lastName)},
-                                    "city": ${JSON.stringify(orderData.customer_city || '')}
+                <>
+                    <Script
+                        id="gtag-enhanced-conversion"
+                        strategy="afterInteractive"
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                gtag('set', 'user_data', {
+                                    "email": ${JSON.stringify(orderData.customer_email || '')},
+                                    "phone_number": ${JSON.stringify(formattedPhone)},
+                                    "address": {
+                                        "first_name": ${JSON.stringify(firstName)},
+                                        "last_name": ${JSON.stringify(lastName)},
+                                        "city": ${JSON.stringify(orderData.customer_city || '')}
+                                    }
+                                });
+                            `,
+                        }}
+                    />
+                    <Script
+                        id="fb-pixel-purchase"
+                        strategy="afterInteractive"
+                        dangerouslySetInnerHTML={{
+                            __html: `
+                                if (typeof fbq !== 'undefined') {
+                                    fbq('track', 'Purchase', {
+                                        value: ${orderData.total_amount || 0},
+                                        currency: 'UAH',
+                                        content_type: 'product',
+                                        content_ids: ${JSON.stringify((orderData.order_items || []).map((item: any) => item.product_id))},
+                                        num_items: ${(orderData.order_items || []).reduce((sum: number, item: any) => sum + (item.quantity || 0), 0)}
+                                    });
                                 }
-                            });
-                        `,
-                    }}
-                />
+                            `,
+                        }}
+                    />
+                </>
             )}
 
             <div className="container py-5">
